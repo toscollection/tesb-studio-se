@@ -321,7 +321,7 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         Dependency xbeanDependency = new Dependency();
         xbeanDependency.setArtifactId("xbean-finder-shaded");
         xbeanDependency.setGroupId("org.apache.xbean");
-        xbeanDependency.setVersion("4.18");
+        xbeanDependency.setVersion("4.20");
         Dependency httpclientDep = new Dependency();
         httpclientDep.setGroupId("org.apache.httpcomponents");
         httpclientDep.setArtifactId("httpclient");
