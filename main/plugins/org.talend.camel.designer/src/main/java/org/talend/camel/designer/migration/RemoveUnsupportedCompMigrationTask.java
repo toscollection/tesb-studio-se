@@ -8,7 +8,6 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementValueType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
-import org.talend.migration.IProjectMigrationTask;
 import org.talend.migration.MigrationReportRecorder;
 
 public class RemoveUnsupportedCompMigrationTask extends AbstractRouteItemComponentMigrationTask {
@@ -31,8 +30,6 @@ public class RemoveUnsupportedCompMigrationTask extends AbstractRouteItemCompone
 	private boolean removeUnsupportedComp(NodeType currentNode) throws PersistenceException {
         boolean needSave = false;
 
-        IProjectMigrationTask task = this;
-
         for (Object e : currentNode.getElementParameter()) {
             ElementParameterType p = (ElementParameterType) e;
             if ("HOTLIBS".equals(p.getName())) {
@@ -44,8 +41,8 @@ public class RemoveUnsupportedCompMigrationTask extends AbstractRouteItemCompone
                         evt.setValue("");
                         elementValue.remove(evt);
 
-                        generateReportRecord(new MigrationReportRecorder(task,
-                                MigrationReportRecorder.MigrationOperationType.MODIFY, null, currentNode, "MODULE_LIST",
+                        generateReportRecord(new MigrationReportRecorder(this,
+                                MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "MODULE_LIST of cMessagingEndpoint",
                                 evtValue, ""));
                         needSave = true;
                     }

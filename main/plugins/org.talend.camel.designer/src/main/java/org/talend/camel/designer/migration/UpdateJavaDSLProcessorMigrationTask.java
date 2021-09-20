@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
+import org.talend.migration.MigrationReportRecorder;
 
 public class UpdateJavaDSLProcessorMigrationTask extends AbstractRouteItemComponentMigrationTask {
 
@@ -43,6 +44,11 @@ public class UpdateJavaDSLProcessorMigrationTask extends AbstractRouteItemCompon
             if ("CODE".equals(p.getName())) {
                 p.setValue(modifiedValue);
                 needSave = true;
+                
+                generateReportRecord(new MigrationReportRecorder(this,
+                    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "CODE",
+                        originalValue, modifiedValue));
+                
                 break;
             }
         }

@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
+import org.talend.migration.MigrationReportRecorder;
 
 public class UpdateCHTTPUriMigrationTask extends AbstractRouteItemComponentMigrationTask {
 
@@ -28,6 +29,7 @@ public class UpdateCHTTPUriMigrationTask extends AbstractRouteItemComponentMigra
         boolean needSave = false;
 
         ElementParameterType param = UtilTool.findParameterType(currentNode, "URI");
+        String previousValue = param.getValue();
         String value = param.getValue();
 
         for (Object e : currentNode.getElementParameter()) {
@@ -39,6 +41,10 @@ public class UpdateCHTTPUriMigrationTask extends AbstractRouteItemComponentMigra
                 }
                 p.setValue(value);
                 needSave = true;
+
+                generateReportRecord(new MigrationReportRecorder(this,
+                    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "URI of cHTTP",
+                        previousValue, value));
                 break;
             }
         }

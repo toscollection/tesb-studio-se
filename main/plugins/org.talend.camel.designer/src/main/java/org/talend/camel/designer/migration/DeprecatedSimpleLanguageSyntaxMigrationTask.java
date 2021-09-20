@@ -10,6 +10,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementValueType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
+import org.talend.migration.MigrationReportRecorder;
 
 public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteItemComponentMigrationTask {
 
@@ -62,6 +63,10 @@ public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteIt
 					if (!valueExpression.equalsIgnoreCase(wrappedBodyAndHeaderExpressions)) {
 						element.setValue(wrappedBodyAndHeaderExpressions);
 						save = true;
+						
+						generateReportRecord(new MigrationReportRecorder(this,
+						    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "Language Expression",
+						        valueExpression, wrappedBodyAndHeaderExpressions));
 					}
 				}
 
@@ -103,11 +108,19 @@ public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteIt
 					for (Object e : currentNode.getElementParameter()) {
 						ElementParameterType p = (ElementParameterType) e;
 						if ("EXPRESSION".equals(p.getName())) {
+							String newValueExpression = "";
 							if (isOldFormatExpression) {
-								p.setValue("\"" + WRAPPER_START + valueExpression + WRAPPER_END + "\"");
+								newValueExpression = "\"" + WRAPPER_START + valueExpression + WRAPPER_END + "\"";
 							} else {
-								p.setValue("\"" + valueExpression + "\"");
+								newValueExpression = "\"" + valueExpression + "\"";
 							}
+							
+							p.setValue(newValueExpression);
+							
+							generateReportRecord(new MigrationReportRecorder(this,
+								    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "Language Expression",
+								    paramExpression.getValue(), newValueExpression));
+							
 							break;
 						}
 					}

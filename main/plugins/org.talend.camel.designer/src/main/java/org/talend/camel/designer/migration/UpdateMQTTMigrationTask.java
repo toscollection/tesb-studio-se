@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
+import org.talend.migration.MigrationReportRecorder;
 
 public class UpdateMQTTMigrationTask extends AbstractRouteItemComponentMigrationTask {
 
@@ -35,6 +36,10 @@ public class UpdateMQTTMigrationTask extends AbstractRouteItemComponentMigration
             if ("MQTT_RECONNECT_DELAY".equals(p.getName())) {
                 p.setValue(value);
                 needSave = true;
+
+                generateReportRecord(new MigrationReportRecorder(this,
+                    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "MQTT_RECONNECT_DELAY of cMQConnectionFactory",
+                        "", value));
                 break;
             }
         }

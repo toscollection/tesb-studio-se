@@ -6,6 +6,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementValueType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
+import org.talend.migration.MigrationReportRecorder;
 
 public class DeprecatedBodyExpressionsMigrationTask extends AbstractRouteItemComponentMigrationTask {
 
@@ -56,6 +57,9 @@ public class DeprecatedBodyExpressionsMigrationTask extends AbstractRouteItemCom
 					if (!valueExpression.equalsIgnoreCase(correctedBodyExpressions)) {
 						element.setValue(correctedBodyExpressions);
 						save = true;
+						generateReportRecord(new MigrationReportRecorder(this,
+							MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "Language Expression",
+							    valueExpression, correctedBodyExpressions));
 					}
 				}
 
@@ -85,6 +89,9 @@ public class DeprecatedBodyExpressionsMigrationTask extends AbstractRouteItemCom
 				if (!valueExpression.equalsIgnoreCase(correctedBodyExpressions)) {
 					valueExpression = correctedBodyExpressions;
 					save = true;
+					generateReportRecord(new MigrationReportRecorder(this,
+					    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "Language Expression",
+					        valueExpression, correctedBodyExpressions));
 				}
 
 				if (save) {

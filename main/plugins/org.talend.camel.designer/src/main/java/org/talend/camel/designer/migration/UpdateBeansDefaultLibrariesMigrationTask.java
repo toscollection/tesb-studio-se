@@ -43,6 +43,7 @@ import org.talend.core.ui.component.ComponentsFactoryProvider;
 import org.talend.designer.core.model.utils.emf.component.ComponentFactory;
 import org.talend.designer.core.model.utils.emf.component.IMPORTType;
 import org.talend.librariesmanager.model.ModulesNeededProvider;
+import org.talend.migration.MigrationReportRecorder;
 
 /**
  * Update core libraries version to default for beans, should run before login
@@ -97,6 +98,7 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
             addModulesNeededForBeans(beanItem);
             try {
                 ProxyRepositoryFactory.getInstance().save(beanItem);
+                generateReportRecord(new MigrationReportRecorder(this, item, "Set of default Bean dependencies is updated"));
             } catch (PersistenceException e) {
                 ExceptionHandler.process(e);
                 return ExecutionResult.FAILURE;

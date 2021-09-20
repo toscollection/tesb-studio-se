@@ -7,6 +7,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
 import org.talend.designer.core.model.utils.emf.talendfile.ElementValueType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
+import org.talend.migration.MigrationReportRecorder;
 
 public class UpdatecKafkaMigrationTask extends AbstractRouteItemComponentMigrationTask {
 	
@@ -36,10 +37,18 @@ public class UpdatecKafkaMigrationTask extends AbstractRouteItemComponentMigrati
                     if ("\"kafkaHeaderSerializer\"".equalsIgnoreCase(ev.getValue()) && "NAME".equalsIgnoreCase(ev.getElementRef())) {
                         ev.setValue("\"headerSerializer\"");
                         needSave = true;
+                        generateReportRecord(new MigrationReportRecorder(this,
+                            MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "URI_OPTIONS",
+                                "\"kafkaHeaderSerializer\"", "\"headerSerializer\""));
+                            
+                        
                     }
                     if ("\"kafkaHeaderDeserializer\"".equalsIgnoreCase(ev.getValue()) && "NAME".equalsIgnoreCase(ev.getElementRef())) {
                         ev.setValue("\"headerDeserializer\"");
                         needSave = true;
+                        generateReportRecord(new MigrationReportRecorder(this,
+                                MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "URI_OPTIONS",
+                                    "\"kafkaHeaderDeserializer\"", "\"headerDeserializer\""));
                     }
                 }
             }

@@ -13,6 +13,7 @@ import org.talend.core.model.components.filters.NameComponentFilter;
 import org.talend.core.model.properties.Item;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
 import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
+import org.talend.migration.MigrationReportRecorder;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryService;
 
@@ -60,6 +61,9 @@ public class NormalizeDataServiceJobBuildTypeMigrationTask extends AbstractDataS
                     try {
                         save(item);
                         modified |= true;
+                        generateReportRecord(new MigrationReportRecorder(this,
+                                MigrationReportRecorder.MigrationOperationType.MODIFY, item, null, "Build Type",
+                                BUILD_TYPE_ROUTE, BUILD_TYPE_OSGI));
                      } catch (PersistenceException e) {
                         ExceptionHandler.process(e);
                         return ExecutionResult.FAILURE;

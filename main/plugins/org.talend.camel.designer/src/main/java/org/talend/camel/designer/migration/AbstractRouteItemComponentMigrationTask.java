@@ -24,6 +24,8 @@ import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
  */
 public abstract class AbstractRouteItemComponentMigrationTask extends
 		AbstractRouteItemMigrationTask {
+	
+	private CamelProcessItem routeItem;
 
 	/**
 	 * the regex patten to filter component name.
@@ -40,6 +42,7 @@ public abstract class AbstractRouteItemComponentMigrationTask extends
 	 */
 	@Override
 	public final ExecutionResult execute(CamelProcessItem item) {
+		this.routeItem = item;
 		List<NodeType> nodes = findComponentNodesRegex(item, getComponentNameRegex());
 		if (nodes.isEmpty()) {
 			return ExecutionResult.NOTHING_TO_DO;
@@ -71,4 +74,13 @@ public abstract class AbstractRouteItemComponentMigrationTask extends
 	 * @throws Exception the exception
 	 */
 	protected abstract boolean execute(NodeType node) throws Exception;
+	
+	/**
+	 * get Route Item
+	 *
+	 * @return route item
+	 */
+	protected CamelProcessItem getRouteItem() { 
+		return this.routeItem;
+	};
 }
