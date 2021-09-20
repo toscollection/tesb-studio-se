@@ -59,11 +59,6 @@
             id="xmlschema-core"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-xmlschema-core}"
             bundleID="" />
-        <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="jakarta.xml.bind-api-2.3.2.jar"
-            id="jakarta.xml.bind-api"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.bind-api-2.3.2.jar"
-            bundleID="" />
 
         <libraryNeededGroup
                 description="cxf-core"
@@ -737,9 +732,10 @@
                        uripath="platform:/plugin/org.talend.libraries.esb/lib/istack-commons-runtime-3.0.10.jar"
                        bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-                       name="jakarta.xml.bind-api-2.3.2.jar"
+                       name="jakarta.xml.bind-api-2.3.3.jar"
                        id="jakarta.xml.bind-api"
-                       uripath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.bind-api-2.3.2.jar"
+                       mvn_uri="mvn:jakarta.xml.bind/jakarta.xml.bind-api/2.3.3"
+                       uripath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.bind-api-2.3.3.jar"
                        bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
                        name="jakarta.xml.soap-api-1.4.1.jar"
@@ -786,6 +782,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
                        name="jakarta.jws-api-1.1.1.jar"
                        id="jakarta.jws-api"
+                       mvn_uri="mvn:jakarta.jws/jakarta.jws-api/1.1.1"
                        uripath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.jws-api-1.1.1.jar"
                        bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
