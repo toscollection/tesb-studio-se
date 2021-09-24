@@ -24,14 +24,6 @@
                            version="5.1.2"
 			beforeLogon="false" />
 		<projecttask
-			id="org.talend.designer.esb.webservice.UpdateBuildTypeForDataServiceMigrationTask"
-			class="org.talend.designer.esb.components.rs.provider.migration.UpdateBuildTypeForDataServiceMigrationTask"
-			name="UpdateBuildTypeForDataServiceMigrationTask"
-			description="Set 'OSGI' as build type for job with ESB components"
-                           breaks="7.3.0"
-                           version="7.3.1"
-			beforeLogon="true" />
-		<projecttask
 	        beforeLogon="false"
 	        breaks="5.3.2"
 	        class="org.talend.designer.esb.components.rs.provider.migration.FormContentTypeMigrationTask"
