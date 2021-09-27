@@ -205,7 +205,7 @@
             bundleID="" />
         <!-- ${tesb-commons-logging} -->
         <libraryNeeded context="plugin:org.apache.commons.logging"
-            name="commons-logging-1.2.jar"
+            name="org.apache.commons.logging_1.2.0.v20180409-1502.jar"
             id="commons-logging"
             mvn_uri="mvn:commons-logging/commons-logging/1.2"
             uripath="platform:/base/plugins/org.apache.commons.logging_1.2.0.v20180409-1502.jar"
