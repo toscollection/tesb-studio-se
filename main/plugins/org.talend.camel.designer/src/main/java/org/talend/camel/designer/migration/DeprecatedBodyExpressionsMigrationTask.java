@@ -81,8 +81,6 @@ public class DeprecatedBodyExpressionsMigrationTask extends AbstractRouteItemCom
 				return false;
 			}
 
-			valueExpression = valueExpression.replaceAll("\"", "");
-
 			if (valueLanguage.equalsIgnoreCase("NONE")) {
 
 				String correctedBodyExpressions = correctBodyExpressions(valueExpression);
