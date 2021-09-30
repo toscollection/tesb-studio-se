@@ -37,6 +37,7 @@ import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.designer.core.model.utils.emf.component.ComponentFactory;
 import org.talend.designer.core.model.utils.emf.component.IMPORTType;
 import org.talend.librariesmanager.model.ModulesNeededProvider;
+import org.talend.migration.MigrationReportRecorder;
 
 /**
  * DOC yyan class global comment. Add esb libraries by default for bean TESB-21419
@@ -83,7 +84,20 @@ public class AddBeansDefaultLibrariesMigrationTask extends AbstractItemMigration
             importType.setMESSAGE(model.getInformationMsg());
             importType.setREQUIRED(model.isRequired());
             importType.setMVN(model.getMavenUri());
-            beanItem.getImports().add(importType);
+            if (!beanItem.getImports().contains(importType)) {
+            	String message = String.format("Adding module needed for beans: %s", importType.getMODULE());
+            	
+                generateReportRecord(new MigrationReportRecorder(this,
+                        MigrationReportRecorder.MigrationOperationType.ADD, beanItem, null, message,
+                        null, null));
+            	beanItem.getImports().add(importType);
+            } else {
+                String message = String.format("Duplicate module found: %s", importType.getMODULE());
+            	
+                generateReportRecord(new MigrationReportRecorder(this,
+                        MigrationReportRecorder.MigrationOperationType.ADD, beanItem, null, message,
+                        null, null));
+            }
         }
     }
 }

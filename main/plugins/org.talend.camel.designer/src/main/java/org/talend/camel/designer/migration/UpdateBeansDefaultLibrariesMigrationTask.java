@@ -121,12 +121,24 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
 
                 String impName = importType.getMODULE().substring(importType.getMODULE().lastIndexOf('-') + 1);
                 if (StringUtils.startsWith(importType.getMODULE(), CAMEL_CXF_PREFIX) && "TESB.jar".equals(impName)) {
+                	
+                	String mvnNewVersion = "mvn:org.talend.libraries/" + CAMEL_CXF_PREFIX + camelVersion + "/6.0.0-SNAPSHOT/jar";
+                	
+                    String message = String.format("Modifying camel cxf library version from %s to %s", importType.getMVN(), mvnNewVersion);
+                    
                     importType.setMODULE(CAMEL_CXF_PREFIX + camelVersionSubString);
-                    importType.setMVN("mvn:org.talend.libraries/" + CAMEL_CXF_PREFIX + camelVersion + "/6.0.0-SNAPSHOT/jar");
+                    importType.setMVN(mvnNewVersion);
+                    
+                    generateReportRecord(new MigrationReportRecorder(this,
+                    		MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, message, null, null));
                 }
                 
                 if (StringUtils.startsWith(importType.getMODULE(), "javax.annotation") ) {
                 	deprecatedModules.add(importType);
+                	
+                    generateReportRecord(new MigrationReportRecorder(this,
+                            MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, "Adding javax.annotation to deprecated modules",
+                            null, null));
                 }
                 
             }
@@ -140,9 +152,20 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
                     if (importType.getMODULE().indexOf('-') > 0) {
                         String impName = importType.getMODULE().substring(0, importType.getMODULE().lastIndexOf('-'));
                         if (moduleName.equals(impName) && !importType.getMODULE().equals(defaultNeed.getModuleName())) {
+
+                            StringBuilder builder = new StringBuilder();
+                            builder.append("Rewriting import type: ");
+                            builder.append(String.format("Setting module name from %s to %s", importType.getMODULE(), defaultNeed.getModuleName()));
+                            builder.append(String.format("Setting message name from %s to %s", importType.getMESSAGE(), defaultNeed.getInformationMsg()));
+                            builder.append(String.format("Setting mvn url from %s to %s", importType.getMODULE(), defaultNeed.getMavenUri()));
+
                             importType.setMODULE(defaultNeed.getModuleName());
                             importType.setMESSAGE(defaultNeed.getInformationMsg());
                             importType.setMVN(defaultNeed.getMavenUri());
+
+                            generateReportRecord(new MigrationReportRecorder(this,
+                                    MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, builder.toString(),
+                                    null, null));
                         }
                     }
                 }
@@ -171,6 +194,14 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
                 importType.setREQUIRED(model.isRequired());
                 importType.setMVN(model.getMavenUri());
                 missingModels.add(importType);
+                
+                StringBuilder recorderMessage = new StringBuilder();
+                recorderMessage.append("Adding missing module: ");
+                recorderMessage.append(model.getModuleName());
+                
+                generateReportRecord(new MigrationReportRecorder(this,
+                        MigrationReportRecorder.MigrationOperationType.ADD, beanItem, null, recorderMessage.toString(),
+                        null, null));
             }
         }
         imports.addAll(missingModels);
