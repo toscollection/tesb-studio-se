@@ -356,7 +356,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-javax.ws.rs-api}"
             id="javax.ws.rs-api"
-            mvn_uri="mvn:javax.ws.rs/javax.ws.rs-api/${tesb-javax.ws.rs-api}"
+            mvn_uri="mvn:javax.ws.rs/javax.ws.rs-api/2.1"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-javax.ws.rs-api}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
