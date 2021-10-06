@@ -652,6 +652,12 @@
             mvn_uri="mvn:org.apache.cxf/cxf-rt-features-clustering/${cxf.version}"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-cxf-rt-features-clustering}"
             bundleID="" />
+        <libraryNeeded context="plugin:org.talend.libraries.esb"
+            name="camel-core-3.11.1.jar"
+            id="camel-core"
+            mvn_uri="mvn:org.apache.camel/camel-core/3.11.1"
+            uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/camel-core-3.11.1.jar"
+            bundleID="" />
 
         <libraryNeededGroup
                 description="locator"
