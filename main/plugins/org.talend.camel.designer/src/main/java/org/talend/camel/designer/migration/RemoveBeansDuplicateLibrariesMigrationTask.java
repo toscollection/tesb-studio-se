@@ -66,8 +66,8 @@ public class RemoveBeansDuplicateLibrariesMigrationTask extends AbstractItemMigr
 
     @Override
     public Date getOrder() {
-        GregorianCalendar gc = new GregorianCalendar(2017, 3, 25, 0, 0, 0);
-        return gc.getTime();
+        Date date = new Date(2021, 10, 5, 0, 0, 0);
+        return date;
     }
 
     @Override
