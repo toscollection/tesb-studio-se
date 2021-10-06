@@ -637,7 +637,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-locator}"
             id="locator"
-            mvn_uri="mvn:org.talend.esb/locator/7.3.1"
+            mvn_uri="mvn:org.talend.esb/locator/8.0.1"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-locator}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
@@ -714,13 +714,13 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-sam-agent}"
             id="sam-agent"
-            mvn_uri="mvn:org.talend.esb/sam-agent/7.3.1"
+            mvn_uri="mvn:org.talend.esb/sam-agent/8.0.1"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-sam-agent}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-sam-common}"
             id="sam-common"
-            mvn_uri="mvn:org.talend.esb/sam-common/7.3.1"
+            mvn_uri="mvn:org.talend.esb/sam-common/8.0.1"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-sam-common}"
             bundleID="" />
         <!-- ${tesb-commons-lang} -->
@@ -746,7 +746,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-correlationid-policy}"
             id="correlationid-policy"
-            mvn_uri="mvn:org.talend.esb.policies/correlationid-policy/7.3.1"
+            mvn_uri="mvn:org.talend.esb.policies/correlationid-policy/8.0.1"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-correlationid-policy}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
@@ -769,7 +769,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-security-common}"
             id="security-common"
-            mvn_uri="mvn:org.talend.esb/security-common/7.3.1"
+            mvn_uri="mvn:org.talend.esb/security-common/8.0.1"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-security-common}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
