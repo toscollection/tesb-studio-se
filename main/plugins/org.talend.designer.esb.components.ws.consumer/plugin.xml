@@ -189,13 +189,13 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-spring-context}"
             id="spring-context"
-            mvn_uri="mvn:org.springframework/spring-context/5.2.15.RELEASE"
+            mvn_uri="mvn:org.springframework/spring-context/5.3.8"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-spring-context}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-spring-aop}"
             id="spring-aop"
-            mvn_uri="mvn:org.springframework/spring-aop/5.2.15.RELEASE"
+            mvn_uri="mvn:org.springframework/spring-aop/5.3.8"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-spring-aop}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
@@ -207,13 +207,13 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-spring-beans}"
             id="spring-beans"
-            mvn_uri="mvn:org.springframework/spring-beans/5.2.15.RELEASE"
+            mvn_uri="mvn:org.springframework/spring-beans/5.3.8"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-spring-beans}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-spring-core}"
             id="spring-core"
-            mvn_uri="mvn:org.springframework/spring-core/5.2.15.RELEASE"
+            mvn_uri="mvn:org.springframework/spring-core/5.3.8"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-spring-core}"
             bundleID="" />
         <!-- ${tesb-commons-logging} -->
@@ -226,21 +226,21 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-spring-expression}"
             id="spring-expression"
-            mvn_uri="mvn:org.springframework/spring-expression/5.2.15.RELEASE"
+            mvn_uri="mvn:org.springframework/spring-expression/5.3.8"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-spring-expression}"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-spring-web}"
             id="spring-web"
-            mvn_uri="mvn:org.springframework/spring-web/5.2.15.RELEASE"
+            mvn_uri="mvn:org.springframework/spring-web/5.3.8"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-spring-web}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-spring-webmvc}"
             id="spring-webmvc"
-            mvn_uri="mvn:org.springframework/spring-webmvc/5.2.15.RELEASE"
+            mvn_uri="mvn:org.springframework/spring-webmvc/5.3.8"
             uripath="platform:/plugin/org.talend.libraries.apache.cxf/lib/${tesb-spring-webmvc}"
             bundleID="" />
 
