@@ -173,7 +173,7 @@
                     <% } else { %> 
                     software.amazon.awssdk.auth.credentials.StaticCredentialsProvider.create(credentials_<%=cid%>))
                     <% } %>
-                    .httpClient(software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient.create())
+                    .httpClient(software.amazon.awssdk.http.apache.ApacheHttpClient.builder().build())
                 <%                      
                 }
                 if(region!=null && !region.isEmpty() && !"DEFAULT".equalsIgnoreCase(region) && !isAWSMQBroker){
