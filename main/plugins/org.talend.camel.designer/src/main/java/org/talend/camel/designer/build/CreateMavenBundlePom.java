@@ -447,6 +447,13 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
 
         plugin.addDependency(commonsCompressDep);
 
+        Dependency jsoupDep = new Dependency();
+        jsoupDep.setGroupId("org.jsoup");
+        jsoupDep.setArtifactId("jsoup");
+        jsoupDep.setVersion("1.14.2");
+
+        plugin.addDependency(jsoupDep);
+
         pluginExecutions.add(pluginExecution);
         plugin.setExecutions(pluginExecutions);
 
