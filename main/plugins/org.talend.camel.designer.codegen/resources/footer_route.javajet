@@ -662,7 +662,6 @@ if (isTestContainer) {
                         if(typeToGenerate.equals("java.util.Date")){ // start if
 
         %>
-                    try{
                         String context_<%=ctxParam.getName()%>_value = context.getProperty("<%=ctxParam.getName()%>");
                         if (context_<%=ctxParam.getName()%>_value == null){
                             context_<%=ctxParam.getName()%>_value = "";
@@ -674,12 +673,7 @@ if (isTestContainer) {
                             context_<%=ctxParam.getName()%>_value = context_<%=ctxParam.getName()%>_value.substring(context_<%=ctxParam.getName()%>_pos + 1);
                         }
                         
-                        context.<%=ctxParam.getName()%>=(java.util.Date)(new java.text.SimpleDateFormat(context_<%=ctxParam.getName()%>_pattern).parse(context_<%=ctxParam.getName()%>_value));
-                       
-                    }catch(java.text.ParseException e)
-                    {
-                        context.<%=ctxParam.getName()%>=null;
-                    }
+                        context.<%=ctxParam.getName()%> = RuntimeUtils.getDate(context_<%=ctxParam.getName()%>_pattern, context_<%=ctxParam.getName()%>_value);
         <%
                         }else if(typeToGenerate.equals("Object")||typeToGenerate.equals("String")||typeToGenerate.equals("java.lang.String") ){
         %>
