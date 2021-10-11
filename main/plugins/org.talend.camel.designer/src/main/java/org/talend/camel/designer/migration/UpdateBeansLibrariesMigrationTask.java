@@ -39,6 +39,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.ui.component.ComponentsFactoryProvider;
 import org.talend.designer.core.model.utils.emf.component.IMPORTType;
+import org.talend.migration.MigrationReportRecorder;
 
 /**
  * Update core libraries version to default for beans, should run before login
@@ -103,6 +104,11 @@ public class UpdateBeansLibrariesMigrationTask extends AbstractItemMigrationTask
                     if (StringUtils.startsWith(fullName, camelPrefix)) {
                         importType.setMODULE(fullName.replaceAll(version, camelVersion));
                         importType.setMVN(importType.getMVN().replaceAll(version, camelVersion));
+
+                        String message = String.format("Upgrading camel bean dependency version from %s to %s", version, camelPrefix);
+
+                        generateReportRecord(new MigrationReportRecorder(this,
+                                MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, message, null, null));
                     }
                 }
             }
