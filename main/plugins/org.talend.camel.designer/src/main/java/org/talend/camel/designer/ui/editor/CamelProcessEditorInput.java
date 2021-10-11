@@ -14,6 +14,8 @@ package org.talend.camel.designer.ui.editor;
 
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.ProcessItem;
+import org.talend.core.model.properties.Property;
+import org.talend.core.runtime.process.TalendProcessArgumentConstant;
 import org.talend.core.ui.editor.JobEditorInput;
 import org.talend.designer.core.ui.editor.process.Process;
 import org.talend.designer.core.ui.projectsetting.ProjectSettingManager;
@@ -38,7 +40,11 @@ public class CamelProcessEditorInput extends JobEditorInput {
 
     @Override
     protected Process createProcess() {
-        return new RouteProcess(getItem().getProperty());
+        Property property = getItem().getProperty();
+        if(null == property.getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE)) {
+            property.getAdditionalProperties().put(TalendProcessArgumentConstant.ARG_BUILD_TYPE, "ROUTE");
+        }
+        return new RouteProcess(property);
     }
 
     @Override
