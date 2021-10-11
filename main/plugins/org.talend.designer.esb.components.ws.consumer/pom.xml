@@ -18,7 +18,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.talend.studio</groupId>
-			<artifactId>org.talend.libraries.esb</artifactId>
+			<artifactId>org.talend.libraries.apache.cxf</artifactId>
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
