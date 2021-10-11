@@ -104,7 +104,7 @@ public abstract class AbstractRouteItemMigrationTask extends
 	}
 
 	@Override
-	public ExecutionResult execute(Item item) {
+	public final ExecutionResult execute(Item item) {
 		if (item instanceof CamelProcessItem) {
 			return execute((CamelProcessItem) item);
 		}

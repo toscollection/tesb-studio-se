@@ -35,5 +35,4 @@ public class RouteImportHandler extends ImportRepTypeHandler {
         HandlerUtil.copyScreenshotFile(resManager, selectedItemRecord);
         return super.copyReferenceFiles(resManager, selectedItemRecord);
     }
-
 }
