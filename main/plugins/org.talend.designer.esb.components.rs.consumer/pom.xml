@@ -10,6 +10,9 @@
   <artifactId>org.talend.designer.esb.components.rs.consumer</artifactId>
   <packaging>eclipse-plugin</packaging>
   <name>Talend Designer ESB Tooling REST Service consumer plugin</name>
+  <properties>
+      <slf4j-api.version>1.7.32</slf4j-api.version>
+  </properties>
     <dependencies>
         <dependency>
             <groupId>org.talend.studio</groupId>
