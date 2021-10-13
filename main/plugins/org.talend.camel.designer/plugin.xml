@@ -314,10 +314,10 @@
           <projecttask
                 beforeLogon="false"
                 breaks="7.3.0"
-                class="org.talend.camel.designer.migration.UpdateBeansCodeMigrationTask"
+                class="org.talend.camel.designer.migration.UpdateBeansPackageReplaceMigrationTask"
                 description="Update Beans default libraries"
-                id="org.talend.camel.designer.migration.UpdateBeansCodeMigrationTask.7.4.1-2021-09"
-                name="UpdateBeansCodeMigrationTask 7.4.1-2021-09"
+                id="org.talend.camel.designer.migration.UpdateBeansPackageReplaceMigrationTask.7.4.1-2021-09"
+                name="UpdateBeansPackageReplaceMigrationTask 7.4.1-2021-09"
                 version="7.4.1">
           </projecttask>
           <projecttask
