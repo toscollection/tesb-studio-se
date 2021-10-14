@@ -46,6 +46,7 @@ if (baseProcess != null) {
 }
 jobFolderName = jobFolderName + JavaResourcesHelper.getJobFolderName(process.getName(), process.getVersion());
 String jobClassPackageFolder = codeGenArgument.getCurrentProjectName().toLowerCase() + '/' + jobFolderName;
+String packageName = codeGenArgument.getCurrentProjectName().toLowerCase() + '.' + jobFolderName;
 boolean isTestContainer=ProcessUtils.isTestContainer(process);
 String className = isTestContainer ? process.getName() + "Test" : process.getName();
 boolean exportTypeSpringBoot = org.talend.designer.runprocess.ProcessorUtilities.isExportJobAsMicroService();
@@ -1047,9 +1048,9 @@ if (null != conns && !conns.isEmpty()) {
 		}
 %>
 <% if ("PATCH".equals(httpVerb)) {%>
-    @org.apache.cxf.jaxrs.ext.<%=httpVerb%>()
+	@org.apache.cxf.jaxrs.ext.<%=httpVerb%>()
 <%} else {%>
-    @javax.ws.rs.<%=httpVerb%>()
+	@javax.ws.rs.<%=httpVerb%>()
 <%}%>
 
 <% if (null != uriPattern) { %>
@@ -1086,15 +1087,15 @@ if (exposeSwagger) {
 	String opName = "Operation " + connName;
 	String notes = "";
 	if (producesContentTypes != null) {
-	    notes += "Produces: " + producesContentTypes + " ";
+		notes += "Produces: " + producesContentTypes + " ";
 	}
 	if (consumesContentTypes != null) {
-	    notes += "Consumes: " + consumesContentTypes;
+		notes += "Consumes: " + consumesContentTypes;
 	}
 	notes = notes.replaceAll("\"", "");
-    %>
+	%>
 
-	  @io.swagger.annotations.ApiOperation(
+	@io.swagger.annotations.ApiOperation(
 		value = "<%=opName%>",
 		notes = "<%=notes%>"
 	)<%
@@ -1460,8 +1461,8 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 			RestServiceProviderImpl4TalendJob provider = new RestServiceProviderImpl4TalendJob(job);
 			
 			if(sf.getProperties() == null){
-        		sf.setProperties(new java.util.HashMap<String, Object>());
-        	}
+				sf.setProperties(new java.util.HashMap<String, Object>());
+			}
 
 			java.util.List<Object> providers = (java.util.List<Object>)sf.getProviders();
 			providers.add(new ExceptionMapper4TalendJobRestService(provider));
@@ -1520,19 +1521,19 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 				org.talend.esb.servicelocator.cxf.LocatorFeature slFeature = null;
 				<% if (ignoreSLStudio) { %>
 					<% if(exportTypeSpringBoot) { %>
-				    	org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
-				    	slFeature = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
+						org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
+						slFeature = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
 					<% } else { %>
 						slFeature = routines.system.BundleUtils.getService(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
 					<% } %>
 				<% } else { %>
 				if(inOSGi){
 					slFeature = routines.system.BundleUtils.getService(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
-		        }else{
-			    	org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
-			    	slFeature = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
+				}else{
+					org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
+					slFeature = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
 
-		        }				
+				}
 				<% } %>
 
 				<% List<Map<String, String>> customProperties = (List<Map<String,String>>)
@@ -1542,8 +1543,8 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 					<% for (int k = 0; k < customProperties.size(); k++) { %>
 						slCustomProps_<%=cid%>.put(<%=customProperties.get(k).get("PROP_NAME")%>, <%=customProperties.get(k).get("PROP_VALUE")%>);
 					<% } %>
-            	
-            		sf.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES,slCustomProps_<%=cid%>);
+
+					sf.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES,slCustomProps_<%=cid%>);
 				<% } %>
 
 				features.add(slFeature);
@@ -1556,10 +1557,10 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 				org.talend.esb.sam.agent.feature.EventFeature samEventFeature_<%=cid%> = null;
 				
 				if(!inOSGi){
-			    	samEventFeature_<%=cid%> = (org.talend.esb.sam.agent.feature.EventFeature) new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/agent-context.xml" }).getBean(org.talend.esb.sam.agent.feature.EventFeature.class);
-		        }else{  
+					samEventFeature_<%=cid%> = (org.talend.esb.sam.agent.feature.EventFeature) new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/agent-context.xml" }).getBean(org.talend.esb.sam.agent.feature.EventFeature.class);
+				}else{  
 					samEventFeature_<%=cid%> = routines.system.BundleUtils.getService(org.talend.esb.sam.agent.feature.EventFeature.class);
-		        }
+				}
 
 				<% List<Map<String, String>> samCustomProperties = (List<Map<String,String>>)
 						ElementParameterParser.getObjectValue(node, "__SERVICE_ACTIVITY_MONITOR_CUSTOM_PROPERTIES__"); %>
@@ -1580,31 +1581,32 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 			<% } %>
 
 			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__LOG_MESSAGES__"))) { %>
+				features.add(new LogMarkerFeature());
 				features.add(new org.apache.cxf.feature.LoggingFeature());
 			<% } %>
 
-            <% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__EXPOSE_SWAGGER_SPEC__")) && !"RESOURCECLASS".equals(ElementParameterParser.getValue(node, "__SERVICE_TYPE__"))) {
-                String swaggerDescription = "";
-                if (Boolean.valueOf(ElementParameterParser.getValue(node,"__INCLUDE_DOC_INTO_SWAGGER_SPEC__"))) {
-                    swaggerDescription = ElementParameterParser.getValue(node,"__COMMENT__").replace("\"", "\\\"");
-                    if (swaggerDescription.contains("\r\n")) {
-                        swaggerDescription = swaggerDescription.replace("\r\n", "\\n\" + \n\"");
-                    } else {
-                        swaggerDescription = swaggerDescription.replace("\n", "\\n\" + \n\"");
-                    }
-                }
-            %>
-                org.apache.cxf.jaxrs.swagger.Swagger2Feature swaggerFeature =
-                        new org.apache.cxf.jaxrs.swagger.Swagger2Feature();
+			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__EXPOSE_SWAGGER_SPEC__")) && !"RESOURCECLASS".equals(ElementParameterParser.getValue(node, "__SERVICE_TYPE__"))) {
+				String swaggerDescription = "";
+				if (Boolean.valueOf(ElementParameterParser.getValue(node,"__INCLUDE_DOC_INTO_SWAGGER_SPEC__"))) {
+					swaggerDescription = ElementParameterParser.getValue(node,"__COMMENT__").replace("\"", "\\\"");
+					if (swaggerDescription.contains("\r\n")) {
+						swaggerDescription = swaggerDescription.replace("\r\n", "\\n\" + \n\"");
+					} else {
+						swaggerDescription = swaggerDescription.replace("\n", "\\n\" + \n\"");
+					}
+				}
+			%>
+				org.apache.cxf.jaxrs.swagger.Swagger2Feature swaggerFeature =
+						new org.apache.cxf.jaxrs.swagger.Swagger2Feature();
 
-                swaggerFeature.setScan(false);
-                swaggerFeature.setBasePath(<%=ElementParameterParser.getValue(node, "__REST_ENDPOINT__")%>);
-                swaggerFeature.setTitle("<%=process.getName()%>" + " REST Application");
-                swaggerFeature.setDescription("<%=swaggerDescription%>");
-                swaggerFeature.setContact(null);
-                swaggerFeature.setLicense(null);
-                swaggerFeature.setLicenseUrl(null);
-                features.add(swaggerFeature);
+				swaggerFeature.setScan(false);
+				swaggerFeature.setBasePath(<%=ElementParameterParser.getValue(node, "__REST_ENDPOINT__")%>);
+				swaggerFeature.setTitle("<%=process.getName()%>" + " REST Application");
+				swaggerFeature.setDescription("<%=swaggerDescription%>");
+				swaggerFeature.setContact(null);
+				swaggerFeature.setLicense(null);
+				swaggerFeature.setLicenseUrl(null);
+				features.add(swaggerFeature);
 			<% } %>
 
 			sf.setFeatures(features);
@@ -1654,10 +1656,10 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 			}
 			if (contextExpression.startsWith("/services")) {
 				contextExpression = contextExpression.replaceFirst("/services","");
-            }
+			}
 			return isExpression ? evaluateContextExpression(contextExpression) : contextExpression;
 		}
-		
+
 		public static String evaluateContextExpression(String expression) throws javax.script.ScriptException {
 			javax.script.ScriptEngineManager manager = new javax.script.ScriptEngineManager();
 			javax.script.ScriptEngine engine = manager.getEngineByName("nashorn");
@@ -1665,22 +1667,46 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 			expression = expression.replaceAll("System.getProperty", "java.lang.System.getProperty");
 			return engine.eval(expression).toString();
 		}
-		
-        public static String getContext(String context, String contextName, String jobName) throws Exception {
 
-            String currentContext = null;
-            String jobNameStripped = jobName.substring(jobName.lastIndexOf(".") + 1);
+		public static String getContext(String context, String contextName, String jobName) throws Exception {
 
-            boolean inOSGi = routines.system.BundleUtils.inOSGi();
+			String currentContext = null;
+			String jobNameStripped = jobName.substring(jobName.lastIndexOf(".") + 1);
 
-            if (inOSGi) {
-                java.util.Dictionary<String, Object> jobProperties = routines.system.BundleUtils.getJobProperties(jobNameStripped);
+			boolean inOSGi = routines.system.BundleUtils.inOSGi();
 
-                if (jobProperties != null) {
-                    currentContext = (String)jobProperties.get("context");
-                }
-            }
+			if (inOSGi) {
+				java.util.Dictionary<String, Object> jobProperties = routines.system.BundleUtils.getJobProperties(jobNameStripped);
 
-            return contextName.contains("context.") ? evaluate(currentContext == null ? context : currentContext, contextName) : contextName;
-        }
+				if (jobProperties != null) {
+					currentContext = (String)jobProperties.get("context");
+				}
+			}
+
+			return contextName.contains("context.") ? evaluate(currentContext == null ? context : currentContext, contextName) : contextName;
+		}
 	}
+
+    public static final class LogMarkerFeature extends org.apache.cxf.feature.AbstractFeature {
+        @Override
+        protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider, org.apache.cxf.Bus bus) {
+            org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icIn =
+                    new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.RECEIVE) {
+                @Override
+                public void handleMessage(org.apache.cxf.message.Message msg) {
+                    org.slf4j.MDC.put("org.talend.esb.jobclass.name", "<%=packageName%>.<%=className%>");
+                }
+            };
+            org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icOut =
+                    new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.SETUP_ENDING) {
+                @Override
+                public void handleMessage(org.apache.cxf.message.Message msg) {
+                    org.slf4j.MDC.remove("org.talend.esb.jobname");
+                }
+            };
+            provider.getInInterceptors().add(icIn);
+            provider.getInFaultInterceptors().add(icIn);
+            provider.getOutInterceptors().add(icOut);
+            provider.getOutFaultInterceptors().add(icOut);
+        }
+    }
