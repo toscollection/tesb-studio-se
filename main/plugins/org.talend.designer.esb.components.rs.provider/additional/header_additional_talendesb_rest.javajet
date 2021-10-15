@@ -50,6 +50,7 @@ String packageName = codeGenArgument.getCurrentProjectName().toLowerCase() + '.'
 boolean isTestContainer=ProcessUtils.isTestContainer(process);
 String className = isTestContainer ? process.getName() + "Test" : process.getName();
 boolean exportTypeSpringBoot = org.talend.designer.runprocess.ProcessorUtilities.isExportJobAsMicroService();
+boolean logMarkerFeatureNeeded = false;
 
 List<? extends INode> httpRequestComponentsList = process.getNodesOfType("tRESTRequest");
 if (!httpRequestComponentsList.isEmpty()) {
@@ -1580,7 +1581,7 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 				features.add(new org.talend.esb.policy.correlation.feature.CorrelationIDFeature());
 			<% } %>
 
-			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__LOG_MESSAGES__"))) { %>
+			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__LOG_MESSAGES__"))) { logMarkerFeatureNeeded = true; %>
 				features.add(new LogMarkerFeature());
 				features.add(new org.apache.cxf.feature.LoggingFeature());
 			<% } %>
@@ -1662,6 +1663,7 @@ class Thread4RestServiceProviderEndpoint extends Thread {
             return contextName.contains("context.") ? evaluate(currentContext == null ? context : currentContext, contextName) : contextName;
         }
     }
+<% if (logMarkerFeatureNeeded) { %>
     public static final class LogMarkerFeature extends org.apache.cxf.feature.AbstractFeature {
         @Override
         protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider, org.apache.cxf.Bus bus) {
@@ -1685,3 +1687,4 @@ class Thread4RestServiceProviderEndpoint extends Thread {
             provider.getOutFaultInterceptors().add(icOut);
         }
     }
+<% } %>
