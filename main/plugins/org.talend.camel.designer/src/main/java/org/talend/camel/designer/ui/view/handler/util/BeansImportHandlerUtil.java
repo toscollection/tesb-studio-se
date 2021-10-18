@@ -87,7 +87,6 @@ public class BeansImportHandlerUtil {
             }
         }
 
-        Set<IMPORTType> removeSet = new HashSet<>();
 
         for (Object imp : imports) {
 
@@ -100,22 +99,6 @@ public class BeansImportHandlerUtil {
                     importType.setMVN("mvn:org.talend.libraries/" + camelCxfPrefix + camelVersion + "/6.0.0-SNAPSHOT/jar");
                 }
             }
-
-            for (ModuleNeeded defaultNeed : modulesNeededForBeans) {
-                if (imp instanceof IMPORTType) {
-                    IMPORTType importType = (IMPORTType) imp;
-                    if (importType.getMODULE().indexOf('-') > 0) {
-
-                        if (StringUtils.equals(importType.getMODULE().replaceAll(VERSION_PATTERN, ""),
-                                defaultNeed.getModuleName().replaceAll(VERSION_PATTERN, ""))) {
-                            removeSet.add(importType);
-                        }
-                    }
-                }
-            }
         }
-
-        imports.removeAll(removeSet);
     }
-
 }
