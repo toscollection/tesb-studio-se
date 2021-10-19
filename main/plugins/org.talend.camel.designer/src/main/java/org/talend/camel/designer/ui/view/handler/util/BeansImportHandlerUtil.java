@@ -68,23 +68,24 @@ public class BeansImportHandlerUtil {
             }
         }
 
-        // add default modules to the list of modules that are being imported from external project
+        
         List<ModuleNeeded> modulesNeededForBeans = ModulesNeededProvider.getModulesNeededForBeans();
-
-        Set<String> importedModulesForBeansNames = new HashSet<String>();
-        for (IMPORTType item : imports) {
-            importedModulesForBeansNames.add(item.getMODULE().replaceAll(VERSION_PATTERN, ""));
+        Set<String> modulesNeededForBeansNames = new HashSet<String>();
+        for (ModuleNeeded module : modulesNeededForBeans) {
+        	modulesNeededForBeansNames.add(module.getModuleName().replaceAll(VERSION_PATTERN, ""));
         }
         
+        // remove default modules in the list of modules that are being imported from external project
+        imports.removeIf(i -> modulesNeededForBeansNames.contains(i.getMODULE().replaceAll(VERSION_PATTERN, "")));
+        
+        // add new default modules
         for (ModuleNeeded model : modulesNeededForBeans) {
-            if (!importedModulesForBeansNames.contains(model.getModuleName().replaceAll(VERSION_PATTERN, ""))) {
-                IMPORTType importType = ComponentFactory.eINSTANCE.createIMPORTType();
-                importType.setMODULE(model.getModuleName());
-                importType.setMESSAGE(model.getInformationMsg());
-                importType.setREQUIRED(model.isRequired());
-                importType.setMVN(model.getMavenUri());
-                imports.add(importType);
-            }
+            IMPORTType importType = ComponentFactory.eINSTANCE.createIMPORTType();
+            importType.setMODULE(model.getModuleName());
+            importType.setMESSAGE(model.getInformationMsg());
+            importType.setREQUIRED(model.isRequired());
+            importType.setMVN(model.getMavenUri());
+            imports.add(importType);
         }
 
 
