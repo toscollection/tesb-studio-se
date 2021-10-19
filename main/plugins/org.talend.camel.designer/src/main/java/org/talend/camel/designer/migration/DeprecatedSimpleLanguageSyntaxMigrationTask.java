@@ -59,14 +59,17 @@ public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteIt
 				if ("EXPRESSION".equalsIgnoreCase(name) && "SIMPLE".equalsIgnoreCase(valueLanguage)) {
 					valueExpression = value;
 
-					String wrappedBodyAndHeaderExpressions = wrapBodyAndHeaderExpressions(valueExpression);
-					if (!valueExpression.equalsIgnoreCase(wrappedBodyAndHeaderExpressions)) {
-						element.setValue(wrappedBodyAndHeaderExpressions);
+					String newExpression = wrapBodyAndHeaderExpressions(valueExpression);
+					
+					newExpression = replaceKeywords(newExpression);
+					
+					if (!valueExpression.equalsIgnoreCase(newExpression)) {
+						element.setValue(newExpression);
 						save = true;
 						
 						generateReportRecord(new MigrationReportRecorder(this,
 						    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "Language Expression",
-						        valueExpression, wrappedBodyAndHeaderExpressions));
+						        valueExpression, newExpression));
 					}
 				}
 
@@ -98,9 +101,11 @@ public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteIt
 					save = true;
 				}
 
-				String wrappedBodyAndHeaderExpressions = wrapBodyAndHeaderExpressions(valueExpression);
-				if (!valueExpression.equalsIgnoreCase(wrappedBodyAndHeaderExpressions)) {
-					valueExpression = wrappedBodyAndHeaderExpressions;
+				String newExpression = wrapBodyAndHeaderExpressions(valueExpression);
+				
+				newExpression = replaceKeywords(newExpression);
+				
+				if (!valueExpression.equalsIgnoreCase(newExpression)) {
 					save = true;
 				}
 
@@ -110,16 +115,16 @@ public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteIt
 						if ("EXPRESSION".equals(p.getName())) {
 							String newValueExpression = "";
 							if (isOldFormatExpression) {
-								newValueExpression = "\"" + WRAPPER_START + valueExpression + WRAPPER_END + "\"";
+								newValueExpression = "\"" + WRAPPER_START + newExpression + WRAPPER_END + "\"";
 							} else {
-								newValueExpression = "\"" + valueExpression + "\"";
+								newValueExpression = "\"" + newExpression + "\"";
 							}
 							
 							p.setValue(newValueExpression);
 							
 							generateReportRecord(new MigrationReportRecorder(this,
 								    MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), currentNode, "Language Expression",
-								    paramExpression.getValue(), newValueExpression));
+								    valueExpression, newValueExpression));
 							
 							break;
 						}
@@ -137,6 +142,12 @@ public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteIt
 		String findRegExp = "(?<!\\$\\{)((body|in.body|header|headers|header|in.header|in.headers)\\[\\d*\\])(?!\\})";
 		String replaceRegExp = "\\$\\{$1\\}";
 		return valueExpression.replaceAll(findRegExp, replaceRegExp);
+	}
+	
+	private String replaceKeywords(String valueExpression) {
+        String findRegExp = "(\\$\\{|\\s|^)property(\\.|\\[\\S*\\])";
+		String replaceRegExp = "$1exchangeProperty$2";
+		return valueExpression.replace(findRegExp, replaceRegExp);
 	}
 
 	private static boolean isOldFormatExpression(String basicExpression, boolean strict) {
