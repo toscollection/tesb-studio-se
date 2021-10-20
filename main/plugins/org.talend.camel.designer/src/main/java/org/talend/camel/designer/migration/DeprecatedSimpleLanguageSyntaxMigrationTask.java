@@ -147,7 +147,7 @@ public class DeprecatedSimpleLanguageSyntaxMigrationTask extends AbstractRouteIt
 	private String replaceKeywords(String valueExpression) {
         String findRegExp = "(\\$\\{|\\s|^)property(\\.|\\[\\S*\\])";
 		String replaceRegExp = "$1exchangeProperty$2";
-		return valueExpression.replace(findRegExp, replaceRegExp);
+		return valueExpression.replaceAll(findRegExp, replaceRegExp);
 	}
 
 	private static boolean isOldFormatExpression(String basicExpression, boolean strict) {
