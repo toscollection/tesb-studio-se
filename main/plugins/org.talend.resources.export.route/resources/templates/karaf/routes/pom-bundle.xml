@@ -107,6 +107,15 @@
             </properties>
         </profile>
         <profile>
+            <id>nexus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <maven.deploy.skip>false</maven.deploy.skip>
+            </properties>
+        </profile>
+        <profile>
             <id>include-java-sources</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
