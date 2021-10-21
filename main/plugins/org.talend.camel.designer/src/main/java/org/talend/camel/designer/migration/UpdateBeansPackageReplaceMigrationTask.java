@@ -79,6 +79,7 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
     public List<ERepositoryObjectType> getTypes() {
         List<ERepositoryObjectType> toReturn = new ArrayList<ERepositoryObjectType>();
         toReturn.add(ERepositoryObjectType.BEANS);
+        toReturn.add(ERepositoryObjectType.ROUTINES);
         return toReturn;
     }
 
