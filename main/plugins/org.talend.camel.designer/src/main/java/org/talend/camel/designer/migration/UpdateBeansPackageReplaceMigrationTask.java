@@ -40,6 +40,7 @@ import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.migration.AbstractItemMigrationTask;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.RoutineItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 
@@ -79,6 +80,7 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
     public List<ERepositoryObjectType> getTypes() {
         List<ERepositoryObjectType> toReturn = new ArrayList<ERepositoryObjectType>();
         toReturn.add(ERepositoryObjectType.BEANS);
+        toReturn.add(ERepositoryObjectType.ROUTINES);
         return toReturn;
     }
 
@@ -92,10 +94,16 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
     public ExecutionResult execute(Item item) {
         ExecutionResult execResult = ExecutionResult.NOTHING_TO_DO;
         String pattern = "(\\s*|\t|\r|\n)";
-        if (item instanceof BeanItem) {
+        if (item instanceof RoutineItem) {
 
-            BeanItem beanItem = (BeanItem) item;
-            String content = new String(beanItem.getContent().getInnerContent());
+            RoutineItem resourceItem = null;
+            if(item instanceof BeanItem) {
+                resourceItem = (BeanItem) item;
+            }else {
+                resourceItem = (RoutineItem) item;
+            }
+
+            String content = new String(resourceItem.getContent().getInnerContent());
             Set<Entry<Object, Object>> entrySet = PACKAGES_TO_REPLACE.entrySet();
 
             for(Entry<Object, Object> entry : entrySet) {
@@ -118,9 +126,9 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
 
                 if (m.find()) {
                     content = content.replaceAll(computePattenBuffer.toString(), " "+replaceValue+" ");
-                    beanItem.getContent().setInnerContent(content.getBytes());
+                    resourceItem.getContent().setInnerContent(content.getBytes());
                     try {
-                        ProxyRepositoryFactory.getInstance().save(beanItem);
+                        ProxyRepositoryFactory.getInstance().save(resourceItem);
                         execResult = ExecutionResult.SUCCESS_NO_ALERT;
                     } catch (PersistenceException e) {
                         log.error("Error replacing import statements", e);
