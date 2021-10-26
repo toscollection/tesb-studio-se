@@ -457,7 +457,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-bcprov-jdk15on}"
             id="bcprov-jdk15on"
-            mvn_uri="mvn:org.bouncycastle/bcprov-jdk15on/1.68"
+            mvn_uri="mvn:org.bouncycastle/bcprov-jdk15on/1.69"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-opensaml-xmlsec-impl}"
