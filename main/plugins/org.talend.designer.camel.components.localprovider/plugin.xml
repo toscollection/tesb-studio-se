@@ -64,7 +64,7 @@
             <library id="slf4j-api" />
             <library id="geronimo-jms_1.1_spec" />
             <library id="geronimo-j2ee-management_1.1_spec" />
-            <library id="geronimo-jta_1.0.1B_spec" />
+            <library id="geronimo-jta_1.1_spec" />
             <library id="commons-logging" />
             <library id="hawtbuf" />
             <library id="xbean-spring" />
@@ -135,9 +135,9 @@
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-geronimo-jta_1.0.1B_spec}"
-            id="geronimo-jta_1.0.1B_spec"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-geronimo-jta_1.0.1B_spec}"
+            name="${tesb-geronimo-jta_1.1_spec}"
+            id="geronimo-jta_1.1_spec"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-geronimo-jta_1.1_spec}"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
