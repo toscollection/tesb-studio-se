@@ -40,8 +40,10 @@ import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.migration.AbstractItemMigrationTask;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.RoutineItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+
 /**
  * Update core libraries version to default for beans, should run before login
  *
@@ -78,6 +80,7 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
     public List<ERepositoryObjectType> getTypes() {
         List<ERepositoryObjectType> toReturn = new ArrayList<ERepositoryObjectType>();
         toReturn.add(ERepositoryObjectType.BEANS);
+        toReturn.add(ERepositoryObjectType.ROUTINES);
         return toReturn;
     }
 
@@ -89,6 +92,7 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
 
     @Override
     public ExecutionResult execute(Item item) {
+
         ExecutionResult execResult = ExecutionResult.NOTHING_TO_DO;
         String pattern = "(\\s*|\t|\r|\n)";
         if (item instanceof BeanItem) {
