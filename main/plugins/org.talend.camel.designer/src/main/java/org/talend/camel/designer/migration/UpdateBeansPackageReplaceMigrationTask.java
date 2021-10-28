@@ -127,14 +127,14 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
 
                 if (m.find()) {
                     content = content.replaceAll(computePattenBuffer.toString(), " "+replaceValue+" ");
-                    beanItem.getContent().setInnerContent(content.getBytes());
+                    resourceItem.getContent().setInnerContent(content.getBytes());
                     isItemUpdated = true;
                 }
             }
-            beanItem.getProperty().getInformations().clear();
+            resourceItem.getProperty().getInformations().clear();
             if(isItemUpdated) {
                 try {
-                    ProxyRepositoryFactory.getInstance().save(beanItem);
+                    ProxyRepositoryFactory.getInstance().save(resourceItem);
                     execResult = ExecutionResult.SUCCESS_NO_ALERT;
                 } catch (PersistenceException e) {
                     log.error("Error replacing import statements", e);
