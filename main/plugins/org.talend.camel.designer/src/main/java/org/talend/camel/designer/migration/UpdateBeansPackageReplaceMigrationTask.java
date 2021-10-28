@@ -92,14 +92,19 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
 
     @Override
     public ExecutionResult execute(Item item) {
-
         ExecutionResult execResult = ExecutionResult.NOTHING_TO_DO;
         String pattern = "(\\s*|\t|\r|\n)";
-        if (item instanceof BeanItem) {
+        if (item instanceof RoutineItem) {
 
-            BeanItem beanItem = (BeanItem) item;
             boolean isItemUpdated = false;
-            String content = new String(beanItem.getContent().getInnerContent());
+            RoutineItem resourceItem = null;
+            if(item instanceof BeanItem) {
+                resourceItem = (BeanItem) item;
+            }else {
+                resourceItem = (RoutineItem) item;
+            }
+
+            String content = new String(resourceItem.getContent().getInnerContent());
             Set<Entry<Object, Object>> entrySet = PACKAGES_TO_REPLACE.entrySet();
 
             for(Entry<Object, Object> entry : entrySet) {
@@ -126,9 +131,10 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
                     isItemUpdated = true;
                 }
             }
-            beanItem.getProperty().getInformations().clear();
+
             if(isItemUpdated) {
                 try {
+                    beanItem.getProperty().getInformations().clear();
                     ProxyRepositoryFactory.getInstance().save(beanItem);
                     execResult = ExecutionResult.SUCCESS_NO_ALERT;
                 } catch (PersistenceException e) {
