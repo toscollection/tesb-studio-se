@@ -34,20 +34,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.common.util.EList;
 import org.talend.camel.core.model.camelProperties.BeanItem;
 import org.talend.camel.designer.ui.wizards.actions.JavaCamelJobScriptsExportWSAction;
 import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.migration.AbstractItemMigrationTask;
 import org.talend.core.model.properties.Item;
-import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.core.runtime.process.ITalendProcessJavaProject;
-import org.talend.designer.runprocess.java.TalendJavaProjectManager;
-
 /**
  * Update core libraries version to default for beans, should run before login
  *
@@ -128,10 +122,9 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
                     isItemUpdated = true;
                 }
             }
-
+            beanItem.getProperty().getInformations().clear();
             if(isItemUpdated) {
                 try {
-                    beanItem.getProperty().getInformations().clear();
                     ProxyRepositoryFactory.getInstance().save(beanItem);
                     execResult = ExecutionResult.SUCCESS_NO_ALERT;
                 } catch (PersistenceException e) {
