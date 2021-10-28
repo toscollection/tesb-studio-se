@@ -131,10 +131,9 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
                     isItemUpdated = true;
                 }
             }
-
+            beanItem.getProperty().getInformations().clear();
             if(isItemUpdated) {
                 try {
-                    beanItem.getProperty().getInformations().clear();
                     ProxyRepositoryFactory.getInstance().save(beanItem);
                     execResult = ExecutionResult.SUCCESS_NO_ALERT;
                 } catch (PersistenceException e) {
