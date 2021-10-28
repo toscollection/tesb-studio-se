@@ -34,15 +34,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.EList;
 import org.talend.camel.core.model.camelProperties.BeanItem;
 import org.talend.camel.designer.ui.wizards.actions.JavaCamelJobScriptsExportWSAction;
 import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.migration.AbstractItemMigrationTask;
 import org.talend.core.model.properties.Item;
-import org.talend.core.model.properties.RoutineItem;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.core.runtime.process.ITalendProcessJavaProject;
+import org.talend.designer.runprocess.java.TalendJavaProjectManager;
 
 /**
  * Update core libraries version to default for beans, should run before login
@@ -80,7 +84,6 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
     public List<ERepositoryObjectType> getTypes() {
         List<ERepositoryObjectType> toReturn = new ArrayList<ERepositoryObjectType>();
         toReturn.add(ERepositoryObjectType.BEANS);
-        toReturn.add(ERepositoryObjectType.ROUTINES);
         return toReturn;
     }
 
@@ -94,16 +97,11 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
     public ExecutionResult execute(Item item) {
         ExecutionResult execResult = ExecutionResult.NOTHING_TO_DO;
         String pattern = "(\\s*|\t|\r|\n)";
-        if (item instanceof RoutineItem) {
+        if (item instanceof BeanItem) {
 
-            RoutineItem resourceItem = null;
-            if(item instanceof BeanItem) {
-                resourceItem = (BeanItem) item;
-            }else {
-                resourceItem = (RoutineItem) item;
-            }
-
-            String content = new String(resourceItem.getContent().getInnerContent());
+            BeanItem beanItem = (BeanItem) item;
+            boolean isItemUpdated = false;
+            String content = new String(beanItem.getContent().getInnerContent());
             Set<Entry<Object, Object>> entrySet = PACKAGES_TO_REPLACE.entrySet();
 
             for(Entry<Object, Object> entry : entrySet) {
@@ -126,16 +124,24 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
 
                 if (m.find()) {
                     content = content.replaceAll(computePattenBuffer.toString(), " "+replaceValue+" ");
-                    resourceItem.getContent().setInnerContent(content.getBytes());
-                    try {
-                        ProxyRepositoryFactory.getInstance().save(resourceItem);
-                        execResult = ExecutionResult.SUCCESS_NO_ALERT;
-                    } catch (PersistenceException e) {
-                        log.error("Error replacing import statements", e);
-                        ExceptionHandler.process(e);
-                        execResult = ExecutionResult.FAILURE;
-                        break;
-                    }
+                    beanItem.getContent().setInnerContent(content.getBytes());
+                    isItemUpdated = true;
+                }
+            }
+
+            if(isItemUpdated) {
+                try {
+                    beanItem.getProperty().getInformations().clear();
+                    ProxyRepositoryFactory.getInstance().save(beanItem);
+                    execResult = ExecutionResult.SUCCESS_NO_ALERT;
+                } catch (PersistenceException e) {
+                    log.error("Error replacing import statements", e);
+                    ExceptionHandler.process(e);
+                    execResult = ExecutionResult.FAILURE;
+                } catch (Exception e) {
+                    log.error("Building Code Project Failed", e);
+                    ExceptionHandler.process(e);
+                    execResult = ExecutionResult.FAILURE;
                 }
             }
         }
