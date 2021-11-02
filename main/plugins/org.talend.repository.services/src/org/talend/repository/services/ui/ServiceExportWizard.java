@@ -115,7 +115,11 @@ public class ServiceExportWizard extends Wizard implements IExportWizard {
         exportChoiceMap.put(ExportChoice.includeLibs, true);
         exportChoiceMap.put(ExportChoice.needLog4jLevel, false);
         exportChoiceMap.put(ExportChoice.needAssembly, true);
-        exportChoiceMap.put(ExportChoice.bundleVersion,  PomIdsHelper.getJobVersion(serviceItem.getProperty()));
+        String bundleVersion = PomIdsHelper.getJobVersion(serviceItem.getProperty());
+        if (bundleVersion != null) {
+        	bundleVersion = bundleVersion.replace("-", ".");
+        }
+        exportChoiceMap.put(ExportChoice.bundleVersion, bundleVersion);
 
         // update to use BuildDataServiceHandler
         IProgressMonitor pMonitor = new NullProgressMonitor();
