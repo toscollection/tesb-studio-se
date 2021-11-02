@@ -96,6 +96,7 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
         String pattern = "(\\s*|\t|\r|\n)";
         if (item instanceof RoutineItem) {
 
+            boolean isItemUpdated = false;
             RoutineItem resourceItem = null;
             if(item instanceof BeanItem) {
                 resourceItem = (BeanItem) item;
@@ -127,15 +128,22 @@ public class UpdateBeansPackageReplaceMigrationTask extends AbstractItemMigratio
                 if (m.find()) {
                     content = content.replaceAll(computePattenBuffer.toString(), " "+replaceValue+" ");
                     resourceItem.getContent().setInnerContent(content.getBytes());
-                    try {
-                        ProxyRepositoryFactory.getInstance().save(resourceItem);
-                        execResult = ExecutionResult.SUCCESS_NO_ALERT;
-                    } catch (PersistenceException e) {
-                        log.error("Error replacing import statements", e);
-                        ExceptionHandler.process(e);
-                        execResult = ExecutionResult.FAILURE;
-                        break;
-                    }
+                    isItemUpdated = true;
+                }
+            }
+            resourceItem.getProperty().getInformations().clear();
+            if(isItemUpdated) {
+                try {
+                    ProxyRepositoryFactory.getInstance().save(resourceItem);
+                    execResult = ExecutionResult.SUCCESS_NO_ALERT;
+                } catch (PersistenceException e) {
+                    log.error("Error replacing import statements", e);
+                    ExceptionHandler.process(e);
+                    execResult = ExecutionResult.FAILURE;
+                } catch (Exception e) {
+                    log.error("Building Code Project Failed", e);
+                    ExceptionHandler.process(e);
+                    execResult = ExecutionResult.FAILURE;
                 }
             }
         }
