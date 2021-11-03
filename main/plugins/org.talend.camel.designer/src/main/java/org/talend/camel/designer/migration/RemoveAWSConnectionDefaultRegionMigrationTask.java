@@ -41,10 +41,15 @@ import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
 import org.talend.migration.MigrationReportRecorder;
 
 /**
- * DOC yyan class global comment. Add esb libraries by default for bean TESB-21419
+ * DOC vdrokov class global comment. Remove cAWSConnection default region for APPINT-33845
  *
  */
-public class RemoveAWSConnectionDefaultRegionMigrationTask extends AbstractItemMigrationTask {
+public class RemoveAWSConnectionDefaultRegionMigrationTask extends AbstractRouteItemComponentMigrationTask {
+
+    @Override
+    public String getComponentNameRegex() {
+        return "cAWSConnection";
+    }
 
     @Override
     public Date getOrder() {
@@ -52,44 +57,28 @@ public class RemoveAWSConnectionDefaultRegionMigrationTask extends AbstractItemM
         return gc.getTime();
     }
 
-    @Override
-    public ExecutionResult execute(Item item) {
-        if (item instanceof ProcessItem) {
-            ProcessItem processItem = (ProcessItem) item;
-            removeAWSConnectionDefaultRegion(processItem);
-            try {
-                ProxyRepositoryFactory.getInstance().save(processItem);
-            } catch (PersistenceException e) {
-                ExceptionHandler.process(e);
-                return ExecutionResult.FAILURE;
-            }
-            return ExecutionResult.SUCCESS_NO_ALERT;
-        } else {
-            return ExecutionResult.NOTHING_TO_DO;
-        }
-    }
+	@Override
+	protected boolean execute(NodeType nodeType) throws Exception {
+		return removeAWSConnectionDefaultRegion(nodeType);
+	}
 
-    private void removeAWSConnectionDefaultRegion(ProcessItem processItem) {
-        List<? extends NodeType> generatingNodes = processItem.getProcess().getNode();
+    private boolean removeAWSConnectionDefaultRegion(NodeType nodeType) {
+        boolean needSave = false;
 
-        Iterator it = generatingNodes.iterator();
-        while(it.hasNext()) {
-            NodeType nodeType = (NodeType) it.next();
+        EList<ElementParameterType> list = nodeType.getElementParameter();
 
-            if ("cAWSConnection".equals(nodeType.getComponentName())) {
-                EList<ElementParameterType> list = nodeType.getElementParameter();
+        for (ElementParameterType elParameter : list) {
+            if ("REGION".equals(elParameter.getName()) && "DEFAULT".equals(elParameter.getValue())) {
+                elParameter.setValue("\"us-west-1\"");
+                needSave = true;
 
-                for (ElementParameterType elParameter : list) {
-                    if ("REGION".equals(elParameter.getName()) && "DEFAULT".equals(elParameter.getValue())) {
-                        elParameter.setValue("\"us-west-1\"");
-                        
-                        String message = "Migrating DEFAULT region of cAWSConnection to US West (N. California)";
-                        
-                        generateReportRecord(new MigrationReportRecorder(this,
-    	    	                MigrationReportRecorder.MigrationOperationType.MODIFY, processItem, null, message, null, null));
-                    }
-                }
+                String message = "Migrating DEFAULT region of cAWSConnection to US West (N. California)";
+
+                generateReportRecord(new MigrationReportRecorder(this,
+                        MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), nodeType, message, "", "us-west-1"));
             }
         }
+
+        return needSave;
     }
 }
