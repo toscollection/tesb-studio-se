@@ -351,7 +351,7 @@
                 beforeLogon="false"
                 breaks="7.3.0"
                 class="org.talend.camel.designer.migration.RemoveAWSConnectionDefaultRegionMigrationTask"
-                description="Remove duplicate libraries"
+                description="Remove cAWSConnection default region"
                 id="org.talend.camel.designer.migration.RemoveAWSConnectionDefaultRegionMigrationTask.7.4.1"
                 name="RemoveAWSConnectionDefaultRegionMigrationTask 7.4.1"
                 version="7.4.1">
