@@ -94,14 +94,14 @@
         </plugins>
     </build>
     <profiles>
-	<profile>
-		<id>nexus</id>
-		<activation>
-			<activeByDefault>true</activeByDefault>
-		</activation>
-		<properties>
-			<maven.deploy.skip>false</maven.deploy.skip>
-		</properties>
-	</profile>
-</profiles>
+		<profile>
+			<id>nexus</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<maven.deploy.skip>false</maven.deploy.skip>
+			</properties>
+		</profile>
+    </profiles>
 </project>
