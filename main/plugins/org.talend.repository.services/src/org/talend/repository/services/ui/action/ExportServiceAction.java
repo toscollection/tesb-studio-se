@@ -287,17 +287,21 @@ public class ExportServiceAction implements IRunnableWithProgress {
             throws InvocationTargetException, InterruptedException {
         for (IRepositoryViewObject node : nodes) {
             ProcessItem processItem = (ProcessItem) node.getProperty().getItem();
+            
+            String bundleVersion = getBundleVersion();
+            if (bundleVersion != null)
+            	bundleVersion = bundleVersion.replace("-", ".");
 
             if (exportChoiceMap == null) {
                 exportChoiceMap = new HashMap<ExportChoice, Object>();
                 exportChoiceMap.put(ExportChoice.needContext, true);
-                exportChoiceMap.put(ExportChoice.bundleVersion, getServiceVersion());
+                exportChoiceMap.put(ExportChoice.bundleVersion, bundleVersion);
             } else {
                 if (exportChoiceMap.get(ExportChoice.needContext) == null) {
                     exportChoiceMap.put(ExportChoice.needContext, true);
                 }
                 if (exportChoiceMap.get(ExportChoice.bundleVersion) == null) {
-                    exportChoiceMap.put(ExportChoice.bundleVersion, getServiceVersion());
+                    exportChoiceMap.put(ExportChoice.bundleVersion, bundleVersion);
                 }
             }
 
