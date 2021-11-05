@@ -69,13 +69,13 @@ public class RemoveAWSConnectionDefaultRegionMigrationTask extends AbstractRoute
 
         for (ElementParameterType elParameter : list) {
             if ("REGION".equals(elParameter.getName()) && "DEFAULT".equals(elParameter.getValue())) {
-                elParameter.setValue("\"us-west-1\"");
+                elParameter.setValue("\"us-east-1\"");
                 needSave = true;
 
-                String message = "Migrating DEFAULT region of cAWSConnection to US West (N. California)";
+                String message = "Migrating DEFAULT region of cAWSConnection to US East (N. Virginia)";
 
                 generateReportRecord(new MigrationReportRecorder(this,
-                        MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), nodeType, message, "", "us-west-1"));
+                        MigrationReportRecorder.MigrationOperationType.MODIFY, getRouteItem(), nodeType, message, "", "us-east-1"));
             }
         }
 
