@@ -143,7 +143,13 @@ public final class CamelFeatureUtil {
 
 
     private static Collection<FeatureModel> computeFeature(String libraryName) {
-        if (CAMEL_CORE.contains(libraryName)) {
+    	
+        String libraryShortName = libraryName;
+        if (libraryName != null && libraryName.endsWith("-alldep")) {
+            libraryShortName = libraryName.substring(0, libraryName.length() - "-alldep".length());
+        }
+    	
+        if (CAMEL_CORE.contains(libraryShortName)) {
             return Arrays.asList(new FeatureModel("camel-core"));
         } else {
             FeatureModel[] features = camelFeaturesMap.get(libraryName);
