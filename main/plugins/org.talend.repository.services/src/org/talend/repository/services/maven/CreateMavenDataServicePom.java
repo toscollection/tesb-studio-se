@@ -401,6 +401,11 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         jsoupDep.setArtifactId("jsoup");
         jsoupDep.setVersion("1.14.2");
 
+        Dependency mavenModelDep = new Dependency();
+        mavenModelDep.setGroupId("org.apache.maven");
+        mavenModelDep.setArtifactId("maven-model");
+        mavenModelDep.setVersion("3.8.1");
+
         dependencies.add(mavensharedDep);
         dependencies.add(commonsioDep);
         dependencies.add(httpclientDep);
@@ -415,6 +420,7 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         dependencies.add(plexusArchiverDep);
         dependencies.add(commonsCompressDep);
         dependencies.add(jsoupDep);
+        dependencies.add(mavenModelDep);
         plugin.setDependencies(dependencies);
 
         return plugin;
