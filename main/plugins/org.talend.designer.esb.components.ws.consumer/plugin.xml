@@ -595,6 +595,11 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-zookeeper}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
+            name="${tesb-zookeeper-jute}"
+            id="zookeeper-jute"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-zookeeper-jute}"
+            bundleID="" />
+        <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-features-clustering}"
             id="cxf-rt-features-clustering"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-features-clustering}"
@@ -608,6 +613,7 @@
             <library id="slf4j-api" />
             <library id="camel-core" />
             <library id="zookeeper" />
+            <library id="zookeeper-jute" />
             <library id="cxf-rt-features-clustering" />
             <library id="pax-cdi-api" />
             <library id="org.apache.servicemix.bundles.javax-inject" />
