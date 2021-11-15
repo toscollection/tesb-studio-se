@@ -227,8 +227,17 @@
 				<groupId>net.shibboleth.utilities</groupId>
 				<artifactId>java-support</artifactId>
 			</exclusion>
+			<exclusion>
+				<groupId>org.apache.santuario</groupId>
+				<artifactId>xmlsec</artifactId>
+			</exclusion>
 		</exclusions>
 	</dependency>
+	<dependency>
+        <groupId>org.apache.santuario</groupId>
+        <artifactId>xmlsec</artifactId>
+        <version>2.1.7</version>
+    </dependency>
 	<!--dependency>
 		<groupId>org.apache.cxf</groupId>
 		<artifactId>cxf-rt-ws-policy</artifactId>
