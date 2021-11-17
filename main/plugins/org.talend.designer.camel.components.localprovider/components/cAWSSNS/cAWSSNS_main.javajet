@@ -18,7 +18,7 @@ imports="
     List< ? extends IConnection> in = node.getIncomingConnections();
 
     CamelEndpointBuilder eb = CamelEndpointBuilder.getBuilder();
-    eb.setComponent("aws-sns");
+    eb.setComponent("aws2-sns");
     eb.useDoubleSlash(false);
 
     String sns = ElementParameterParser.getValue(node, "__AWS_CONNECTION_CLIENT__");

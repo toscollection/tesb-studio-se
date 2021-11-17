@@ -153,9 +153,9 @@
 			
 			<IMPORT MODULE_GROUP="aws-jackson" REQUIRED="true" />
 
-            <IMPORT NAME="httpcore-4.4.6.jar" MODULE="httpcore-4.4.6.jar"
-                MVN="mvn:org.talend.libraries/httpcore-4.4.6/6.0.0"
-                UrlPath="platform:/plugin/org.talend.libraries.apache.http/lib/httpcore-4.4.6.jar"
+            <IMPORT NAME="httpcore-4.4.13.jar" MODULE="httpcore-4.4.13.jar"
+                MVN="mvn:org.apache.httpcomponents/httpcore/4.4.13"
+                UrlPath="platform:/plugin/org.talend.libraries.apache.http/lib/httpcore-4.4.13.jar"
                 REQUIRED="true" />
             <IMPORT NAME="httpclient-4.5.13.jar" MODULE="httpclient-4.5.13.jar"
                 MVN="mvn:org.talend.libraries/httpclient-4.5.13/6.0.0"
