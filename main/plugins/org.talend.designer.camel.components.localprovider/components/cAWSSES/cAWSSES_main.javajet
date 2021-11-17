@@ -21,7 +21,7 @@ imports="
 
 	String from = ElementParameterParser.getValue(node, "__FROM__");
 
-	builder.setComponent("aws-ses");
+	builder.setComponent("aws2-ses");
 	builder.useDoubleSlash(false);
 	builder.setName(from);
 
