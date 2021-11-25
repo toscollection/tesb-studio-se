@@ -152,9 +152,9 @@ imports="
 
         if(argName.equals("providers")) {
             if(argValue.startsWith("\"") && argValue.endsWith("\"") && argValue.length() >= 2){
-                argValue = argValue.replaceFirst("\"","");
-                builder.addParam(argName, "\"#providers," + argValue);
-                builderRT.addParam(argName, "\"#providers," + argValue);
+                argValue = argValue.substring(0, argValue.length() - 1);
+                builder.addParam(argName, argValue + ",#providers\"");
+                builderRT.addParam(argName, argValue + ",#providers\"");
             }else{
                 builder.addParam(argName, argValue);
                 builderRT.addParam(argName, argValue);
