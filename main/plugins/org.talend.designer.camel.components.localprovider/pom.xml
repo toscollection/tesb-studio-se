@@ -44,9 +44,6 @@
 		<mail.version>1.4.7</mail.version>
 		<!-- camel-aws -->
 		<aws.sdk.version>2.16.23</aws.sdk.version>
-		<!-- camel-azure -->
-		<azure-storage-version>7.0.0</azure-storage-version>
-		<azure-keyvault-core-version>1.0.0</azure-keyvault-core-version>
 		<!-- camel-hawtdb -->
 		<hawtdb-version>1.6</hawtdb-version>
 		<Saxon-HE-version>9.7.0-21</Saxon-HE-version>
@@ -826,6 +823,34 @@
 			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
 			<version>1.2.5</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>com.microsoft.azure</groupId>
+		    <artifactId>azure-storage</artifactId>
+		    <version>7.0.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.microsoft.azure</groupId>
+		    <artifactId>azure-keyvault-core</artifactId>
+		    <version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.fusesource.mqtt-client</groupId>
+		    <artifactId>mqtt-client</artifactId>
+		    <version>${mqtt-client.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.fusesource.hawtdispatch</groupId>
+		    <artifactId>hawtdispatch</artifactId>
+		    <version>${hawtdispatch.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.fusesource.hawtdispatch</groupId>
+		    <artifactId>hawtdispatch-transport</artifactId>
+		    <version>${hawtdispatch.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

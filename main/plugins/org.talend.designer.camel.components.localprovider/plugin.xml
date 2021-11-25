@@ -590,9 +590,9 @@
             uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-azure-keyvault-core}"
             bundleID="" />            
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-camel-azure}"
-            id="camel-azure"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-azure}"
+            name="${tesb-camel-azure-storage-blob}"
+            id="camel-azure-storage-blob"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-azure-storage-blob}"
             bundleID="" />
         
         <libraryNeededGroup
