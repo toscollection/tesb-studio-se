@@ -14,7 +14,6 @@
 	<properties>
 		<!-- <camel.version>2.25.2</camel.version> -->
 		<camel.version>3.11.1</camel.version>
-		<camel.mqtt.version>${camel.version}.tesb1</camel.mqtt.version>
 		<camel.wmq.version>${camel.version}</camel.wmq.version>
 		<!-- camel-groovy -->
 		<groovy.version>2.4.8</groovy.version>
@@ -870,25 +869,6 @@
 							<excludeGroupIds>p2.eclipse-plugin,org.talend.studio</excludeGroupIds>
 						</configuration>
 					</execution>
-<!--                     <execution>
-                        <id>copy</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.apache.camel</groupId>
-                                    <artifactId>camel-mqtt</artifactId>
-                                    <version>${camel.mqtt.version}</version>
-                                    <type>jar</type>
-                                    <outputDirectory>${basedir}/lib</outputDirectory>
-                                    <destFileName>camel-mqtt-${camel.version}.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution> -->
 				</executions>
 			</plugin>
 			<plugin>

@@ -350,12 +350,7 @@
             <library id="netty-transport-native-epoll" />
             <library id="netty-resolver" />
         </libraryNeededGroup>
-
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-camel-mqtt}"
-            id="camel-mqtt"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-mqtt}"
-            bundleID="" />
+        
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
             name="${tesb-mqtt-client}"
             id="mqtt-client"
@@ -381,7 +376,6 @@
                 description="camel-mqtt"
                 id="camel-mqtt"
                 name="camel-mqtt">
-            <library id="camel-mqtt" />
             <library id="mqtt-client" />
             <library id="hawtdispatch-transport" />
             <library id="hawtdispatch" />
