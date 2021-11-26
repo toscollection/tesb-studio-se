@@ -599,7 +599,7 @@
                 description="camel-azure"
                 id="camel-azure"
                 name="camel-azure">
-            <library id="camel-azure" />
+            <library id="camel-azure-storage-blob" />
             <library id="azure-storage" />
             <library id="azure-keyvault-core" />
         </libraryNeededGroup>
@@ -654,33 +654,6 @@
               uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-jackson-module-jaxb-annotations}">
         </libraryNeeded>
 
-        <libraryNeededGroup
-              description="camel-hawtdb-alldep"
-              id="camel-hawtdb-alldep"
-              name="camel-hawtdb-alldep">
-           <library
-                 id="camel-hawtdb">
-           </library>
-           <library
-                 id="hawtdb">
-           </library>
-           <library
-                 id="hawtbuf">
-           </library>
-        </libraryNeededGroup>
-        <libraryNeeded
-              context="plugin:org.talend.designer.camel.components.localprovider"
-              id="camel-hawtdb"
-              name="${tesb-camel-hawtdb}"
-              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-hawtdb}">
-        </libraryNeeded>
-        <libraryNeeded
-              context="plugin:org.talend.designer.camel.components.localprovider"
-              id="hawtdb"
-              name="${tesb-hawtdb}"
-              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-hawtdb}">
-        </libraryNeeded>
-        
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 			name="jackson-annotations-${jackson.version}.jar"
 			id="azure-jackson-annotations"
