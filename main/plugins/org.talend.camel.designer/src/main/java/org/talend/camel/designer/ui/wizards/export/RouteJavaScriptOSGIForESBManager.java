@@ -280,6 +280,21 @@ public class RouteJavaScriptOSGIForESBManager extends AdaptedJobJavaScriptOSGIFo
         manifestImportPackage.append("org.apache.camel.component.cxf.jaxrs.blueprint;resolution:=optional");
         manifestImportPackage.append(MANIFEST_ITEM_SEPARATOR);
         
+        //https://jira.talendforge.org/browse/APPINT-34061
+        Set<String> relativePathList = libResource.getRelativePathList();
+        search:
+            for (String path : relativePathList) {
+                Set<URL> resources = libResource.getResourcesByRelativePath(path);
+                for (URL url : resources) {
+                    String urlStr = url.getPath().replace("\\", "/");
+                    if (urlStr.matches("(.*)camel-xslt-alldep-(.*)$")) {
+                        manifestImportPackage.append("net.sf.saxon;resolution:=optional");
+                        manifestImportPackage.append(MANIFEST_ITEM_SEPARATOR);
+                        break search;
+                    }
+                }
+            }
+        
         manifestImportPackage
                 .append(resolver.getManifestImportPackage(MANIFEST_ITEM_SEPARATOR))
                 .append(",*;resolution:=optional"); //$NON-NLS-1$
