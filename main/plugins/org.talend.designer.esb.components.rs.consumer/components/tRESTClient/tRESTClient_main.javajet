@@ -463,7 +463,7 @@ try {
             if (status_<%=cid%> != 304 && status_<%=cid%> >= 300 && responseClass_<%=cid%> != javax.ws.rs.core.Response.class) {
                 throw org.apache.cxf.jaxrs.utils.ExceptionUtils.toWebApplicationException((javax.ws.rs.core.Response)responseObjBase_<%=cid%>);
             }
-            if (responseObjBase_<%=cid%>.getEntity() != null) {
+            if (status_<%=cid%> != 204 && responseObjBase_<%=cid%>.getEntity() != null) {
 				responseDoc_<%=cid%> = responseObjBase_<%=cid%>.readEntity(responseClass_<%=cid%>);
 			}
 		<% } else if ("POST".equals(method)) { %>
