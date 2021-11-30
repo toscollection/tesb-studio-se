@@ -1126,7 +1126,11 @@ if (contentTypes.containsKey(produces)) {
 						@javax.ws.rs.DefaultValue("<%=param.getDefaultValue()%>") <%
 					}
 				} %>
-				@<%=restParameterTypes.get(param.getParamType())%>("<%=param.getName()%>") <%= javaType%> <%=variableName%>
+				<% if (multipartSupported) { 
+				%>@<%=restParameterTypes.get(param.getParamType())%>(value="<%=param.getName()%>", required=<%=!param.isNullable()%>) <%= javaType%> <%=variableName%><% 
+				} else { 
+				%>@<%=restParameterTypes.get(param.getParamType())%>("<%=param.getName()%>") <%= javaType%> <%=variableName%><%
+				} %>
 		<%	} // loop thru jax-rs parameters %>
 		<% if (!(noBodyRequest || formSupported || multipartSupported) && null != bodyParameter) {
 			if (paramCommaWritten) { %>, <% } %><%=bodyParameter.getJavaType()%> body
@@ -1184,10 +1188,10 @@ if (contentTypes.containsKey(produces)) {
 		request_<%=cid%>.put("PARAMS", parameters_<%=cid%>);
 
 <% if (multipartSupported) { %>
-		java.util.List<String> partNames_<%=cid%> = new java.util.ArrayList<String>();
+		java.util.Map<String, Boolean> partNames_<%=cid%> = new java.util.HashMap<String, Boolean>();
 <%		for (Parameter param : parameters.values()) {
 			if ("MULTIPART".equals(param.getParamType())) { %>
-				partNames_<%=cid%>.add("<%=param.getVariableName()%>");
+				partNames_<%=cid%>.put("<%=param.getVariableName()%>", <%=param.isNullable()%>);
 <%			}
 		} %>
 		populateMultipartRequestInfo(request_<%=cid%>, messageContext, partNames_<%=cid%>);
@@ -1239,14 +1243,16 @@ if (contentTypes.containsKey(produces)) {
 	}
 
 	private void populateMultipartRequestInfo(java.util.Map<String, Object> request, org.apache.cxf.jaxrs.ext.MessageContext context,
-			java.util.List<String> partNames) {
+			java.util.Map<String, Boolean> partNames) {
 		java.util.Map<String, String> attachmentFilenames = new java.util.HashMap<String, String>();
 
 		java.util.Map<String, java.util.Map<String, java.util.List<String>>> attachmentHeaders =
 			new java.util.HashMap<String, java.util.Map<String, java.util.List<String>>>();
 
-		for (String partName : partNames) {
-			org.apache.cxf.jaxrs.ext.multipart.Attachment attachment = getFirstMatchingPart(context, partName);
+		for (java.util.Map.Entry<String,Boolean> p : partNames.entrySet()) {
+			String partName = p.getKey();
+			Boolean optional = p.getValue();
+			org.apache.cxf.jaxrs.ext.multipart.Attachment attachment = getFirstMatchingPart(context, partName, optional);
 			if (null != attachment) {
 				attachmentHeaders.put(partName, attachment.getHeaders());
 				if (null != attachment.getContentDisposition()) {
@@ -1263,7 +1269,7 @@ if (contentTypes.containsKey(produces)) {
 	}
 
 	private static org.apache.cxf.jaxrs.ext.multipart.Attachment getFirstMatchingPart(
-			org.apache.cxf.jaxrs.ext.MessageContext context, String partName) {
+			org.apache.cxf.jaxrs.ext.MessageContext context, String partName, Boolean optional) {
 		List<org.apache.cxf.jaxrs.ext.multipart.Attachment> attachments =
 			org.apache.cxf.jaxrs.utils.multipart.AttachmentUtils.getAttachments(context);
 		for (org.apache.cxf.jaxrs.ext.multipart.Attachment attachment : attachments) {
@@ -1274,6 +1280,9 @@ if (contentTypes.containsKey(produces)) {
 			if (null != cd && partName.equals(cd.getParameter("name"))) {
 				return attachment;
 			}
+		}
+		if (optional) { 
+			return null;
 		}
 		// unexpected
 		throw new javax.ws.rs.InternalServerErrorException();
