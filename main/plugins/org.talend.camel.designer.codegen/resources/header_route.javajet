@@ -86,9 +86,9 @@ package <%= packageName %>;
     }
 */
 
-	for (String codesJar : CodeGeneratorRoutine.getRequiredCodesJarName(process)) {
-		importsSet.add("import "+ codesJar);
-	}
+    for (String codesJar : CodeGeneratorRoutine.getRequiredCodesJarName(process)) {
+        importsSet.add("import "+ codesJar);
+    }
 
     importsSet.add("import java.util.HashMap");
     importsSet.add("import java.util.Map");
@@ -167,22 +167,22 @@ package <%= packageName %>;
         boolean isRoutelet = ((IProcess2) process).getProperty().getItem().getClass().getName().endsWith("RouteletProcessItemImpl");
 
         boolean hasCSoapOrCRest = false;
-        
+
         boolean isEnableMetrics = false; 
 
         for (INode node : graphicalNodes) {
-        	if ("cSOAP".equals(node.getComponent().getName()) || "cREST".equals(node.getComponent().getName())) {
-        		hasCSoapOrCRest = true;
-        	}
+            if ("cSOAP".equals(node.getComponent().getName()) || "cREST".equals(node.getComponent().getName())) {
+                hasCSoapOrCRest = true;
+            }
         }
 
         if(exportTypeSpringBoot){
-        	try{
-        		isEnableMetrics = Boolean.valueOf(process.getClass().getDeclaredMethod("isEnableMetrics").invoke(process).toString());
-        	}catch(Exception e){
-        		
-        	}
-        	
+            try{
+                isEnableMetrics = Boolean.valueOf(process.getClass().getDeclaredMethod("isEnableMetrics").invoke(process).toString());
+            }catch(Exception e){
+
+            }
+
  %>
 
 
@@ -499,25 +499,25 @@ public class <%=className%> extends org.apache.camel.builder.RouteBuilder implem
 
     @org.springframework.beans.factory.annotation.Autowired
     org.springframework.core.env.Environment env;
-    
+
     <% if(isEnableMetrics) { %>
-    
+
     @org.springframework.context.annotation.Bean
-	io.prometheus.client.CollectorRegistry metricRegistry() {
+    io.prometheus.client.CollectorRegistry metricRegistry() {
         try {
-        	new io.prometheus.jmx.BuildInfoCollector().register();
-			new io.prometheus.jmx.JmxCollector(new org.springframework.core.io.ClassPathResource("config/jmx-prometheus.yaml").getInputStream()).register();
-		} catch (javax.management.MalformedObjectNameException e) {
-			e.printStackTrace();
-		} catch (java.io.IOException e) {
-			e.printStackTrace();
-		}
-        
+            new io.prometheus.jmx.BuildInfoCollector().register();
+            new io.prometheus.jmx.JmxCollector(new org.springframework.core.io.ClassPathResource("config/jmx-prometheus.yaml").getInputStream()).register();
+        } catch (javax.management.MalformedObjectNameException e) {
+            e.printStackTrace();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
         return io.prometheus.client.CollectorRegistry.defaultRegistry;
     }
-    
+
     <% } %>
-    
+
 <%
     }else {
 %>
@@ -530,14 +530,14 @@ public class <%=className%> extends org.apache.camel.builder.RouteBuilder implem
 
     private boolean inMS = <%=exportTypeSpringBoot%>;
 
-	private static Object arguments;
+    private static Object arguments;
 
 <%
     for (INode node : graphicalNodes) {
         if ("cMQConnectionFactory".equals(node.getComponent().getName())) {
             boolean hasPooledConnectionFactory = Boolean.parseBoolean(ElementParameterParser.getValue(node, "__AMQ_POOL__").trim());
             boolean isActiveMQ = "ActiveMQ".equals(ElementParameterParser.getValue(node, "__MQ_TYPE__"));
-			if (hasPooledConnectionFactory && isActiveMQ) {
+            if (hasPooledConnectionFactory && isActiveMQ) {
                 String cid = node.getUniqueName();
 %>
 
@@ -549,44 +549,44 @@ public class <%=className%> extends org.apache.camel.builder.RouteBuilder implem
     }
 %>
 
-	public void setArguments(Object arguments) {
-		this.inOSGi = true;
-		<%=className%>.arguments = arguments;
-		<% if(!exportTypeSpringBoot){ %>
-		if (null != context && null != context.getProperty("context")) {
-			contextStr = (String) context.getProperty("context");
-		}
-		<% } %>
-	}
+    public void setArguments(Object arguments) {
+        this.inOSGi = true;
+        <%=className%>.arguments = arguments;
+        <% if(!exportTypeSpringBoot){ %>
+        if (null != context && null != context.getProperty("context")) {
+            contextStr = (String) context.getProperty("context");
+        }
+        <% } %>
+    }
 
-	public <T> Map<String, T> getArguments(Object props,Class c){
-		if (props != null) {
-			try {
-				java.lang.reflect.Field propertiesField = props.getClass().getDeclaredField("properties");
-				propertiesField.setAccessible(true);
-				java.util.Dictionary p = (java.util.Dictionary) propertiesField.get(props);
-				java.util.Map<String,T> result = new java.util.HashMap<>();
+    public <T> Map<String, T> getArguments(Object props,Class c){
+        if (props != null) {
+            try {
+                java.lang.reflect.Field propertiesField = props.getClass().getDeclaredField("properties");
+                propertiesField.setAccessible(true);
+                java.util.Dictionary p = (java.util.Dictionary) propertiesField.get(props);
+                java.util.Map<String,T> result = new java.util.HashMap<>();
 
-				if(p !=null ){
-					for (java.util.Enumeration<String> keys = p.keys(); keys.hasMoreElements();) {
-						String key = keys.nextElement();
-						if(c.equals(String.class)){
-							result.put(key, (T) String.valueOf(p.get(key)));
-						}else{
-							result.put(key, (T) p.get(key));
-						}
+                if(p !=null ){
+                    for (java.util.Enumeration<String> keys = p.keys(); keys.hasMoreElements();) {
+                        String key = keys.nextElement();
+                        if(c.equals(String.class)){
+                            result.put(key, (T) String.valueOf(p.get(key)));
+                        }else{
+                            result.put(key, (T) p.get(key));
+                        }
 
-				    }
-				}
+                    }
+                }
 
-			    return result;
+                return result;
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 <%
 
     boolean hasSam = false;
@@ -1153,18 +1153,18 @@ final Map<String, String> contentTypes = new java.util.HashMap<String, String>()
     private org.talend.esb.sam.agent.feature.EventFeature eventFeature;
 
     public void setEventFeature(org.talend.esb.sam.agent.feature.EventFeature eventFeature){
-    	this.eventFeature = eventFeature;
+        this.eventFeature = eventFeature;
     }
 
     public org.talend.esb.sam.agent.feature.EventFeature getEventFeature(org.apache.cxf.Bus bus) {
-    	org.talend.esb.sam.agent.feature.EventFeature eventFeature_;
-    	if(inOSGi){
-			eventFeature_ = eventFeature;
-		}else{
-			eventFeature_ = new org.springframework.context.support.ClassPathXmlApplicationContext("META-INF/tesb/agent-context.xml").getBean(org.talend.esb.sam.agent.feature.EventFeature.class);
-		}
+        org.talend.esb.sam.agent.feature.EventFeature eventFeature_;
+        if(inOSGi){
+            eventFeature_ = eventFeature;
+        }else{
+            eventFeature_ = new org.springframework.context.support.ClassPathXmlApplicationContext("META-INF/tesb/agent-context.xml").getBean(org.talend.esb.sam.agent.feature.EventFeature.class);
+        }
 
-		return eventFeature_;
+        return eventFeature_;
     }
 
 <%
@@ -1174,32 +1174,32 @@ final Map<String, String> contentTypes = new java.util.HashMap<String, String>()
 %>
     //ESB Service Locator Feature
 
-	private org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature;
+    private org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature;
 
     public org.talend.esb.servicelocator.cxf.LocatorFeature getLocatorFeature(org.apache.cxf.Bus bus) {
-    	org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature_ = null;
+        org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature_ = null;
         if(inOSGi){
-			locatorFeature_ = locatorFeature;
+            locatorFeature_ = locatorFeature;
         }else{
-	    	org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
-	    	locatorFeature_ = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
+            org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
+            locatorFeature_ = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
         }
         return locatorFeature_;
     }
 
     public void setLocatorFeature(org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature){
-    	this.locatorFeature = locatorFeature;
+        this.locatorFeature = locatorFeature;
     }
 
     public void initLocator(CamelContext camelContext){
-    	if(camelContext.getComponent("locator") == null){
-			camelContext.addComponent("locator", new org.apache.camel.support.DefaultComponent(){
-				@Override
-				protected org.apache.camel.Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-					return null;
-				}
-			});
-		}
+        if(camelContext.getComponent("locator") == null){
+            camelContext.addComponent("locator", new org.apache.camel.support.DefaultComponent(){
+                @Override
+                protected org.apache.camel.Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+                    return null;
+                }
+            });
+        }
     }
 
 <%
@@ -1228,37 +1228,37 @@ final Map<String, String> contentTypes = new java.util.HashMap<String, String>()
         }
 %>
     public String getCXFRSEndpointAddress(String endpointUrl) {
-        
-		if (inOSGi || inMS) {
-		
+
+        if (inOSGi || inMS) {
+
             if (endpointUrl != null && !endpointUrl.trim().isEmpty() && !endpointUrl.contains("://")) {
-			
+
                 if (endpointUrl.startsWith("/services")) {
                     endpointUrl = endpointUrl.substring("/services".length());
                 }
-				
+
                 if (!endpointUrl.startsWith("/")) {
                     endpointUrl = '/' + endpointUrl;
                 }
             }
             return endpointUrl;
         }
-		
+
         String defaultEndpointUrl = "<%=defaultUri%>";
-        
-		if (null == endpointUrl || endpointUrl.trim().isEmpty()) {
-            
-			endpointUrl = defaultEndpointUrl;
-			
+
+        if (null == endpointUrl || endpointUrl.trim().isEmpty()) {
+
+            endpointUrl = defaultEndpointUrl;
+
         } else if (!endpointUrl.contains("://")) { // relative
-            
-			if (endpointUrl.startsWith("/")) {
+
+            if (endpointUrl.startsWith("/")) {
                 endpointUrl = endpointUrl.substring(1);
             }
-            
-			endpointUrl = defaultEndpointUrl + endpointUrl;
+
+            endpointUrl = defaultEndpointUrl + endpointUrl;
         }
-		
+
         return endpointUrl;
     }
 
@@ -1833,13 +1833,13 @@ private void addRegistry(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint,
                 public void clientCreated(org.apache.cxf.endpoint.Client client) {
                     String address = client.getEndpoint().getEndpointInfo().getAddress();
                     if ((address != null) && address.startsWith("locator://")) {
-				    	org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature_ = null;
-				        if(inOSGi){
-							locatorFeature_ = routines.system.BundleUtils.getService(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
-				        }else{
-					    	org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
-					    	locatorFeature_ = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
-				        }
+                        org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature_ = null;
+                        if(inOSGi){
+                            locatorFeature_ = routines.system.BundleUtils.getService(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
+                        }else{
+                            org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
+                            locatorFeature_ = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
+                        }
                         locatorFeature_.initialize(client, client.getBus());
                     }
                 }
@@ -2188,12 +2188,12 @@ if (isProvider) {
     java.util.Map<String, String> getOidcSettings() {
         java.util.Map<String, String> settings = new java.util.HashMap<String, String>();
     <% if(!exportTypeSpringBoot) {%>
-		if(!inOSGi){
-			org.springframework.context.support.ClassPathXmlApplicationContext context =
-				new org.springframework.context.support.ClassPathXmlApplicationContext("META-INF/tesb/oidc-context.xml");
-			org.talend.esb.security.oidc.OidcConfiguration oidcConfiguration = context.getBean(org.talend.esb.security.oidc.OidcConfiguration.class);
-			return oidcConfiguration.getOidcProperties();
-		}
+        if(!inOSGi){
+            org.springframework.context.support.ClassPathXmlApplicationContext context =
+                new org.springframework.context.support.ClassPathXmlApplicationContext("META-INF/tesb/oidc-context.xml");
+            org.talend.esb.security.oidc.OidcConfiguration oidcConfiguration = context.getBean(org.talend.esb.security.oidc.OidcConfiguration.class);
+            return oidcConfiguration.getOidcProperties();
+        }
     <% } %>
         String tokenEndpoint = org.talend.esb.security.oidc.OidcClientUtils.getTokenEndpoint();
         String validationEndpoint = org.talend.esb.security.oidc.OidcClientUtils.getValidationEndpoint();
@@ -2258,7 +2258,7 @@ if (isProvider) {
         return org.talend.esb.security.oidc.OidcClientUtils.oidcClientBearer(oidcUsername, oidcPassword, getOidcSettings());
     }
 <%
-	}
+    }
 %>
             @Override
             public void configure() throws java.lang.Exception {
@@ -2289,13 +2289,13 @@ if (isProvider) {
         if ("cMQConnectionFactory".equals(node.getComponent().getName())) {
             boolean hasPooledConnectionFactory = Boolean.parseBoolean(ElementParameterParser.getValue(node, "__AMQ_POOL__").trim());
             boolean isActiveMQ = "ActiveMQ".equals(ElementParameterParser.getValue(node, "__MQ_TYPE__"));
-			if (hasPooledConnectionFactory && isActiveMQ) {
+            if (hasPooledConnectionFactory && isActiveMQ) {
                 String cid = node.getUniqueName();
 %>
 
                 if (null != pooledConnectionFactory_<%=cid%>) {
                     pooledConnectionFactory_<%=cid%>.clear();
-	            }
+                }
 <%
             }
         }
@@ -2346,26 +2346,26 @@ if (isProvider) {
                 <%}%>
 
                 <%
-                	if(process.getNodesOfType("cREST").size() > 0){
+                    if(process.getNodesOfType("cREST").size() > 0){
                 %>
 
-	                java.util.List<Object> providers = new java.util.ArrayList<Object>();
-			        providers.add(new com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider());
-			        providers.add(new com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider());
-					registry.put("providers", providers);
+                    java.util.List<Object> providers = new java.util.ArrayList<Object>();
+                    providers.add(new com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider());
+                    providers.add(new com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider());
+                    registry.put("providers", providers);
 
                 <%}%>
 
                 <%if(exportTypeSpringBoot){%>
-					<%if(!isRoutelet){%>
-						<%= generateAddRoutesMethod(process)%>
-					<%}%>
+                    <%if(!isRoutelet){%>
+                        <%= generateAddRoutesMethod(process)%>
+                    <%}%>
                 <%}else{%>
-                	<%if(!isRoutelet) {%>
-                	if(inOSGi){
-						<%= generateAddRoutesMethod(process)%>
-					}
-                	<%}%>
+                    <%if(!isRoutelet) {%>
+                    if(inOSGi){
+                        <%= generateAddRoutesMethod(process)%>
+                    }
+                    <%}%>
                     //read context values
                     readContextValues(contextStr);
 
@@ -2452,10 +2452,10 @@ if (isProvider) {
                     if ("true".equals(ElementParameterParser.getValue(node, "__ENABLE_SECURITY__"))) {
                         if("BASIC".equals(ElementParameterParser.getValue(node, "__SECURITY_TYPE__"))) {
 %>
-							<%if(!exportTypeSpringBoot){%>
-	                            org.apache.cxf.jaxrs.security.JAASAuthenticationFilter jaas_<%=cid%> = new org.apache.cxf.jaxrs.security.JAASAuthenticationFilter();
-	                            jaas_<%=cid%>.setContextName("karaf");
-	                            sf_<%=cid%>.setProvider(jaas_<%=cid%>);
+                            <%if(!exportTypeSpringBoot){%>
+                                org.apache.cxf.jaxrs.security.JAASAuthenticationFilter jaas_<%=cid%> = new org.apache.cxf.jaxrs.security.JAASAuthenticationFilter();
+                                jaas_<%=cid%>.setContextName("karaf");
+                                sf_<%=cid%>.setProvider(jaas_<%=cid%>);
                             <%}%>
 <%
                         } else if ("SAML".equals(ElementParameterParser.getValue(node, "__SECURITY_TYPE__"))) {
@@ -2589,11 +2589,11 @@ if (isProvider) {
                             org.talend.esb.security.saml.SAMLRESTUtils.configureClient(cf_<%=cid%>, stsClient_<%=cid%>);
 <%
                         }else if ("OIDC".equals(ElementParameterParser.getValue(node, "__SECURITY_TYPE__"))) {
-                        	if(hasOidcClientAuthentication){
+                            if(hasOidcClientAuthentication){
 %>
                             org.talend.esb.security.oidc.OidcClientUtils.configureClient(cf_<%=cid%>, <%=ElementParameterParser.getValue(node, "__USERNAME__")%>, <%=ElementParameterParser.getValue(node, "__PASSWORD__")%>, getOidcSettings());
 <%
-                        	}
+                            }
                         }
                     }
                 }
@@ -2609,28 +2609,28 @@ if (isProvider) {
                 <%}%>
 <%              } else {
 %>
-				factory_<%=cid%>.setAddress(<%=ElementParameterParser.getValue(node, "__URL__")%>);
+                factory_<%=cid%>.setAddress(<%=ElementParameterParser.getValue(node, "__URL__")%>);
 <%
                 }
 %>
 <%
-				boolean ignoreSLStudio = !Boolean.valueOf(System.getProperty("ignoreSLStudio"));
-				if ("true".equals(ElementParameterParser.getValue(node, "__SERVICE_LOCATOR__"))) {
-					if(ignoreSLStudio) {
+                boolean ignoreSLStudio = !Boolean.valueOf(System.getProperty("ignoreSLStudio"));
+                if ("true".equals(ElementParameterParser.getValue(node, "__SERVICE_LOCATOR__"))) {
+                    if(ignoreSLStudio) {
 %>
-					if(inMS || inOSGi) {
+                    if(inMS || inOSGi) {
 <%
-					}
-%>				
-					factory_<%=cid%>.setServiceName(new javax.xml.namespace.QName(
+                    }
+%>
+                    factory_<%=cid%>.setServiceName(new javax.xml.namespace.QName(
                         <%=ElementParameterParser.getValue(node, "__SERVICE_NAMESPACE__")%>,
                         <%=ElementParameterParser.getValue(node, "__SERVICE_NAME__")%>));
-				
+
 
 <%
                         if (!isProvider) {
 %>
-							initLocator(camelContext);
+                            initLocator(camelContext);
 
                             factory_<%=cid%>.setAddress("locator://rest");
 
@@ -2638,46 +2638,46 @@ if (isProvider) {
 <%
                         }else{
 %>
-							org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature_<%=cid%> = getLocatorFeature(sf_<%=cid%>.getBus());
+                            org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature_<%=cid%> = getLocatorFeature(sf_<%=cid%>.getBus());
 <%
-						}
+                        }
 %>
 
 
 <%
                     List<Map<String, String>> customProperties = (List<Map<String,String>>) ElementParameterParser.getObjectValue(node, "__SL_META_DATA__");
-					if (!customProperties.isEmpty())
-					{
+                    if (!customProperties.isEmpty())
+                    {
 %>
-					java.util.Map<String, String> slCustomProps_<%=cid%> = new java.util.HashMap<String, String>();
+                    java.util.Map<String, String> slCustomProps_<%=cid%> = new java.util.HashMap<String, String>();
 
                     <% for (Map<String, String> custProp : customProperties) { %>
-                    	slCustomProps_<%=cid%>.put(<%=custProp.get("NAME")%>, <%=custProp.get("VALUE")%>);
+                        slCustomProps_<%=cid%>.put(<%=custProp.get("NAME")%>, <%=custProp.get("VALUE")%>);
                     <% } %>
 
-					<%if(!isProvider){%>
-                    	if(cf_<%=cid%>.getProperties() == null){
-                    		cf_<%=cid%>.setProperties(new java.util.HashMap<String, Object>());
-                    	}
+                    <%if(!isProvider){%>
+                        if(cf_<%=cid%>.getProperties() == null){
+                            cf_<%=cid%>.setProperties(new java.util.HashMap<String, Object>());
+                        }
 
-						cf_<%=cid%>.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES, slCustomProps_<%=cid%>);
+                        cf_<%=cid%>.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES, slCustomProps_<%=cid%>);
                     <%}else{%>
-                    	if(sf_<%=cid%>.getProperties() == null){
-                    		sf_<%=cid%>.setProperties(new java.util.HashMap<String, Object>());
-                    	}
+                        if(sf_<%=cid%>.getProperties() == null){
+                            sf_<%=cid%>.setProperties(new java.util.HashMap<String, Object>());
+                        }
 
-                    	sf_<%=cid%>.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES, slCustomProps_<%=cid%>);
+                        sf_<%=cid%>.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES, slCustomProps_<%=cid%>);
                     <%}%>
 <%
-					}
+                    }
 %>
                         factory_<%=cid%>.getFeatures().add(locatorFeature_<%=cid%>);
 <%
-					if(ignoreSLStudio) {
+                    if(ignoreSLStudio) {
 %>
-					}
+                    }
 <%
-					}
+                    }
                 } else if (!isProvider) {
 %>
                     // {baseUri}cREST
@@ -2691,13 +2691,13 @@ if (isProvider) {
 <%
                         if (!isProvider) {
 %>
-							org.talend.esb.sam.agent.feature.EventFeature eventFeature_<%=cid%> = getEventFeature(cf_<%=cid%>.getBus());
+                            org.talend.esb.sam.agent.feature.EventFeature eventFeature_<%=cid%> = getEventFeature(cf_<%=cid%>.getBus());
 <%
                         }else{
 %>
-							org.talend.esb.sam.agent.feature.EventFeature eventFeature_<%=cid%> = getEventFeature(sf_<%=cid%>.getBus());
+                            org.talend.esb.sam.agent.feature.EventFeature eventFeature_<%=cid%> = getEventFeature(sf_<%=cid%>.getBus());
 <%
-						}
+                        }
 %>
 
 
@@ -2723,17 +2723,62 @@ if (isProvider) {
 <%
                 String fbn = isProvider ? "sf_" + cid : "cf_" + cid;
 %>
-				java.util.List<Object> providers_<%=cid%> = (java.util.List<Object>)registry.get("providers");
+                java.util.List<Object> providers_<%=cid%> = (java.util.List<Object>)registry.get("providers");
                 if (providers_<%=cid%> == null) {
                     providers_<%=cid%> = new java.util.ArrayList<Object>();
                 }
                 providers_<%=cid%>.addAll(<%=fbn%>.getProviders());
                 registry.put("providers", providers_<%=cid%>);
-                registry.put("features_<%=cid%>", <%=fbn%>.getFeatures() != null ? <%=fbn%>.getFeatures() : new java.util.ArrayList<org.apache.cxf.feature.Feature>());
-                registry.put("inInterceptors_<%=cid%>", <%=fbn%>.getInInterceptors() != null ? <%=fbn%>.getInInterceptors()
-                               : new java.util.ArrayList<org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message>>());
-                registry.put("outInterceptors_<%=cid%>", <%=fbn%>.getOutInterceptors() != null ? <%=fbn%>.getOutInterceptors()
-                               : new java.util.ArrayList<org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message>>());
+
+                java.util.List<org.apache.cxf.feature.Feature> fts_<%=cid%> = <%=fbn%>.getFeatures();
+                if (fts_<%=cid%> == null) {
+                    fts_<%=cid%> = new java.util.ArrayList<>();
+                }
+                java.util.List<org.apache.cxf.interceptor.Interceptor<?extends org.apache.cxf.message.Message>> icsIn_<%=cid%> =
+                    <%=fbn%>.getInInterceptors();
+                if (icsIn_<%=cid%> == null) {
+                    icsIn_<%=cid%> = new java.util.ArrayList<>();
+                }
+                java.util.List<org.apache.cxf.interceptor.Interceptor<?extends org.apache.cxf.message.Message>> icsOut_<%=cid%> =
+                    <%=fbn%>.getOutInterceptors();
+                if (icsOut_<%=cid%> == null) {
+                    icsOut_<%=cid%> = new java.util.ArrayList<>();
+                }
+
+<%
+                if (isProvider) {
+%>
+                org.apache.cxf.feature.Feature ft_<%=cid%> = new  org.apache.cxf.feature.AbstractFeature() {
+                    @Override
+                    protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider, org.apache.cxf.Bus bus) {
+                        org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icIn =
+                                new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.RECEIVE) {
+                            @Override
+                            public void handleMessage(org.apache.cxf.message.Message msg) {
+                                org.slf4j.MDC.put("org.talend.esb.jobclass.name", "<%=packageName%>.<%=className%>");
+                            }
+                        };
+                        org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icOut =
+                                new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.SETUP_ENDING) {
+                            @Override
+                            public void handleMessage(org.apache.cxf.message.Message msg) {
+                                org.slf4j.MDC.remove("org.talend.esb.jobname");
+                            }
+                        };
+                        provider.getInInterceptors().add(icIn);
+                        provider.getInFaultInterceptors().add(icIn);
+                        provider.getOutInterceptors().add(icOut);
+                        provider.getOutFaultInterceptors().add(icOut);
+                    }
+                };
+
+                fts_<%=cid%>.add(ft_<%=cid%>);
+<%
+                }
+%>
+                registry.put("features_<%=cid%>", fts_<%=cid%>);
+                registry.put("inInterceptors_<%=cid%>", icsIn_<%=cid%>);
+                registry.put("outInterceptors_<%=cid%>", icsOut_<%=cid%>);
                 registry.put("properties_<%=cid%>", <%=fbn%>.getProperties() != null ? <%=fbn%>.getProperties() : new java.util.HashMap<String, Object>());
                 <%
                     String endpointConfigurerClassName = "CxfRsConfigurer";
@@ -2743,12 +2788,12 @@ if (isProvider) {
                         public void configure(org.apache.cxf.jaxrs.AbstractJAXRSFactoryBean factoryBean) {
                             <%
                                 if ("true".equals(ElementParameterParser.getValue(node, "__SERVICE_LOCATOR__"))) {
-									if(ignoreSLStudio) {
+                                    if(ignoreSLStudio) {
                             %>
-									if(inMS || inOSGi) {
-							<%
-									} //end ignoreSLStudio
-							%>
+                                    if(inMS || inOSGi) {
+                            <%
+                                    } //end ignoreSLStudio
+                            %>
                                     // SL
                                     factoryBean.setServiceName(new javax.xml.namespace.QName(
                                                                     <%=ElementParameterParser.getValue(node, "__SERVICE_NAMESPACE__")%>,
@@ -2759,11 +2804,11 @@ if (isProvider) {
                                     factoryBean.setAddress("locator://rest"); // is ignored by Camel
                             <%
                                     }
-									if(ignoreSLStudio) {
-							%>
-									}
-							<%
-									}  //end if(ignoreSLStudio)
+                                    if(ignoreSLStudio) {
+                            %>
+                                    }
+                            <%
+                                    }  //end if(ignoreSLStudio)
                                 }
                             %>
                         }
@@ -3309,7 +3354,7 @@ if (isProvider) {
                         );
 
                         <%if("true".equals(ElementParameterParser.getValue(node, "__ENABLE_CXF_MESSAGE_GZIP__"))){%>
-                        		<%=endpointVar%>.getFeatures().add(new org.apache.cxf.transport.common.gzip.GZIPFeature());
+                                <%=endpointVar%>.getFeatures().add(new org.apache.cxf.transport.common.gzip.GZIPFeature());
                         <%}%>
 <%
 
@@ -3342,7 +3387,7 @@ if (isProvider) {
             if ("true".equals(useSL) && (isProvider || !useRegistry)) {
                 if (!isProvider) {
 %>
-					initLocator(camelContext);
+                    initLocator(camelContext);
                     <%=endpointVar%>.setAddress("locator://cSOAP");
 <%
                 }
@@ -3364,17 +3409,17 @@ if (isProvider) {
                 org.talend.esb.servicelocator.cxf.LocatorFeature locatorFeature_<%=cid%> = getLocatorFeature(<%=endpointVar%>.getBus());
 
                 <% if (!customProperties.isEmpty()) { %>
-	                java.util.Map<String, String> slCustomProps_<%=cid%> = new java.util.HashMap<String, String>();
-	                <% for (Map<String, String> custProp : customProperties) { %>
-	                    slCustomProps_<%=cid%>.put(<%=custProp.get("NAME")%>, <%=custProp.get("VALUE")%>);
-	                <% } %>
+                    java.util.Map<String, String> slCustomProps_<%=cid%> = new java.util.HashMap<String, String>();
+                    <% for (Map<String, String> custProp : customProperties) { %>
+                        slCustomProps_<%=cid%>.put(<%=custProp.get("NAME")%>, <%=custProp.get("VALUE")%>);
+                    <% } %>
 
-	                java.util.Map<String, Object> endpointProps_<%=cid%> = <%=endpointVar%>.getProperties();
-	                if (endpointProps_<%=cid%> == null) {
-	                    endpointProps_<%=cid%> = new java.util.HashMap<String, Object>();
-	                }
-	                endpointProps_<%=cid%>.put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES, slCustomProps_<%=cid%>);
-	                <%=endpointVar%>.setProperties(endpointProps_<%=cid%>);
+                    java.util.Map<String, Object> endpointProps_<%=cid%> = <%=endpointVar%>.getProperties();
+                    if (endpointProps_<%=cid%> == null) {
+                        endpointProps_<%=cid%> = new java.util.HashMap<String, Object>();
+                    }
+                    endpointProps_<%=cid%>.put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES, slCustomProps_<%=cid%>);
+                    <%=endpointVar%>.setProperties(endpointProps_<%=cid%>);
                 <% } %>
 
                 <%=endpointVar%>.getFeatures().add(locatorFeature_<%=cid%>);
@@ -3437,16 +3482,16 @@ if (isProvider) {
 %>
             if(inOSGi){
            
-		        // add handlers for main MIME types
-		        javax.activation.MailcapCommandMap mc_<%=cid%> = ( javax.activation.MailcapCommandMap)javax.activation.CommandMap.getDefaultCommandMap();
-		        mc_<%=cid%>.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
-		        mc_<%=cid%>.addMailcap("text/xml;; x-java-content-handler=com.sun.mail.handlers.text_xml");
-		        mc_<%=cid%>.addMailcap("text/plain;; x-java-content-handler=com.sun.mail.handlers.text_plain");
-		        mc_<%=cid%>.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
-		        mc_<%=cid%>.addMailcap("message/rfc822;; x-java-content-handler=com.sun.mail.handlers.message_rfc822");
-		        javax.activation.CommandMap.setDefaultCommandMap(mc_<%=cid%>);
-		        // add com.sun.mail.handlers to job imports
-		        com.sun.mail.handlers.text_plain text_plain_h_<%=cid%> = null;
+                // add handlers for main MIME types
+                javax.activation.MailcapCommandMap mc_<%=cid%> = ( javax.activation.MailcapCommandMap)javax.activation.CommandMap.getDefaultCommandMap();
+                mc_<%=cid%>.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
+                mc_<%=cid%>.addMailcap("text/xml;; x-java-content-handler=com.sun.mail.handlers.text_xml");
+                mc_<%=cid%>.addMailcap("text/plain;; x-java-content-handler=com.sun.mail.handlers.text_plain");
+                mc_<%=cid%>.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
+                mc_<%=cid%>.addMailcap("message/rfc822;; x-java-content-handler=com.sun.mail.handlers.message_rfc822");
+                javax.activation.CommandMap.setDefaultCommandMap(mc_<%=cid%>);
+                // add com.sun.mail.handlers to job imports
+                com.sun.mail.handlers.text_plain text_plain_h_<%=cid%> = null;
            }
 
             <%@ include file="@{org.talend.designer.components.localprovider}/components/templates/password.javajet"%>
@@ -3628,16 +3673,16 @@ if (isProvider) {
             }
 %>
         }
-        
-<%		if ("cSplitter".equals(nodeComponentName)) {
-			String expression = ElementParameterParser.getValue(node, "__EXPRESSION__"); 
+
+<%        if ("cSplitter".equals(nodeComponentName)) {
+            String expression = ElementParameterParser.getValue(node, "__EXPRESSION__"); 
 %>
 
-		org.apache.camel.language.xpath.XPathBuilder xpathBuilder_<%=cid%> = new org.apache.camel.language.xpath.XPathBuilder(<%=expression%>);
-		xpathBuilder_<%=cid%>.setNamespaces(<%=cid%>NSMap);
-		xpathBuilder_<%=cid%>.threadSafety(true);
-		
-<%		}	%>
+        org.apache.camel.language.xpath.XPathBuilder xpathBuilder_<%=cid%> = new org.apache.camel.language.xpath.XPathBuilder(<%=expression%>);
+        xpathBuilder_<%=cid%>.setNamespaces(<%=cid%>NSMap);
+        xpathBuilder_<%=cid%>.threadSafety(true);
+
+<%        }    %>
 
 <%
     }else if("cSetHeader".equals(nodeComponentName) || "cSetProperty".equals(nodeComponentName)){
@@ -3808,13 +3853,13 @@ if (isProvider) {
         String cid = node.getUniqueName();
 %>
 <%@ include file="platform:/plugin/org.talend.designer.camel.components.localprovider/components/cAzureStorageBlob/cAzureStorageBlobConnection.javajet" %>
-		registry.put("blobType_<%=cid%>", org.apache.camel.component.azure.blob.BlobType.<%=ElementParameterParser.getValue(node, "__BLOB_TYPE__")%>);
+        registry.put("blobType_<%=cid%>", org.apache.camel.component.azure.blob.BlobType.<%=ElementParameterParser.getValue(node, "__BLOB_TYPE__")%>);
 <%
         List<Map<String, String>> blobMetadataList = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__BLOB_METADATA__");
         if (blobMetadataList != null && !blobMetadataList.isEmpty()){
 %>
-			java.util.Map<String, String> blobMetadataList = new java.util.HashMap<String, String>();
-<%			
+            java.util.Map<String, String> blobMetadataList = new java.util.HashMap<String, String>();
+<%
             for (Map<String, String> map : blobMetadataList) {
                 String argName = map.get("BLOB_METADATA_KEY").trim();
                 String argValue = map.get("BLOB_METADATA_VALUE").trim();
@@ -3823,12 +3868,12 @@ if (isProvider) {
                 }
 %>
                 blobMetadataList.put("<%=argName%>", <%=argValue%>);
-<%				
+<%
             }
 %>
-		    registry.put("blobMetadata_<%=cid%>", blobMetadataList);
+            registry.put("blobMetadata_<%=cid%>", blobMetadataList);
 <%
-	    }
+        }
     }// end cAzureStorageBlob
 }
 %>

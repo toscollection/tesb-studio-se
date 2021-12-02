@@ -46,9 +46,11 @@ if (baseProcess != null) {
 }
 jobFolderName = jobFolderName + JavaResourcesHelper.getJobFolderName(process.getName(), process.getVersion());
 String jobClassPackageFolder = codeGenArgument.getCurrentProjectName().toLowerCase() + '/' + jobFolderName;
+String packageName = codeGenArgument.getCurrentProjectName().toLowerCase() + '.' + jobFolderName;
 boolean isTestContainer=ProcessUtils.isTestContainer(process);
 String className = isTestContainer ? process.getName() + "Test" : process.getName();
 boolean exportTypeSpringBoot = org.talend.designer.runprocess.ProcessorUtilities.isExportJobAsMicroService();
+boolean logMarkerFeatureNeeded = false;
 
 List<? extends INode> httpRequestComponentsList = process.getNodesOfType("tRESTRequest");
 if (!httpRequestComponentsList.isEmpty()) {
@@ -1066,9 +1068,9 @@ if (null != conns && !conns.isEmpty()) {
 		}
 %>
 <% if ("PATCH".equals(httpVerb)) {%>
-    @org.apache.cxf.jaxrs.ext.<%=httpVerb%>()
+	@org.apache.cxf.jaxrs.ext.<%=httpVerb%>()
 <%} else {%>
-    @javax.ws.rs.<%=httpVerb%>()
+	@javax.ws.rs.<%=httpVerb%>()
 <%}%>
 
 <% if (null != uriPattern) { %>
@@ -1096,12 +1098,15 @@ if (!noBodyRequest) {
 String producesContentTypes = null;
 if (contentTypes.containsKey(produces)) {
 	producesContentTypes = arrayHelper.codeGenArray(contentTypes.get(produces));
-%>	@javax.ws.rs.Produces(<%=producesContentTypes%>)
+%>
+	@javax.ws.rs.Produces(<%=producesContentTypes%>)
 <% } else if ("ONEWAY".equals(produces)) {
-%>	@org.apache.cxf.jaxrs.ext.Oneway()
+%>
+	@org.apache.cxf.jaxrs.ext.Oneway()
 <% } %>
 	public javax.ws.rs.core.Response <%=connName%>(
-		<%	boolean paramCommaWritten = false;
+		<%
+			boolean paramCommaWritten = false;
 			for (Parameter param : parameters.values()) {
 				if (!paramCommaWritten) {
 					paramCommaWritten = true;
@@ -1125,7 +1130,8 @@ if (contentTypes.containsKey(produces)) {
 					} else { %>
 						@javax.ws.rs.DefaultValue("<%=param.getDefaultValue()%>") <%
 					}
-				} %>
+				}
+		%>
 				<% if (multipartSupported) { 
 				%>@<%=restParameterTypes.get(param.getParamType())%>(value="<%=param.getName()%>", required=<%=!param.isNullable()%>) <%= javaType%> <%=variableName%><% 
 				} else { 
@@ -1465,8 +1471,8 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 			RestServiceProviderImpl4TalendJob provider = new RestServiceProviderImpl4TalendJob(job);
 
 			if(sf.getProperties() == null){
-        		sf.setProperties(new java.util.HashMap<String, Object>());
-        	}
+				sf.setProperties(new java.util.HashMap<String, Object>());
+			}
 
 			java.util.List<Object> providers = (java.util.List<Object>)sf.getProviders();
 			providers.add(new ExceptionMapper4TalendJobRestService(provider));
@@ -1533,11 +1539,11 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 				<% } else { %>
 				if(inOSGi){
 					slFeature = routines.system.BundleUtils.getService(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
-		        }else{
-			    	org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
-			    	slFeature = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
+				}else{
+					org.springframework.context.support.ClassPathXmlApplicationContext context_ = new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/locator/beans.xml" });
+					slFeature = (org.talend.esb.servicelocator.cxf.LocatorFeature) context_.getBean(org.talend.esb.servicelocator.cxf.LocatorFeature.class);
 
-		        }
+				}
 				<% } %>
 
 				<% List<Map<String, String>> customProperties = (List<Map<String,String>>)
@@ -1548,7 +1554,7 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 						slCustomProps_<%=cid%>.put(<%=customProperties.get(k).get("PROP_NAME")%>, <%=customProperties.get(k).get("PROP_VALUE")%>);
 					<% } %>
 
-            		sf.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES,slCustomProps_<%=cid%>);
+					sf.getProperties().put(org.talend.esb.servicelocator.cxf.LocatorFeature.LOCATOR_PROPERTIES,slCustomProps_<%=cid%>);
 				<% } %>
 
 				features.add(slFeature);
@@ -1561,10 +1567,10 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 				org.talend.esb.sam.agent.feature.EventFeature samEventFeature_<%=cid%> = null;
 
 				if(!inOSGi){
-			    	samEventFeature_<%=cid%> = (org.talend.esb.sam.agent.feature.EventFeature) new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/agent-context.xml" }).getBean(org.talend.esb.sam.agent.feature.EventFeature.class);
-		        }else{
+					samEventFeature_<%=cid%> = (org.talend.esb.sam.agent.feature.EventFeature) new org.springframework.context.support.ClassPathXmlApplicationContext(new String[] { "META-INF/tesb/agent-context.xml" }).getBean(org.talend.esb.sam.agent.feature.EventFeature.class);
+				}else{
 					samEventFeature_<%=cid%> = routines.system.BundleUtils.getService(org.talend.esb.sam.agent.feature.EventFeature.class);
-		        }
+				}
 
 				<% List<Map<String, String>> samCustomProperties = (List<Map<String,String>>)
 						ElementParameterParser.getObjectValue(node, "__SERVICE_ACTIVITY_MONITOR_CUSTOM_PROPERTIES__"); %>
@@ -1584,7 +1590,8 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 				features.add(new org.talend.esb.policy.correlation.feature.CorrelationIDFeature());
 			<% } %>
 
-			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__LOG_MESSAGES__"))) { %>
+			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__LOG_MESSAGES__"))) { logMarkerFeatureNeeded = true; %>
+				features.add(new LogMarkerFeature());
 				features.add(new org.apache.cxf.feature.LoggingFeature());
 			<% } %>
 
@@ -1665,3 +1672,28 @@ class Thread4RestServiceProviderEndpoint extends Thread {
             return contextName.contains("context.") ? evaluate(currentContext == null ? context : currentContext, contextName) : contextName;
         }
     }
+<% if (logMarkerFeatureNeeded) { %>
+    public static final class LogMarkerFeature extends org.apache.cxf.feature.AbstractFeature {
+        @Override
+        protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider, org.apache.cxf.Bus bus) {
+            org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icIn =
+                    new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.RECEIVE) {
+                @Override
+                public void handleMessage(org.apache.cxf.message.Message msg) {
+                    org.slf4j.MDC.put("org.talend.esb.jobclass.name", "<%=packageName%>.<%=className%>");
+                }
+            };
+            org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icOut =
+                    new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.SETUP_ENDING) {
+                @Override
+                public void handleMessage(org.apache.cxf.message.Message msg) {
+                    org.slf4j.MDC.remove("org.talend.esb.jobname");
+                }
+            };
+            provider.getInInterceptors().add(icIn);
+            provider.getInFaultInterceptors().add(icIn);
+            provider.getOutInterceptors().add(icOut);
+            provider.getOutFaultInterceptors().add(icOut);
+        }
+    }
+<% } %>
