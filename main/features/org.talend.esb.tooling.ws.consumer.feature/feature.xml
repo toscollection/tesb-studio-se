@@ -6,6 +6,6 @@
   <license url="http://www.example.com/license">[Enter License Description here.]</license>  
   <!-- org.talend.libraries.esb -->  
   <requires>
-    <import feature="org.talend.lite.root.feature"/>
+    <import feature="org.eclipse.rcp" version="0.0.0" match="greaterOrEqual"/>
   </requires>
 </feature>
