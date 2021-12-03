@@ -180,6 +180,8 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
 
         pomModel.addProfile(addProfileForCloud());
 
+        pomModel.addProfile(addProfileForNexus());
+
         pomModel.setBuild(new Build());
 
         pomModel.getBuild().addPlugin(addSkipDockerMavenPlugin());
@@ -261,6 +263,19 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         deployCloudProfile.setActivation(deployCloudActivation);
         deployCloudProfile.setBuild(new Build());
         deployCloudProfile.getBuild().addPlugin(addSkipDeployFeatureMavenPlugin());
+        return deployCloudProfile;
+    }
+
+    /**
+     * Enable nexus profile.
+     */
+    private Profile addProfileForNexus() {
+        Profile deployCloudProfile = new Profile();
+        deployCloudProfile.setId("nexus");
+        Activation deployCloudActivation = new Activation();
+        deployCloudActivation.setActiveByDefault(true);
+        deployCloudProfile.setActivation(deployCloudActivation);
+        deployCloudProfile.addProperty("maven.deploy.skip", "false");
         return deployCloudProfile;
     }
 
