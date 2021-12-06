@@ -30,6 +30,16 @@ imports="
     eb.addParam("amazonSNSClient", "\"#cAWSSNS_" +sns+"\"");
     eb.addParam("subject", subjectName);
 
+    List<Map<String, String>> tableValues = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__URI_OPTIONS__");
+    for (Map<String, String> map : tableValues) {
+        String argName = map.get("NAME").trim();
+        String argValue = map.get("VALUE").trim();
+        if(argName.startsWith("\"") && argName.endsWith("\"") && argName.length() >= 2) {
+            argName = argName.substring(1, argName.length() - 1);
+        }
+        eb.addParam(argName, argValue);
+    }
+
     String uri = eb.build();
     if(in.size()>0) {
 %>
