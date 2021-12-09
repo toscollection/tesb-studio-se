@@ -82,8 +82,16 @@ if (null != metadatas && 0 < metadatas.size()) {
 <%
 						for (IMetadataColumn connColumn : conn.getMetadataTable().getListColumns()) {
 							String columnName = connColumn.getLabel();
+							String parameterName = columnName;
+							// try to extract parameter name from comment field
+							if (null != connColumn.getComment()){
+							    java.util.regex.Matcher m = java.util.regex.Pattern.compile(".*\\((.*?)\\).*").matcher(connColumn.getComment());
+							    if (m.find()) {
+							        parameterName = m.group(1); // + "_UPDATED_";
+							    } 
+							}
 							String schemaFieldType = connColumn.getTalendType();
-							String restParameterType = connColumn.getComment();
+							String restParameterType = (connColumn.getComment() == null || connColumn.getComment().indexOf("(") < 0)? connColumn.getComment():connColumn.getComment().substring(0, connColumn.getComment().indexOf("("));
 							if (restParameterType == null || restParameterType.trim().length() == 0) {
 								restParameterType = "";
 							}
@@ -104,7 +112,7 @@ if (null != metadatas && 0 < metadatas.size()) {
 <%
 							} else {
 								restParameterType = ("".equals(restParameterType)) ? "PATH" : restParameterType.trim().toUpperCase();
-								String parameterKey = restParameterType + ":" + columnName + ":" + schemaFieldType;
+								String parameterKey = restParameterType + ":" + parameterName + ":" + schemaFieldType;
 %>
 								if (params_<%=cid%>.containsKey("<%=parameterKey%>")) {
 									<% if ("id_Document".equals(schemaFieldType)) { %>
