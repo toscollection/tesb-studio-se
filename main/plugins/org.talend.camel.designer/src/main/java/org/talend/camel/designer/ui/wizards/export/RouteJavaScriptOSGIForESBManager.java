@@ -372,6 +372,15 @@ public class RouteJavaScriptOSGIForESBManager extends AdaptedJobJavaScriptOSGIFo
                     return;
                 }
 
+                //replace spring cxf core to blueprint cxf core.
+                Namespace springCxfCoreNs = root.getNamespaceForURI("http://cxf.apache.org/core");
+                if (null != springCxfCoreNs) {
+                    Namespace blueprintCxfCoreNs = Namespace.get("cxf", "http://cxf.apache.org/blueprint/core");
+                    moveNamespace(root, springCxfCoreNs, blueprintCxfCoreNs);
+                    root.remove(springCxfCoreNs);
+                    root.add(blueprintCxfCoreNs);
+                }
+                
                 String bpPrefix = "bp";
                 int cnt = 0;
                 while (root.getNamespaceForPrefix(bpPrefix) != null) {
@@ -641,6 +650,12 @@ public class RouteJavaScriptOSGIForESBManager extends AdaptedJobJavaScriptOSGIFo
         }
         String value = schemaLocation.getValue().replaceAll("(\\A|\\b)\\s\\s+\\b", "\n            ");
         if (addBlueprint) {
+            //see targetNamespace in:
+            //http://cxf.apache.org/schemas/blueprint/core.xsd
+            //http://cxf.apache.org/schemas/blueprint/policy.xsd
+            value = value.replace("http://cxf.apache.org/core", "http://cxf.apache.org/blueprint/core")
+                    .replace("http://cxf.apache.org/schemas/core.xsd", "http://cxf.apache.org/schemas/blueprint/core.xsd")
+                    .replace("http://cxf.apache.org/schemas/policy.xsd", "http://cxf.apache.org/schemas/blueprint/policy.xsd");
             value += "\n            http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd";
         }
         if (addCamel) {
