@@ -1725,9 +1725,9 @@ private void addRegistry(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint,
                 throw new RuntimeException("Cannot load client properties", e);
             }
 
-            Map<String, String> stsProps = new HashMap<String, String>();
+            Map<String, Object> stsProps = new HashMap<String, Object>();
             for (Map.Entry<Object, Object> entry : stsProperties.entrySet()) {
-                    stsProps.put((String)entry.getKey(), (String)entry.getValue());
+                    stsProps.put((String)entry.getKey(), entry.getValue());
             }
             new org.talend.esb.security.saml.STSClientUtils(stsProps);
         <%}%>
@@ -2019,9 +2019,9 @@ if(hasCXFSamlTokenConsumer){
                 throw new RuntimeException("Cannot load client properties", e);
             }
 
-            Map<String, String> stsProps = new HashMap<String, String>();
+            Map<String, Object> stsProps = new HashMap<String, Object>();
             for (Map.Entry<Object, Object> entry : stsProperties.entrySet()) {
-                    stsProps.put((String)entry.getKey(), (String)entry.getValue());
+                    stsProps.put((String)entry.getKey(), entry.getValue());
             }
             new org.talend.esb.security.saml.STSClientUtils(stsProps);
         <%}%>
@@ -2569,9 +2569,9 @@ if (isProvider) {
                                     throw new RuntimeException("Cannot load client properties", e);
                                 }
 
-                                Map<String, String> stsProps = new HashMap<String, String>();
+                                Map<String, Object> stsProps = new HashMap<String, Object>();
                                 for (Map.Entry<Object, Object> entry : stsProperties.entrySet()) {
-                                    stsProps.put((String)entry.getKey(), (String)entry.getValue());
+                                    stsProps.put((String)entry.getKey(), entry.getValue());
                                 }
 
                                 new org.talend.esb.security.saml.STSClientUtils(stsProps);
