@@ -437,7 +437,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency mavenCoreDep = new Dependency();
         mavenCoreDep.setGroupId("org.apache.maven");
         mavenCoreDep.setArtifactId("maven-core");
-        mavenCoreDep.setVersion("3.8.1");
+        mavenCoreDep.setVersion("3.8.3");
 
         Dependency mavenCompatDep = new Dependency();
         mavenCompatDep.setGroupId("org.apache.maven");
