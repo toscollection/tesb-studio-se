@@ -358,6 +358,15 @@
           </projecttask>
           <projecttask
                 beforeLogon="false"
+                breaks="8.0.0"
+                class="org.talend.camel.designer.migration.UpdateAWSConnectionRemovedRegionMigrationTask"
+                description="Update cAWSConnection removed region"
+                id="org.talend.camel.designer.migration.UpdateAWSConnectionRemovedRegionMigrationTask"
+                name="UpdateAWSConnectionRemovedRegionMigrationTask"
+                version="8.0.1">
+          </projecttask>
+          <projecttask
+                beforeLogon="false"
                 breaks="5.6.0"
                 class="org.talend.camel.designer.migration.UpdateBuildTypeForCTalendJobMigrationTask"
                 description="Set route as build type for job in cTalendJob"
