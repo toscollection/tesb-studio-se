@@ -35,6 +35,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
+import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.utils.MojoType;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.process.JobInfo;
@@ -43,8 +44,11 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.GITConstant;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.core.repository.services.IGitInfoService;
 import org.talend.core.repository.utils.ItemResourceUtil;
 import org.talend.core.runtime.maven.MavenConstants;
+import org.talend.core.runtime.projectsetting.ProjectPreferenceManager;
+import org.talend.core.services.IGITProviderService;
 import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
 import org.talend.designer.maven.model.TalendJavaProjectConstants;
 import org.talend.designer.maven.model.TalendMavenConstants;
@@ -54,6 +58,8 @@ import org.talend.designer.maven.tools.creator.CreateMavenJobPom;
 import org.talend.designer.maven.utils.PomIdsHelper;
 import org.talend.designer.maven.utils.PomUtil;
 import org.talend.designer.runprocess.IProcessor;
+import org.talend.designer.runprocess.ProcessorUtilities;
+import org.talend.repository.model.RepositoryConstants;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.services.model.services.ServiceConnection;
 import org.talend.repository.services.model.services.ServiceItem;
@@ -107,6 +113,38 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         checkPomProperty(properties, "talend.project.name", ETalendMavenVariables.ProjectName, project.getTechnicalLabel());
         checkPomProperty(properties, "talend.job.version", ETalendMavenVariables.TalendJobVersion, property.getVersion());
         checkPomProperty(properties, "talend.job.id", ETalendMavenVariables.JobId, property.getId());
+
+        // add branch/git info
+        org.talend.core.model.general.Project currentProject = ProjectManager.getInstance()
+                .getProjectFromProjectTechLabel(project.getTechnicalLabel());
+        String branchName = ProjectManager.getInstance().getMainProjectBranch(project);
+        try {
+            if (branchName == null) {
+                ProjectPreferenceManager preferenceManager =
+                        new ProjectPreferenceManager(currentProject, "org.talend.repository", false);
+                branchName = preferenceManager.getValue(RepositoryConstants.PROJECT_BRANCH_ID);
+            }
+        } catch (Exception e) {
+            ExceptionHandler.process(e);
+        }
+        if (null != branchName && branchName.startsWith("branches/")) {
+            branchName = branchName.substring(9);
+            properties.setProperty("talend.project.branch.name", branchName);
+        }
+
+        try {
+            if ((ProcessorUtilities.isCIMode() || !currentProject.isLocal()) && IGITProviderService.get() != null
+                    && IGITProviderService.get().isGITProject(currentProject) && IGitInfoService.get() != null) {
+                additionalProperties.clear();
+                additionalProperties.putAll(IGitInfoService.get().getGitInfo(property));
+            }
+        } catch (Exception e) {
+            ExceptionHandler.process(e);
+        }
+        properties.setProperty("talend.job.git.author", additionalProperties.getOrDefault(IGitInfoService.GIT_AUTHOR, ""));
+        properties.setProperty("talend.job.git.commit.id", additionalProperties.getOrDefault(IGitInfoService.GIT_COMMIT_ID, ""));
+        properties.setProperty("talend.job.git.commit.date",
+                additionalProperties.getOrDefault(IGitInfoService.GIT_COMMIT_DATE, ""));
     }
 
     @Override
