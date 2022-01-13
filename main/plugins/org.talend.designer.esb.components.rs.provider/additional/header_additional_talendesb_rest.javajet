@@ -1632,19 +1632,41 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 }
 %>
 	public static class ContextBean {
-		static String evaluate(String context, String contextExpression)
+		static String evaluate(String context, String contextExpression, String jobName)
 				throws IOException, javax.script.ScriptException {
+			String currentContext = context;
+			String jobNameStripped = jobName.substring(jobName.lastIndexOf(".") + 1);
+
+			boolean inOSGi = routines.system.BundleUtils.inOSGi();
+			java.util.Dictionary<String, Object> jobProperties = null;
+			if (inOSGi) {
+				jobProperties = routines.system.BundleUtils.getJobProperties(jobNameStripped);
+
+				if (jobProperties != null && null != jobProperties.get("context")) {
+					currentContext = (String) jobProperties.get("context");
+				}
+			}
+						
 			boolean isExpression = contextExpression.contains("+") || contextExpression.contains("(");
 			final String prefix = isExpression ? "\"" : "";
 			java.util.Properties defaultProps = new java.util.Properties();
 			java.io.InputStream inContext = <%=className %>.class.getClassLoader()
-					.getResourceAsStream("<%=jobClassPackageFolder%>/contexts/" + context + ".properties");
+					.getResourceAsStream("<%=jobClassPackageFolder%>/contexts/" + currentContext  + ".properties");
 			if (inContext == null) {
 				inContext = <%=className %>.class.getClassLoader()
-						.getResourceAsStream("config/contexts/" + context + ".properties");
+						.getResourceAsStream("config/contexts/" + currentContext  + ".properties");
 			}
 			try {
 			    defaultProps.load(inContext);
+				if(jobProperties != null){
+					java.util.Enumeration<String> keys = jobProperties.keys();
+					while (keys.hasMoreElements()) {
+						String propKey = keys.nextElement();
+						if (defaultProps.containsKey(propKey)) {
+							defaultProps.put(propKey, (String) jobProperties.get(propKey));
+						}
+					}
+				}
 			} finally {
 			    inContext.close();
 			}
@@ -1670,21 +1692,7 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 		}
 
         public static String getContext(String context, String contextName, String jobName) throws Exception {
-
-            String currentContext = null;
-            String jobNameStripped = jobName.substring(jobName.lastIndexOf(".") + 1);
-
-            boolean inOSGi = routines.system.BundleUtils.inOSGi();
-
-            if (inOSGi) {
-                java.util.Dictionary<String, Object> jobProperties = routines.system.BundleUtils.getJobProperties(jobNameStripped);
-
-                if (jobProperties != null) {
-                    currentContext = (String)jobProperties.get("context");
-                }
-            }
-
-            return contextName.contains("context.") ? evaluate(currentContext == null ? context : currentContext, contextName) : contextName;
+			return contextName.contains("context.") ? evaluate(context, contextName, jobName) : contextName;
         }
     }
 <% if (logMarkerFeatureNeeded) { %>
