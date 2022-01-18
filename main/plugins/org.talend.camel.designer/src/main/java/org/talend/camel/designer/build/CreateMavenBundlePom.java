@@ -447,12 +447,12 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency mavenSettingsDep = new Dependency();
         mavenSettingsDep.setGroupId("org.apache.maven");
         mavenSettingsDep.setArtifactId("maven-settings");
-        mavenSettingsDep.setVersion("3.8.1");
+        mavenSettingsDep.setVersion("3.8.3");
 
         Dependency mavenSettingsBdDep = new Dependency();
         mavenSettingsBdDep.setGroupId("org.apache.maven");
         mavenSettingsBdDep.setArtifactId("maven-settings-builder");
-        mavenSettingsBdDep.setVersion("3.8.1");
+        mavenSettingsBdDep.setVersion("3.8.3");
 
         Dependency plexusArchiverDep = new Dependency();
         plexusArchiverDep.setGroupId("org.codehaus.plexus");
@@ -472,7 +472,12 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency mavenModelDep = new Dependency();
         mavenModelDep.setGroupId("org.apache.maven");
         mavenModelDep.setArtifactId("maven-model");
-        mavenModelDep.setVersion("3.8.1");
+        mavenModelDep.setVersion("3.8.3");
+
+        Dependency commonsCodecDep = new Dependency();
+        commonsCodecDep.setGroupId("commons-codec");
+        commonsCodecDep.setArtifactId("commons-codec");
+        commonsCodecDep.setVersion("1.15");
 
         dependencies.add(mavensharedDep);
         dependencies.add(commonsioDep);
@@ -489,6 +494,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         dependencies.add(commonsCompressDep);
         dependencies.add(jsoupDep);
         dependencies.add(mavenModelDep);
+        dependencies.add(commonsCodecDep);
         plugin.setDependencies(dependencies);
 
         return plugin;
