@@ -80,9 +80,9 @@ for (IConnection conn : dataOutputs) {
 } else { 
        if ("GET".equals(method)) {
            %>Object<%
-       }else if ("POST".equals(method) && "application/xml".equals(contentType)) {
+       } else if ("POST".equals(method) && "application/xml".equals(contentType)) {
            %>String<%
-       }else {
+       } else {
            %>javax.ws.rs.core.Response<% 
        }  
 }%> responseDoc_<%=cid%> = null;
@@ -299,16 +299,19 @@ try {
 
 	<%}%>
 
-	org.apache.cxf.jaxrs.client.WebClient webClient_<%=cid%> = factoryBean_<%=cid%>.createWebClient();
+    org.apache.cxf.jaxrs.client.WebClient webClient_<%=cid%> = null;
+	if (globalMap.containsKey("webClient_<%=cid%>")  {
+	    webClient_<%=cid%> = globalMap.get("webClient_<%=cid%>"); 
+	} else  {
+		webClient_<%=cid%> = factoryBean_<%=cid%>.createWebClient();
+		globalMap.put("webClient_<%=cid%>", webClient_<%=cid%>);
+	}
 
 	// set request path
 	webClient_<%=cid%>.path(<%=paramsHelper.getStringParam("__PATH__")%>);
 
 	// set connection properties
 	org.apache.cxf.jaxrs.client.ClientConfiguration clientConfig_<%=cid%> = org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>);
-	org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>).getRequestContext().put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
-	
-	
 	org.apache.cxf.transport.http.auth.HttpAuthSupplier httpAuthSupplerHttpConduit = null;
 	org.apache.cxf.transport.http.HTTPConduit conduit_<%=cid%> = clientConfig_<%=cid%>.getHttpConduit();
 
@@ -510,6 +513,7 @@ try {
 				{
 					Object responseObj_<%=cid%> = responseDoc_<%=cid%>;
 				<%} else if ("POST".equals(method) && "application/xml".equals(acceptType)) {%>
+				{
 					Object responseObj_<%=cid%> = org.dom4j.DocumentHelper.parseText(responseDoc_<%=cid%>);
 				<%} else {%>
 				Object responseObj_<%=cid%> = null;
