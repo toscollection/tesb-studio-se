@@ -80,6 +80,8 @@ for (IConnection conn : dataOutputs) {
 } else { 
        if ("GET".equals(method)) {
            %>Object<%
+       }else if ("POST".equals(method) && "application/xml".equals(contentType)) {
+           %>String<%
        }else {
            %>javax.ws.rs.core.Response<% 
        }  
@@ -304,6 +306,9 @@ try {
 
 	// set connection properties
 	org.apache.cxf.jaxrs.client.ClientConfiguration clientConfig_<%=cid%> = org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>);
+	org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>).getRequestContext().put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
+	
+	
 	org.apache.cxf.transport.http.auth.HttpAuthSupplier httpAuthSupplerHttpConduit = null;
 	org.apache.cxf.transport.http.HTTPConduit conduit_<%=cid%> = clientConfig_<%=cid%>.getHttpConduit();
 
@@ -469,6 +474,9 @@ try {
 		<% } else if ("POST".equals(method)) { %>
 			<%if (MULTIPART_MIXED.equals(acceptType)) { %>
 				responseDoc_<%=cid%> = webClient_<%=cid%>.postObjectGetCollection(requestBody_<%=cid%>, responseClass_<%=cid%>);
+            <% } else if ("application/xml".equals(acceptType)) { %>
+                responseDoc_<%=cid%> = webClient_<%=cid%>
+							.invoke("POST", requestBody_<%=cid%>, String.class);
 			<% } else { %>
 				responseDoc_<%=cid%> = webClient_<%=cid%>.post(requestBody_<%=cid%>);
 			<% } %>
@@ -501,6 +509,8 @@ try {
 				<% if ("GET".equals(method)) {%>
 				{
 					Object responseObj_<%=cid%> = responseDoc_<%=cid%>;
+				<%} else if ("POST".equals(method) && "application/xml".equals(acceptType)) {%>
+					Object responseObj_<%=cid%> = org.dom4j.DocumentHelper.parseText(responseDoc_<%=cid%>);
 				<%} else {%>
 				Object responseObj_<%=cid%> = null;
 				if(responseDoc_<%=cid%> != null && responseDoc_<%=cid%>.hasEntity()){
