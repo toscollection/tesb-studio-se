@@ -48,14 +48,17 @@ import org.talend.core.model.process.IProcess;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.repository.constants.FileConstants;
 import org.talend.core.runtime.process.ITalendProcessJavaProject;
+import org.talend.core.runtime.process.TalendProcessOptionConstants;
 import org.talend.designer.camel.dependencies.core.DependenciesResolver;
 import org.talend.designer.camel.resource.core.model.ResourceDependencyModel;
 import org.talend.designer.camel.resource.core.util.RouteResourceUtil;
+import org.talend.designer.core.IDesignerCoreService;
 import org.talend.designer.core.model.utils.emf.talendfile.ConnectionType;
 import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.IRunProcessService;
 import org.talend.librariesmanager.model.ModulesNeededProvider;
+import org.talend.repository.RepositoryPlugin;
 import org.talend.repository.constants.BuildJobConstants;
 import org.talend.repository.documentation.ExportFileResource;
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.esb.DataSourceConfig;
@@ -255,6 +258,19 @@ public class RouteJavaScriptOSGIForESBManager extends AdaptedJobJavaScriptOSGIFo
             manifestImportPackage.append(subjobImportPackages.get(processItem.getProperty().getId()));
             manifestImportPackage.append(MANIFEST_ITEM_SEPARATOR);
         }
+        
+        
+        IDesignerCoreService designerService = RepositoryPlugin.getDefault().getDesignerCoreService();
+        IProcess process = designerService.getProcessFromProcessItem(processItem, false);
+
+        for (String lib : process.getNeededLibraries(TalendProcessOptionConstants.MODULES_WITH_CHILDREN)) {
+            if (lib != null && lib.matches("camel-jsonpath-(.*)jar")){
+                manifestImportPackage.append("org.apache.camel.jsonpath.jackson");
+                manifestImportPackage.append(MANIFEST_ITEM_SEPARATOR);
+                break;
+            }
+        }
+        
         manifestImportPackage
                 .append(resolver.getManifestImportPackage(MANIFEST_ITEM_SEPARATOR))
                 .append(",*;resolution:=optional"); //$NON-NLS-1$
