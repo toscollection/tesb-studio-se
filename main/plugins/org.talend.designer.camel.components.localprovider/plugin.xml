@@ -1805,6 +1805,7 @@
            <library
                  id="asm">
            </library>
+	   <group id="camel-jackson" />	
         </libraryNeededGroup>
         
         <libraryNeededGroup
