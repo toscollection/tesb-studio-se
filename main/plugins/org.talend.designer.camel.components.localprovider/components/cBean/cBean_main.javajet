@@ -25,11 +25,11 @@ imports="
 		if("true".equals(fromRegistry)){
 			if("false".equals(specifyMethod)){
 %>
-				.beanRef(<%=id%>)
+				.bean(<%=id%>)
 <%
 			}else{
 %>
-				.beanRef(<%=id%>, <%=method%>)
+				.bean(<%=id%>, <%=method%>)
 <%
 			}
 		}else{
