@@ -23,6 +23,7 @@ final String MULTIPART_MIXED = "multipart/mixed";
 NodeConnectionsHelper connsHelper = new NodeConnectionsHelper(node);
 IConnection inputConn = connsHelper.getInputConn();
 IConnection connResponse = connsHelper.getOutputConnResponse();
+String connResponseName = null;
 IConnection connFault = connsHelper.getOutputConnFault();
 List<IConnection> dataOutputs = connsHelper.getDataOutputs();
 
@@ -482,7 +483,7 @@ try {
 		}
 
 		<% if (null != connResponse) {
-			String connResponseName = connResponse.getName(); %>
+			connResponseName = connResponse.getName(); %>
 			if (<%=connResponseName%> == null) {
 				<%=connResponseName%> = new <%=connResponseName%>Struct();
 			}
@@ -590,7 +591,6 @@ for (String responsePart_<%=cid%> : responseDoc_<%=cid%>) {
     responseParts_<%=cid%>.add(responsePart_<%=cid%>);
 }
 <% } %>
-for (String responsePart_<%=cid%> : responseParts_<%=cid%>) {
-    row1 = new row1Struct();
-    row1.string = responsePart_<%=cid%>;
+for (String responsePart_<%=cid%> : responseParts_<%=cid%>) {    
+    <%=connResponseName%>.string = responsePart_<%=cid%>;
 <% } %>
