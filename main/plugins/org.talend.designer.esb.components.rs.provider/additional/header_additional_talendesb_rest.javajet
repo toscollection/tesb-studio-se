@@ -741,8 +741,16 @@ public static class RestServiceProviderImpl4TalendJob {
 		}
 
 		public Parameter(String paramType, IMetadataColumn column, boolean generateVariableName) {
-			this.name = column.getLabel();
-
+			// try to extract parameter name from comment field
+			String paramName = column.getLabel();
+			if (null != column.getComment()){
+			    java.util.regex.Matcher m = java.util.regex.Pattern.compile(".*\\((.*?)\\).*").matcher(column.getComment());
+			    if (m.find()) {
+			        paramName = m.group(1);
+			    }
+			}
+                        this.name = paramName;
+			
 			String fieldType = column.getTalendType();
 			this.javaType = (JAVA_TYPE_DOCUMENT_ID.equals(fieldType)) ? "org.dom4j.Document"
 							: JavaTypesManager.getTypeToGenerate(JavaTypesManager.getJavaTypeFromId(fieldType), true);
@@ -761,7 +769,7 @@ public static class RestServiceProviderImpl4TalendJob {
 			}
 
 			this.isNullable = column.isNullable();
-			this.variableName = (generateVariableName) ? new TalendString(name).getAsciiRandomString(5) : name;
+			this.variableName = (generateVariableName) ? new TalendString(column.getLabel()).getAsciiRandomString(5) : column.getLabel();
 		}
 
 		public Parameter(String name, String paramType, String javaType, boolean generateVariableName) {
@@ -944,7 +952,7 @@ if (null != conns && !conns.isEmpty()) {
 			for (IMetadataColumn column : connMetadata.getListColumns()) {
 				if (SCHEMA_FIELD_NAME_4_REQUEST_BODY.equals(column.getLabel())) {
 					// rest parameter type
-					String restParameterType = column.getComment();
+					String restParameterType = (column.getComment() == null || column.getComment().indexOf("(") < 0)? column.getComment():column.getComment().substring(0, column.getComment().indexOf("("));
 					restParameterType = (null == restParameterType) ? "" : restParameterType.trim().toUpperCase();
 
 					// check that the field is not one of supported rest parameter type
@@ -968,7 +976,7 @@ if (null != conns && !conns.isEmpty()) {
 					// schema parameter name
 					String schemaFieldName = column.getLabel();
 					if (uriVariable.equals(schemaFieldName)) {
-						String restParameterType = column.getComment();
+						String restParameterType = (column.getComment() == null || column.getComment().indexOf("(") < 0)? column.getComment():column.getComment().substring(0, column.getComment().indexOf("("));
 						schemaFieldType = column.getTalendType();
 
 						if (restParameterType == null || restParameterType.trim().length() == 0 || "PATH".equalsIgnoreCase(restParameterType.trim())) {
@@ -1011,7 +1019,7 @@ if (null != conns && !conns.isEmpty()) {
 			// now we are going to declare all other (non uri template) variables ("Query", "Form", "Header", "Matrix", "Multipart" parameter types by REST)
 			for (IMetadataColumn column : connMetadata.getListColumns()) {
 				// rest parameter type
-				String restParameterType = column.getComment();
+				String restParameterType = (column.getComment() == null || column.getComment().indexOf("(") < 0)? column.getComment():column.getComment().substring(0, column.getComment().indexOf("("));
 				// skip "Path" parameters as we already collect uri template parameters
 				if (restParameterType == null || restParameterType.trim().length() == 0 || "PATH".equalsIgnoreCase(restParameterType.trim())) {
 					continue;
@@ -1037,6 +1045,13 @@ if (null != conns && !conns.isEmpty()) {
 
 				// schema parameter name
 				String schemaFieldName = column.getLabel();
+				// try to extract parameter name from comment field
+				if (null != column.getComment()){
+				    java.util.regex.Matcher m = java.util.regex.Pattern.compile(".*\\((.*?)\\).*").matcher(column.getComment());
+				    if (m.find()) {
+				        schemaFieldName = m.group(1);
+				    }
+				}
 				// schema parameter type
 				String schemaFieldType = column.getTalendType();
 				if (supportedTypes.contains(schemaFieldType)) {
