@@ -1628,9 +1628,7 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 		}
 	}
 }
-<%
-}
-%>
+
 	public static class ContextBean {
 		static String evaluate(String context, String contextExpression, String jobName)
 				throws IOException, javax.script.ScriptException {
@@ -1683,18 +1681,21 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 			return isExpression ? evaluateContextExpression(contextExpression) : contextExpression;
 		}
 
-		public static String evaluateContextExpression(String expression) throws javax.script.ScriptException {
-			javax.script.ScriptEngineManager manager = new javax.script.ScriptEngineManager();
-			javax.script.ScriptEngine engine = manager.getEngineByName("nashorn");
+		public static String evaluateContextExpression(String expression) throws RuntimeException {
+			delight.rhinosandox.RhinoSandbox sandbox = delight.rhinosandox.RhinoSandboxes.create();
+
 			// Add some import for Java
 			expression = expression.replaceAll("System.getProperty", "java.lang.System.getProperty");
-			return engine.eval(expression).toString();
+			return sandbox.eval(null, expression).toString();
 		}
 
         public static String getContext(String context, String contextName, String jobName) throws Exception {
 			return contextName.contains("context.") ? evaluate(context, contextName, jobName) : contextName;
         }
     }
+<%
+}
+%>
 <% if (logMarkerFeatureNeeded) { %>
     public static final class LogMarkerFeature extends org.apache.cxf.feature.AbstractFeature {
         @Override

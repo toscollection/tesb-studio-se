@@ -65,7 +65,19 @@
     </checknodes>
  </extension>
  <extension point="org.talend.core.runtime.librariesNeeded">
+        <libraryNeeded context="plugin:org.talend.designer.esb.components.rs.provider"
+            name="delight-rhino-sandbox-${delight-rhino-sandbox.version}.jar"
+            id="delight-rhino-sandbox"
+            uripath="platform:/plugin/org.talend.designer.esb.components.rs.provider/lib/delight-rhino-sandbox-${delight-rhino-sandbox.version}.jar"
+            mvn_uri="mvn:org.javadelight/delight-rhino-sandbox/${delight-rhino-sandbox.version}"
+            bundleID="" />
 
+        <libraryNeeded context="plugin:org.talend.designer.esb.components.rs.provider"
+            name="rhino-${rhino.version}.jar"
+            id="rhino"
+            uripath="platform:/plugin/org.talend.designer.esb.components.rs.provider/lib/rhino-${rhino.version}.jar"
+            mvn_uri="mvn:org.mozilla/rhino/${rhino.version}"
+            bundleID="" />
  </extension>
  <extension
        point="org.eclipse.core.runtime.preferences">
