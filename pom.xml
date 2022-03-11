@@ -247,7 +247,7 @@
 				</licenseMerges>
 				<excludedGroups>org\.talend\.(.*)</excludedGroups>
 				<useMissingFile>true</useMissingFile>
-				<failIfWarning>true</failIfWarning>
+				<failIfWarning>false</failIfWarning>
 			</configuration>
 		</plugin>
 			<plugin>
