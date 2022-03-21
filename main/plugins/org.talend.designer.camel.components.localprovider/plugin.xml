@@ -351,26 +351,6 @@
             <library id="netty-resolver" />
         </libraryNeededGroup>
 
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-camel-mqtt}"
-            id="camel-mqtt"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-mqtt}"
-            bundleID="" />
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-mqtt-client}"
-            id="mqtt-client"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-mqtt-client}"
-            bundleID="" />
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-hawtdispatch-transport}"
-            id="hawtdispatch-transport"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-hawtdispatch-transport}"
-            bundleID="" />
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-hawtdispatch}"
-            id="hawtdispatch"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-hawtdispatch}"
-            bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-hawtbuf}"
             id="hawtbuf"
@@ -578,31 +558,13 @@
             mvn_uri="mvn:org.slf4j/slf4j-api/${slf4j-api.version}"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/slf4j-api-${slf4j-api.version}.jar"
             bundleID="" />
-        <!-- ms azure -->
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-azure-storage}"
-            id="azure-storage"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-azure-storage}"
-            bundleID="" />
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-azure-keyvault-core}"
-            id="azure-keyvault-core"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-azure-keyvault-core}"
-            bundleID="" />            
-        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-camel-azure}"
-            id="camel-azure"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-azure}"
-            bundleID="" />
-        
+
         <libraryNeededGroup
                 description="camel-azure"
                 id="camel-azure"
                 name="camel-azure">
-            <library id="camel-azure" />
-            <library id="azure-storage" />
-            <library id="azure-keyvault-core" />
         </libraryNeededGroup>
+
 
         <libraryNeededGroup
                 description="jackson-providers"
@@ -659,27 +621,9 @@
               id="camel-hawtdb-alldep"
               name="camel-hawtdb-alldep">
            <library
-                 id="camel-hawtdb">
-           </library>
-           <library
-                 id="hawtdb">
-           </library>
-           <library
                  id="hawtbuf">
            </library>
         </libraryNeededGroup>
-        <libraryNeeded
-              context="plugin:org.talend.designer.camel.components.localprovider"
-              id="camel-hawtdb"
-              name="${tesb-camel-hawtdb}"
-              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-hawtdb}">
-        </libraryNeeded>
-        <libraryNeeded
-              context="plugin:org.talend.designer.camel.components.localprovider"
-              id="hawtdb"
-              name="${tesb-hawtdb}"
-              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-hawtdb}">
-        </libraryNeeded>
         
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 			name="jackson-annotations-${jackson.version}.jar"

@@ -44,11 +44,6 @@
 		<mail.version>1.4.7</mail.version>
 		<!-- camel-aws -->
 		<aws.sdk.version>2.16.23</aws.sdk.version>
-		<!-- camel-azure -->
-		<azure-storage-version>7.0.0</azure-storage-version>
-		<azure-keyvault-core-version>1.0.0</azure-keyvault-core-version>
-		<!-- camel-hawtdb -->
-		<hawtdb-version>1.6</hawtdb-version>
 		<Saxon-HE-version>9.7.0-21</Saxon-HE-version>
 		<!-- camel-kafka -->
 		<kafka-clients-version>3.1.0</kafka-clients-version>
