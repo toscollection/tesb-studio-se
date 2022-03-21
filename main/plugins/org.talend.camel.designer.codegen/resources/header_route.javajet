@@ -2790,9 +2790,6 @@ if (isProvider) {
                     icsOut_<%=cid%> = new java.util.ArrayList<>();
                 }
 
-<%
-                if (isProvider) {
-%>
                 org.apache.cxf.feature.Feature ft_<%=cid%> = new  org.apache.cxf.feature.AbstractFeature() {
                     @Override
                     protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider, org.apache.cxf.Bus bus) {
@@ -2818,9 +2815,7 @@ if (isProvider) {
                 };
 
                 fts_<%=cid%>.add(ft_<%=cid%>);
-<%
-                }
-%>
+
                 registry.put("features_<%=cid%>", fts_<%=cid%>);
                 registry.put("inInterceptors_<%=cid%>", icsIn_<%=cid%>);
                 registry.put("outInterceptors_<%=cid%>", icsOut_<%=cid%>);
