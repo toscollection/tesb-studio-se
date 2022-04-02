@@ -550,18 +550,18 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
     protected void handleDestinationBrowseButtonPressed() {
         FileDialog dialog = new FileDialog(getContainer().getShell(), SWT.SAVE);
 
+        String suffix = FileConstants.KAR_FILE_SUFFIX;
         if (EXPORTTYPE_SPRING_BOOT.equals(exportTypeCombo.getText())) {
             if (exportAsZip) {
-                dialog.setFilterExtensions(new String[] { "*" + FileConstants.ZIP_FILE_SUFFIX, "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
+                suffix = FileConstants.ZIP_FILE_SUFFIX;
             } else {
-                dialog.setFilterExtensions(new String[] { "*.jar", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
+                suffix = FileConstants.JAR_FILE_SUFFIX;
             }
-        } else {
-            dialog.setFilterExtensions(new String[] { "*.kar", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
-        }
+        } 
+        dialog.setFilterExtensions(new String[] { "*" + suffix, "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
         dialog.setText(""); //$NON-NLS-1$
         // this is changed by me shenhaize
-        dialog.setFileName(this.getDefaultFileName().get(0));
+        dialog.setFileName(this.getDefaultFileName().get(0) + suffix);
         String currentSourceString = getDestinationValue();
         int lastSeparatorIndex = currentSourceString.lastIndexOf(File.separator);
         if (lastSeparatorIndex != -1) {

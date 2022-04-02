@@ -230,6 +230,12 @@
                 UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.bind-api-2.3.3.jar"
                 REQUIRED="true"/>
 
+            <IMPORT MODULE="delight-rhino-sandbox-${delight-rhino-sandbox.version}.jar" MVN="mvn:org.javadelight/delight-rhino-sandbox/${delight-rhino-sandbox.version}"
+                NAME="delight-rhino-sandbox" REQUIRED="true"/>
+
+            <IMPORT MODULE="rhino-${rhino.version}.jar" MVN="mvn:org.mozilla/rhino/${rhino.version}"
+                NAME="rhino" REQUIRED="true"/>
+
             <IMPORT MODULE_GROUP="security-common" REQUIRED="true" />
 			
 			<IMPORT MODULE_GROUP="spring-context"  REQUIRED="true" />

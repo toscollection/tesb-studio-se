@@ -55,7 +55,7 @@ public class RemoveSlashServicesInEndpointMigrationTask extends AbstractItemMigr
         if (processType.getNode().isEmpty()) {
             return ExecutionResult.NOTHING_TO_DO;
         }
-        
+
         boolean modified = false;
         for (Object o : processType.getNode()) {
             if (o instanceof NodeType) {
