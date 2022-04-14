@@ -491,7 +491,6 @@
                 name="RemoveSlashServicesInEndpointMigrationTask"
                 version="8.0.1">
           </projecttask>
-
     </extension>
 
         <extension

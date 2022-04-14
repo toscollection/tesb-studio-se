@@ -502,6 +502,11 @@
 		<version>1_2</version>
 	</dependency>
 	<dependency>
+        <groupId>org.apache.servicemix.bundles</groupId>
+        <artifactId>org.apache.servicemix.bundles.saaj-impl</artifactId>
+        <version>1.5.1_1</version>
+    </dependency>
+	<dependency>
 	    <groupId>org.apache.zookeeper</groupId>
 	    <artifactId>zookeeper-jute</artifactId>
 	    <version>3.5.9</version>
