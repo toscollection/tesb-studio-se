@@ -1438,7 +1438,9 @@ static class CxfPayloadProvider implements javax.ws.rs.ext.MessageBodyWriter<org
 %>
             @org.springframework.context.annotation.Bean
             public org.springframework.boot.web.servlet.ServletRegistrationBean servletRegistrationBean(org.springframework.context.ApplicationContext context) {
-                return new org.springframework.boot.web.servlet.ServletRegistrationBean(new org.apache.cxf.transport.servlet.CXFServlet(), "/services/*");
+                String talendCtxPath = context.getEnvironment().getProperty("talend.server.servlet.context-path");
+                String path = (null == talendCtxPath)? "/*" : talendCtxPath + "/*";
+                return new org.springframework.boot.web.servlet.ServletRegistrationBean(new org.apache.cxf.transport.servlet.CXFServlet(), path);
             }
             @org.springframework.context.annotation.Bean(name = "cxf")
             public org.apache.cxf.bus.spring.SpringBus springBus() {
