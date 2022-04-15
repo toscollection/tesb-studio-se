@@ -121,7 +121,9 @@ if (null != metadatas && 0 < metadatas.size()) {
 										<%=connectionName%>.<%=columnName%> = <%=columnName%>_<%=cid%>;
 									<% } else { %>
 										<% String javaTypeFull = JavaTypesManager.getTypeToGenerate(schemaFieldType, true); %>
-										<%=connectionName%>.<%=columnName%> = (<%= javaTypeFull%>) params_<%=cid%>.get("<%=parameterKey%>");
+                                        if (null != params_<%=cid%>.get("<%=parameterKey%>")) {                                         
+                                            <%=connectionName%>.<%=columnName%> = (<%= javaTypeFull%>) params_<%=cid%>.get("<%=parameterKey%>");
+                                        }
 									<% } %>
 								}
 <%
