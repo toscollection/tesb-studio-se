@@ -63,7 +63,7 @@
         <reflections.version>0.9.11</reflections.version>
         <guava.version>20.0</guava.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
-        <snakeyaml.version>1.23</snakeyaml.version>
+        <snakeyaml.version>1.30</snakeyaml.version>
         <activemq.version>5.15.10</activemq.version>
         <xbean-spring.version>4.14</xbean-spring.version>
         <!-- external deps -->
@@ -72,9 +72,10 @@
         <mvn-commons-lang>mvn:commons-lang/commons-lang/2.6</mvn-commons-lang>
         <mvn-commons-pool>mvn:commons-pool/commons-pool/1.6</mvn-commons-pool>
         
-        <jetty-all.version>9.4.18.v20190429</jetty-all.version>
+        <jetty-all.version>9.4.43.v20210629</jetty-all.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-        <jackson.version>2.9.9</jackson.version>
+        <jackson.version>2.13.2</jackson.version>
+        <jackson-databind.version>2.13.2.2</jackson-databind.version>
     </properties>
 
     <dependencies>
