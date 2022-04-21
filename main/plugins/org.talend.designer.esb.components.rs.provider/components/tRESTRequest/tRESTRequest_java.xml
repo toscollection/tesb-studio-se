@@ -236,8 +236,8 @@
                 UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jackson-core-${jackson.version}.jar"
                 REQUIRED="true"/>
 
-            <IMPORT MODULE="jackson-databind-${jackson.version}.jar" MVN="mvn:org.talend.libraries/jackson-databind/6.0.0" NAME="jackson-databind-${jackson.version}"
-                UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jackson-databind-${jackson.version}.jar"
+            <IMPORT MODULE="jackson-databind-${jackson.databind.version}.jar" MVN="mvn:org.talend.libraries/jackson-databind/6.0.0" NAME="jackson-databind-${jackson.databind.version}"
+                UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jackson-databind-${jackson.databind.version}.jar"
                 REQUIRED="true"/>
 
             <IMPORT MODULE="jackson-dataformat-yaml-${jackson.version}.jar" MVN="mvn:org.talend.libraries/jackson-dataformat-yaml/6.0.0" NAME="jackson-dataformat-yaml-${jackson.version}"
