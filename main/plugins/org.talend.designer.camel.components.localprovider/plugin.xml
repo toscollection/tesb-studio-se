@@ -638,9 +638,9 @@
 			bundleID="" />
 			
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-			name="jackson-databind-${jackson.version}.jar"
+			name="jackson-databind-${jackson.databind.version}.jar"
 			id="azure-jackson-databind"
-			uripath="platform:/plugin/org.talend.libraries.esb/lib/jackson-databind-${jackson.version}.jar"
+			uripath="platform:/plugin/org.talend.libraries.esb/lib/jackson-databind-${jackson.databind.version}.jar"
 			bundleID="" />        
         
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
@@ -656,9 +656,9 @@
 			bundleID="" />
 			
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-			name="jackson-databind-${jackson.version}.jar"
+			name="jackson-databind-${jackson.databind.version}.jar"
 			id="aws-jackson-databind"
-			uripath="platform:/plugin/org.talend.libraries.esb/lib/jackson-databind-${jackson.version}.jar"
+			uripath="platform:/plugin/org.talend.libraries.esb/lib/jackson-databind-${jackson.databind.version}.jar"
 			bundleID="" />
         
         <libraryNeededGroup
