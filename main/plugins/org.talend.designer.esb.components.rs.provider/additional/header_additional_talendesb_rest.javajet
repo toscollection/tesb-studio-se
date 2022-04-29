@@ -1147,7 +1147,7 @@ if (exposeSwagger) {
 						@javax.ws.rs.DefaultValue("<%=param.getDefaultValue()%>") <%
 					}
 				} %>
-				<% if (multipartSupported) { 
+				<% if (multipartSupported && "org.apache.cxf.jaxrs.ext.multipart.Multipart".equalsIgnoreCase(restParameterTypes.get(param.getParamType()))) { 
 				%>@<%=restParameterTypes.get(param.getParamType())%>(value="<%=param.getName()%>", required=<%=!param.isNullable()%>) <%= javaType%> <%=variableName%><% 
 				} else { 
 				%>@<%=restParameterTypes.get(param.getParamType())%>("<%=param.getName()%>") <%= javaType%> <%=variableName%><%
