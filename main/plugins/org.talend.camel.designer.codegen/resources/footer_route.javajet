@@ -595,7 +595,33 @@ if (isTestContainer) {
 	}
 
     <%if(exportTypeSpringBoot){%>
-    
+    	//for the issue APPINT-34429
+		/**
+		 * read context values from specified context
+		 * @parameter contextName : the name of context while will be used
+		 */
+		private void readContextValues(String contextName){
+			<%
+			for (IContextParameter ctxParam :params){ //start for
+				if (ctxParam.getType().equals("id_Password")) {
+			%>
+					String pwd_<%=ctxParam.getName()%>_value = context.getProperty("<%=ctxParam.getName()%>");
+					if(pwd_<%=ctxParam.getName()%>_value!=null) {
+						if(context_param.containsKey("<%=ctxParam.getName()%>")) {//no need to decrypt if it come from program argument or parent job runtime
+							context.set<%=Character.toUpperCase(ctxParam.getName().charAt(0)) + ctxParam.getName().substring(1)%>(pwd_<%=ctxParam.getName()%>_value);
+						} else if (!pwd_<%=ctxParam.getName()%>_value.isEmpty()) {
+							try {
+								context.set<%=Character.toUpperCase(ctxParam.getName().charAt(0)) + ctxParam.getName().substring(1)%>(routines.system.PasswordEncryptUtil.decryptPassword(pwd_<%=ctxParam.getName()%>_value));
+							} catch (java.lang.RuntimeException e) {
+								//do nothing
+							}
+						}
+					}
+			<%
+					continue;
+				}
+			}%>
+		}
     <% }else{ %>
             private boolean contextValuesRead = false;
 
