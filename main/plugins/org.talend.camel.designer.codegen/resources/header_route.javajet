@@ -2360,6 +2360,8 @@ if (isProvider) {
                     <%if(!isRoutelet){%>
                         <%= generateAddRoutesMethod(process)%>
                     <%}%>
+                    //read context values
+                    readContextValues(contextStr);
                 <%}else{%>
                     <%if(!isRoutelet) {%>
                     if(inOSGi){
@@ -2368,7 +2370,6 @@ if (isProvider) {
                     <%}%>
                     //read context values
                     readContextValues(contextStr);
-
                 <%}%>
 
 <%
