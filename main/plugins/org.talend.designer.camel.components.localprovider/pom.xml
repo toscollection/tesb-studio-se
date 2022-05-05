@@ -14,7 +14,7 @@
     <properties>
         <camel.version>2.24.2</camel.version>
         <camel.mqtt.version>2.24.2.tesb1</camel.mqtt.version>
-        <camel.wmq.version>${camel.version}.1</camel.wmq.version>
+        <camel.wmq.version>2.25.2</camel.wmq.version>
         <!-- camel-groovy -->
         <groovy.version>2.4.8</groovy.version>
         <!-- camel-xstream -->
