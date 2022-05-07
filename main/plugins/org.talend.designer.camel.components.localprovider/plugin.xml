@@ -660,7 +660,7 @@
             uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-ftp}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="camel-${tesb-jsch}"
+            name="${tesb-jsch}"
             id="jsch"
             mvn_uri="mvn:com.jcraft/jsch/${jsch.version}"
             uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-jsch}"
