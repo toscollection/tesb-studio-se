@@ -92,6 +92,9 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
     private static final String EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE = Messages
             .getString("JavaCamelJobScriptsExportWSWizardPage.ExportSpringBootDockerImage");//$NON-NLS-1$
 
+    private static final String EXPORTTYPE_CAMEL_K = Messages
+            .getString("JavaCamelJobScriptsExportWSWizardPage.ExportCamelK");//$NON-NLS-1$
+
     // dialog store id constants
     private static final String STORE_DESTINATION_NAMES_ID = "JavaJobScriptsExportWizardPage.STORE_DESTINATION_NAMES_ID"; //$NON-NLS-1$
 
@@ -152,6 +155,7 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
 
         // TESB-5328
         exportTypeCombo.add(EXPORTTYPE_KAR);
+        exportTypeCombo.add(EXPORTTYPE_CAMEL_K);
         if (PluginChecker.isTIS()) {
             exportTypeCombo.add(EXPORTTYPE_SPRING_BOOT);
 
@@ -521,7 +525,7 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
         } else {
             exportTypeCombo.select(0);
             exportTypeCombo.notifyListeners(SWT.Selection, null);
-            exportTypeCombo.setEnabled(false);
+            exportTypeCombo.setEnabled(true);
         }
     }
 
@@ -859,6 +863,23 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
 
                     buildJobWithMaven(exportTypeCombo.getText().equals(EXPORTTYPE_SPRING_BOOT) ? JobExportType.ROUTE
                             : JobExportType.MSESB_IMAGE, monitor);
+
+                }
+            };
+            try {
+                getContainer().run(false, true, worker);
+            } catch (Exception e) {
+                MessageBoxExceptionHandler.process(e.getCause() == null ? e : e.getCause(), getShell());
+                return false;
+            }
+        } else if (exportTypeCombo.getText().equals(EXPORTTYPE_CAMEL_K)) {
+
+            IRunnableWithProgress worker = new IRunnableWithProgress() {
+
+                @Override
+                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+                    buildJobWithMaven(JobExportType.ROUTE, monitor);
 
                 }
             };
