@@ -406,7 +406,7 @@ try {
 	if (use_auth_<%=cid%> && "OAUTH2_BEARER".equals(<%=authType%>)) {
 		// set oAuth2 bearer token
 		org.apache.cxf.rs.security.oauth2.client.BearerAuthSupplier authSupplier = new org.apache.cxf.rs.security.oauth2.client.BearerAuthSupplier();
-		authSupplier.setAccessToken(<%=paramsHelper.getStringParam("__AUTH_BEARER_TOKEN__")%>);
+		authSupplier.setAccessToken((String) <%=paramsHelper.getStringParam("__AUTH_BEARER_TOKEN__")%>);
 		conduit_<%=cid%>.setAuthSupplier(authSupplier);
 	}
 
