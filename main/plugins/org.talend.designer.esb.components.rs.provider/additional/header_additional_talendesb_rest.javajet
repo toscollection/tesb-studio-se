@@ -612,7 +612,10 @@ public static class RestServiceProviderImpl4TalendJob {
 				responseBody = response.get("BODY");
 				status = (Integer) response.get("STATUS");
 				headers = (java.util.Map<String, String>) response.get("HEADERS");
-			}
+			} else {
+                            responseBody = request.get("ERROR");
+                        }
+            
 			if (null == status) {
 				status = (request.containsKey("STATUS")) ? (Integer) request.get("STATUS") : 404;
 			}
@@ -1157,6 +1160,27 @@ if (contentTypes.containsKey(produces)) {
 			if (paramCommaWritten) { %>, <% } %><%=bodyParameter.getJavaType()%> body
 		<% } %>
 			) {
+                List<String> requiredParameterWithNullValueList = new java.util.ArrayList<String>();
+<%
+
+for (Parameter param : parameters.values()) {
+        String variableName = param.getVariableName();
+        String javaType = param.getJavaType();
+        if ("java.util.Date".equals(javaType)) {
+            variableName += "_" + cid;
+        }
+        if (!param.isNullable() && null == param.getDefaultValue()){
+%>
+                    if(null == <%=variableName%>){
+                        requiredParameterWithNullValueList.add("<%=param.getName()%>");
+                    }
+<%
+        }
+    }
+%>  
+                if(requiredParameterWithNullValueList.size() > 0){
+                    return handleWrongRequest(messageContext, 400, "400 Bad Request \n" + requiredParameterWithNullValueList.toString() + " in <%=cid%>:<%=connName%> " + (requiredParameterWithNullValueList.size() == 1 ? "is required!" : "are required!"));         
+                }
 <%
 		for (Parameter param : parameters.values()) {
 			String variableName = param.getVariableName();
