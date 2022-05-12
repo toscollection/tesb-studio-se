@@ -55,7 +55,7 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-stax2-api}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-xmlschema-core}"
+            name="xmlschema-core-2.2.5.jar"
             id="xmlschema-core"
             mvn_uri="mvn:org.apache.ws.xmlschema/xmlschema-core/2.2.5"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-xmlschema-core}"
@@ -94,7 +94,7 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-asm}"
             bundleID="" /-->
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-cxf-rt-databinding-jaxb}"
+            name="cxf-rt-databinding-jaxb-3.3.10.jar"
             id="cxf-rt-databinding-jaxb"
              mvn_uri="mvn:org.apache.cxf/cxf-rt-databinding-jaxb/3.3.10"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-databinding-jaxb}"
@@ -145,7 +145,7 @@
             uripath="platform:/base/plugins/org.apache.xml.resolver_1.2.0.v201005080400.jar"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-cxf-rt-bindings-xml}"
+            name="cxf-rt-bindings-xml-3.3.10.jar"
             id="cxf-rt-bindings-xml"
             mvn_uri="mvn:org.apache.cxf/cxf-rt-bindings-xml/3.3.10"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-bindings-xml}"
@@ -399,7 +399,7 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-security-saml}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-cxf-rt-security}"
+            name="cxf-rt-security-3.3.10.jar"
             id="cxf-rt-security"
             mvn_uri="mvn:org.apache.cxf/cxf-rt-security/3.3.10"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-security}"
@@ -533,7 +533,7 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-wss4j-ws-security-dom}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-wss4j-policy}"
+            name="wss4j-policy-2.2.6.jar"
             id="wss4j-policy"
             mvn_uri="mvn:org.apache.wss4j/wss4j-policy/2.2.6"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-wss4j-policy}"
@@ -545,13 +545,13 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-wss4j-ws-security-stax}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-wss4j-ws-security-policy-stax}"
+            name="wss4j-ws-security-policy-stax-2.2.6.jar"
             id="wss4j-ws-security-policy-stax"
             mvn_uri="mvn:org.apache.wss4j/wss4j-ws-security-policy-stax/2.2.6"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-wss4j-ws-security-policy-stax}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-wss4j-bindings}"
+            name="wss4j-bindings-2.2.6.jar"
             id="wss4j-bindings"
             mvn_uri="mvn:org.apache.wss4j/wss4j-bindings/2.2.6"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-wss4j-bindings}"
