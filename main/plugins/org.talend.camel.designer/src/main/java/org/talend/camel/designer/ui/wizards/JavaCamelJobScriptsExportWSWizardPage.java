@@ -181,6 +181,8 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
                     boolean isMS = destination.equals(EXPORTTYPE_SPRING_BOOT)
                             || destination.equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE);
 
+                    boolean isCamelK = destination.equals(EXPORTTYPE_CAMEL_K);
+
                     if (isMS) {
 
                         exportAsZipButton.dispose();
@@ -225,6 +227,8 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
                             destinationValue = destinationValue.substring(0, destinationValue.lastIndexOf("."))
                                     + FileConstants.JAR_FILE_SUFFIX;
                         }
+                    } else if (isCamelK) {
+                        destinationValue = destinationValue.substring(0, destinationValue.lastIndexOf(".")) + FileConstants.ZIP_FILE_SUFFIX;
                     } else {
                         destinationValue = destinationValue.substring(0, destinationValue.lastIndexOf(".")) + getOutputSuffix();
                     }
@@ -874,21 +878,59 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
             }
         } else if (exportTypeCombo.getText().equals(EXPORTTYPE_CAMEL_K)) {
 
-            IRunnableWithProgress worker = new IRunnableWithProgress() {
+            if (getProcessItem() instanceof CamelProcessItem) {
+                CamelProcessItem camelProcessItem = (CamelProcessItem) getProcessItem();
+                if (camelProcessItem.isExportMicroService()) {
+                    camelProcessItem.setExportMicroService(false);
+                }
+                camelProcessItem.getProperty().getAdditionalProperties().put("BUILD_TYPE", "ROUTE_CAMELK");
+            }
+
+            exportChoiceMap.put(ExportChoice.esbExportType, "zip");
+
+            buildJobHandlerAction = new IRunnableWithProgress() {
 
                 @Override
                 public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-                    buildJobWithMaven(JobExportType.ROUTE, monitor);
+                    IBuildJobHandler buildJobHandler  = BuildJobFactory.createBuildJobHandler(getProcessItem(), getContextName(), version,
+                                        exportChoiceMap, "ROUTE_CAMELK");
+
+                    Map<String, Object> prepareParams = new HashMap<String, Object>();
+                    prepareParams.put(IBuildResourceParametes.OPTION_ITEMS, true);
+                    prepareParams.put(IBuildResourceParametes.OPTION_ITEMS_DEPENDENCIES, true);
+
+                    try {
+                          buildJobHandler.prepare(monitor, prepareParams);
+                          //buildJobHandler.build(monitor);
+
+                          IFile targetFile = buildJobHandler.getJobTargetFile();
+
+                          if (targetFile != null && targetFile.exists()) {
+                              try {
+                                  FilesUtils.copyFile(targetFile.getLocation().toFile(), new File(getDestinationValue()));
+                              } catch (IOException e) {
+                                  e.printStackTrace();
+                              }
+                          }
+
+                      } catch (Exception e) {
+                          MessageBoxExceptionHandler.process(e.getCause() == null ? e : e.getCause(), getShell());
+                      }
 
                 }
             };
+
+            //ProcessorUtilities.setExportAsOSGI(true);
+
+
             try {
-                getContainer().run(false, true, worker);
+                getContainer().run(false, true, buildJobHandlerAction);
             } catch (Exception e) {
-                MessageBoxExceptionHandler.process(e.getCause() == null ? e : e.getCause(), getShell());
+                MessageBoxExceptionHandler.process(e.getCause(), getShell());
                 return false;
             }
+
 
         } else {
 

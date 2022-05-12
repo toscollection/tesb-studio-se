@@ -21,6 +21,8 @@ public class PartGeneratorManager extends ArgumentBuilderHolder {
 	private PartGenerator<IContext> contextGenerator;
 	private PartGenerator<INode> endpointIdGenerator;
 
+	private String buildType;
+
     /**
      * DOC yyan PartGeneratorManager constructor comment.
      * Extract IRouteProcess interface
@@ -31,6 +33,7 @@ public class PartGeneratorManager extends ArgumentBuilderHolder {
      */
     public PartGeneratorManager(IRouteProcess process, boolean statistics, boolean trace, String[] options) {
         super(new CodeGeneratorArgumentBuilder(process, statistics, trace, options));
+        buildType = (String) process.getAdditionalProperties().get("BUILD_TYPE");
         templateGenerator = new TemplatePartGenerator(argumentBuilder);
         contextGenerator = new ContextPartGenerator(argumentBuilder);
         endpointIdGenerator = new EndpointIdGenerator();
@@ -73,4 +76,8 @@ public class PartGeneratorManager extends ArgumentBuilderHolder {
 	public CharSequence generateEndpointId(INode node) throws CodeGeneratorException {
 		return endpointIdGenerator.generatePart(node);
 	}
+
+    public String getBuildType() {
+        return this.buildType;
+    }
 }

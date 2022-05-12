@@ -33,10 +33,13 @@ public class ProcessPartBuilder extends AbstractProcessPartBuilder {
 
 	private final List<NodesSubTree> sortedFilteredSubTrees;
 
+	private String buildType;
+
 	public ProcessPartBuilder(PartGeneratorManager generatorManager) {
 		super(generatorManager);
 		this.nodesTree = manager.getArgumentBuilder().getProcessTree();
 		this.subTrees = nodesTree.getSubTrees();
+		this.buildType = generatorManager.getBuildType();
 
 		if (hasSubTrees()) {
 			sortedFilteredSubTrees = new ArrayList<NodesSubTree>();
@@ -60,15 +63,22 @@ public class ProcessPartBuilder extends AbstractProcessPartBuilder {
 
 	@Override
 	public AbstractProcessPartBuilder appendContent() throws CodeGeneratorException {
-		appendTyped(ECamelTemplate.HEADER_ROUTE);
-		if (hasSubTrees()) {
-			for (NodesSubTree subTree : sortedFilteredSubTrees) {
-				appendSubTree(subTree);
+		if (buildType.equals("ROUTE_CAMELK")) {
+			if (hasSubTrees()) {
+				for (NodesSubTree subTree : sortedFilteredSubTrees) {
+					appendSubTree(subTree);
+				}
 			}
+		} else {
+			appendTyped(ECamelTemplate.HEADER_ROUTE);
+			if (hasSubTrees()) {
+				for (NodesSubTree subTree : sortedFilteredSubTrees) {
+					appendSubTree(subTree);
+				}
+			}
+			appendTyped(ECamelTemplate.FOOTER_ROUTE);
+			appendTyped(ECamelTemplate.PROCESSINFO);
 		}
-
-		appendTyped(ECamelTemplate.FOOTER_ROUTE);
-		appendTyped(ECamelTemplate.PROCESSINFO);
 		return this;
 	}
 

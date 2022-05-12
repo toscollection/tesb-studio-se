@@ -652,6 +652,16 @@
                        name="ROUTELET"
                  order="10">
            </buildType>
+           </buildProvider>
+           <buildProvider
+                 description="Build Route as Camel K"
+                 id="build.provider.esb.route.camelk"
+                 provider="org.talend.camel.designer.build.camelk.RouteCamelKBuildProvider">
+                 <buildType
+                       label="Route (Camel K)"
+                       name="ROUTE_CAMELK"
+                 order="50">
+           </buildType>
            </buildProvider>           
         </extension>
 
