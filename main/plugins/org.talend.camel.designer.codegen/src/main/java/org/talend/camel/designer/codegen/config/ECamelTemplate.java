@@ -27,6 +27,7 @@ import org.talend.designer.codegen.config.TemplateUtil;
 public enum ECamelTemplate {
 	FOOTER_ROUTE("footer_route"), //$NON-NLS-1$
 	HEADER_ROUTE("header_route"), //$NON-NLS-1$
+	HEADER_ROUTE_CAMELK("header_route_camelk"), //$NON-NLS-1$
 	CAMEL_SPECIALLINKS("camel_speciallinks"), //$NON-NLS-1$
 
 	// ref templates.

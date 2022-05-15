@@ -906,13 +906,13 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
 
                           IFile targetFile = buildJobHandler.getJobTargetFile();
 
-                          if (targetFile != null && targetFile.exists()) {
+                          //if (targetFile != null && targetFile.exists()) {
                               try {
                                   FilesUtils.copyFile(targetFile.getLocation().toFile(), new File(getDestinationValue()));
                               } catch (IOException e) {
                                   e.printStackTrace();
                               }
-                          }
+                          //}
 
                       } catch (Exception e) {
                           MessageBoxExceptionHandler.process(e.getCause() == null ? e : e.getCause(), getShell());

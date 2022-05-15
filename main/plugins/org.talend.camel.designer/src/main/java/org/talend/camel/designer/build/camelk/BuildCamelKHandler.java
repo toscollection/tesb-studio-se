@@ -15,6 +15,9 @@ package org.talend.camel.designer.build.camelk;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -24,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.talend.camel.core.model.camelProperties.CamelProcessItem;
 import org.talend.camel.core.model.camelProperties.impl.CamelProcessItemImpl;
 import org.talend.commons.CommonsPlugin;
 import org.talend.commons.exception.ExceptionHandler;
@@ -31,6 +35,9 @@ import org.talend.commons.utils.io.FilesUtils;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.utils.JavaResourcesHelper;
+import org.talend.designer.core.model.utils.emf.talendfile.ElementParameterType;
+import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
+import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
 import org.talend.designer.maven.model.MavenSystemFolders;
 import org.talend.designer.maven.model.TalendMavenConstants;
 import org.talend.designer.maven.utils.PomIdsHelper;
@@ -46,6 +53,8 @@ import org.talend.repository.utils.ZipFileUtils;
  */
 public class BuildCamelKHandler extends BuildJobHandler {
 
+    private CamelProcessItemImpl camelProcessItem;
+
     /**
      * (non-Javadoc)
      *
@@ -60,8 +69,7 @@ public class BuildCamelKHandler extends BuildJobHandler {
         super(processItem, version, contextName, exportChoiceMap);
 
         if (processItem instanceof CamelProcessItemImpl) {
-            CamelProcessItemImpl camelProcessItemImpl = (CamelProcessItemImpl) processItem;
-            //camelProcessItemImpl.setExportMicroService(true);
+            this.camelProcessItem = (CamelProcessItemImpl) processItem;
         }
 
         IFolder resFolder = talendProcessJavaProject.getProject().getFolder(MavenSystemFolders.RESOURCES.getPath());
@@ -80,6 +88,7 @@ public class BuildCamelKHandler extends BuildJobHandler {
         } catch (CoreException e) {
             e.printStackTrace();
         }
+
     }
 
     /*
@@ -104,76 +113,6 @@ public class BuildCamelKHandler extends BuildJobHandler {
         super.prepare(monitor, parameters);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.talend.repository.ui.wizards.exportjob.handler.AbstractBuildJobHandler#getProfileArgs()
-     */
-    @Override
-    protected StringBuffer getProfileArgs() {
-        StringBuffer profileBuffer = new StringBuffer();
-
-        boolean needMavenScript = exportChoice.get(ExportChoice.needMavenScript) != null
-                || isOptionChoosed(ExportChoice.needMavenScript);
-
-        boolean buildImage = exportChoice.get(ExportChoice.buildImage) == null ? false
-                : (Boolean) exportChoice.get(ExportChoice.buildImage);
-
-        profileBuffer.append(TalendMavenConstants.PREFIX_PROFILE);
-        profileBuffer.append(SPACE);
-
-        // should add the default settings always.
-        addArg(profileBuffer, true, true, TalendMavenConstants.PROFILE_DEFAULT_SETTING);
-
-        if (buildImage) {
-            addArg(profileBuffer, true, TalendMavenConstants.PROFILE_DOCKER);
-        }
-
-        if (needMavenScript) {
-
-            addArg(profileBuffer, true, TalendMavenConstants.PROFILE_INCLUDE_JAVA_SOURCES);
-
-            addArg(profileBuffer, true, TalendMavenConstants.PROFILE_INCLUDE_MAVEN_RESOURCES);
-
-            addArg(profileBuffer, true, TalendMavenConstants.PROFILE_INCLUDE_MICROSERVICE_CONFIGS);
-
-            addArg(profileBuffer, false, TalendMavenConstants.PROFILE_INCLUDE_MICROSERVICE_RUNNING_CONFIGS);
-
-            addArg(profileBuffer, false, TalendMavenConstants.PROFILE_INCLUDE_BINARIES);
-
-        } else {
-            addArg(profileBuffer, false, TalendMavenConstants.PROFILE_INCLUDE_JAVA_SOURCES);
-
-            addArg(profileBuffer, false, TalendMavenConstants.PROFILE_INCLUDE_MAVEN_RESOURCES);
-
-            addArg(profileBuffer, false, TalendMavenConstants.PROFILE_INCLUDE_MICROSERVICE_CONFIGS);
-
-            addArg(profileBuffer, true, TalendMavenConstants.PROFILE_INCLUDE_MICROSERVICE_RUNNING_CONFIGS);
-
-            addArg(profileBuffer, true, TalendMavenConstants.PROFILE_INCLUDE_BINARIES);
-        }
-
-        // If the map doesn't contain the assembly key, then take the default value activation from the POM.
-        boolean isAssemblyNeeded = exportChoice.get(ExportChoice.needAssembly) == null
-                || isOptionChoosed(ExportChoice.needAssembly);
-        addArg(profileBuffer, isAssemblyNeeded, TalendMavenConstants.PROFILE_PACKAGING_AND_ASSEMBLY);
-
-        return profileBuffer;
-    }
-
-    @Override
-    public Map<String, Object> getArguments() {
-
-        Map<String, Object> arguments = super.getArguments();
-
-        if (isOptionChoosed(ExportChoice.esbMetrics)) {
-            arguments.put("ESB_METRICS", true);
-        }
-
-        return arguments;
-
-    }
-
     @Override
     public IFile getJobTargetFile() {
         try {
@@ -185,12 +124,12 @@ public class BuildCamelKHandler extends BuildJobHandler {
             IFolder srcFolder = talendProcessJavaProject.getSrcFolder();
             IFile jobFile = srcFolder.getFile(projectName + "/" + jobName.toLowerCase() + "_0_1" + "/" + jobName + ".java");
 
-            File groovyFile = new File(talendProcessJavaProject.getTempFolder() + "/" + jobName + ".groovy");
+            File groovyFile = new File(talendProcessJavaProject.getTempFolder().getLocation().toString() + "/" + jobName + ".groovy");
             FilesUtils.copyFile(jobFile.getLocation().toFile(), groovyFile);
 
-            File scriptFile = new File(talendProcessJavaProject.getTempFolder() + "/" + jobName + ".sh");
+            File scriptFile = new File(talendProcessJavaProject.getTempFolder().getLocation().toString() + "/" + jobName + ".sh");
             FileOutputStream fos = new FileOutputStream(scriptFile);
-            String scriptContent = "kamel run " + jobName + ".groovy";
+            String scriptContent = "kamel run " + addComponentsDepends(camelProcessItem) + jobName + ".groovy";
             fos.write(scriptContent.getBytes());
             fos.close();
 
@@ -198,8 +137,8 @@ public class BuildCamelKHandler extends BuildJobHandler {
             outputFiles[0] = groovyFile;
             outputFiles[1] = scriptFile;
 
-            String zipFileName = talendProcessJavaProject.getTempFolder() + "/" + jobName + ".zip";
-            ZipFileUtils.zip(outputFiles, zipFileName);
+            IFile zipFile = talendProcessJavaProject.getTempFolder().getFile(jobName + ".zip");
+            ZipFileUtils.zip(outputFiles, zipFile.getLocation().toString());
 
             return talendProcessJavaProject.getTempFolder().getFile(jobName + ".zip");
         } catch (IOException e) {
@@ -207,6 +146,48 @@ public class BuildCamelKHandler extends BuildJobHandler {
             return null;
         }
 
+    }
+
+    private String addComponentsDepends(CamelProcessItemImpl camelProcessItem){
+        StringBuffer dependsBuffer = new StringBuffer();
+
+        ProcessType processType = camelProcessItem.getProcess();
+
+        for (Object o : processType.getNode()) {
+            if (o instanceof NodeType) {
+                NodeType currentNode = (NodeType) o;
+                String componentName = currentNode.getComponentName();
+                if (componentName.equals("cSOAP") || componentName.equals("cREST")) {
+                    dependsBuffer.append("-d camel-cxf");
+                }
+                if (componentName.equals("cMessagingEndpoint")) {
+                    for (Object e : currentNode.getElementParameter()) {
+                        ElementParameterType p = (ElementParameterType) e;
+                        if ("URI".equals(p.getName())) {
+                            if (p.getValue() != null && p.getValue().startsWith("\"aws2-s3")) {
+                                dependsBuffer.append("-d camel-aws2-s3");
+                            }
+                            if (p.getValue() != null && p.getValue().startsWith("\"aws2-sqs")) {
+                                dependsBuffer.append("-d camel-aws2-sqs");
+                            }
+                            if (p.getValue() != null && p.getValue().startsWith("\"aws2-sns")) {
+                                dependsBuffer.append("-d camel-aws2-sns");
+                            }
+                            if (p.getValue() != null && p.getValue().startsWith("\"aws2-ses")) {
+                                dependsBuffer.append("-d camel-aws2-ses");
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        if (dependsBuffer.length() <= 0) {
+            return "";
+        } else {
+            return dependsBuffer.toString() + " ";
+        }
     }
 
 }

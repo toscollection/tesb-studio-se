@@ -40,6 +40,10 @@ public class TemplatePartGenerator extends ArgumentBuilderHolder implements Part
 			Object[] args = { process, VersionUtils.getVersion() };
 			return generateTypedComponentCode(template, wrapToVector(args));
 		}
+		case HEADER_ROUTE_CAMELK: {
+			Object[] args = { process, VersionUtils.getVersion() };
+			return generateTypedComponentCode(template, wrapToVector(args));
+		}
 		case FOOTER_ROUTE:
 			return generateTypedComponentCode(template, wrapToVector(process, null != process.getSpringContent()));
 

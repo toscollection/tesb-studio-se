@@ -64,6 +64,7 @@ public class ProcessPartBuilder extends AbstractProcessPartBuilder {
 	@Override
 	public AbstractProcessPartBuilder appendContent() throws CodeGeneratorException {
 		if (buildType.equals("ROUTE_CAMELK")) {
+			appendTyped(ECamelTemplate.HEADER_ROUTE_CAMELK);
 			if (hasSubTrees()) {
 				for (NodesSubTree subTree : sortedFilteredSubTrees) {
 					appendSubTree(subTree);
