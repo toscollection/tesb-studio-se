@@ -129,7 +129,7 @@ public class BuildCamelKHandler extends BuildJobHandler {
 
             File scriptFile = new File(talendProcessJavaProject.getTempFolder().getLocation().toString() + "/" + jobName + ".sh");
             FileOutputStream fos = new FileOutputStream(scriptFile);
-            String scriptContent = "./kamel run " + addComponentsDepends(camelProcessItem) + jobName + ".groovy" + " --dev";
+            String scriptContent = "kamel run " + addComponentsDepends(camelProcessItem) + jobName + ".groovy" + " --dev";
             fos.write(scriptContent.getBytes());
             fos.close();
 
