@@ -24,7 +24,6 @@ import org.eclipse.emf.common.util.EList;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.process.EConnectionType;
-import org.talend.core.model.components.ComponentUtilities;
 import org.talend.core.model.process.IProcess;
 import org.talend.core.model.process.JobInfo;
 import org.talend.core.model.properties.Item;
@@ -291,7 +290,7 @@ public final class CamelFeatureUtil {
         }
     }
 
-    private void addChildSpecificFeatures(Collection<FeatureModel> features, ProcessItem routeProcess, IDesignerCoreService designerService) {
+    private static void addChildSpecificFeatures(Collection<FeatureModel> features, ProcessItem routeProcess, IDesignerCoreService designerService) {
         Set<JobInfo> childrenJobInfo = ProcessorUtilities.getChildrenJobInfo(routeProcess);
         for(JobInfo jobInfo: childrenJobInfo) {
             //APPINT-34618 add pax-jdbc-mssql feature if mssql is used in child job.
