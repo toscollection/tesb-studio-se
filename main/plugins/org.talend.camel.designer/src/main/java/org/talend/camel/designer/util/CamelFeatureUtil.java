@@ -19,12 +19,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.process.EConnectionType;
 import org.talend.core.model.process.IProcess;
+import org.talend.core.model.process.JobInfo;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.Property;
@@ -43,6 +44,7 @@ import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
 import org.talend.designer.maven.utils.PomIdsHelper;
 import org.talend.designer.publish.core.models.FeatureModel;
 import org.talend.designer.publish.core.models.FeaturesModel;
+import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.RepositoryPlugin;
 import org.talend.repository.model.IRepositoryNode;
@@ -59,15 +61,15 @@ import org.talend.repository.utils.EmfModelUtils;
  */
 public final class CamelFeatureUtil {
 
-	private static final FeatureModel FEATURE_CAMEL_GROOVY = new FeatureModel("camel-groovy"); //$NON-NLS-1$
-	private static final FeatureModel FEATURE_CAMEL_SCRIPT_JAVASCRIPT = new FeatureModel("camel-script-javascript"); //$NON-NLS-1$
-	private static final FeatureModel FEATURE_CAMEL_SCRIPT = new FeatureModel("camel-script"); //$NON-NLS-1$
+    private static final FeatureModel FEATURE_CAMEL_GROOVY = new FeatureModel("camel-groovy"); //$NON-NLS-1$
+    private static final FeatureModel FEATURE_CAMEL_SCRIPT_JAVASCRIPT = new FeatureModel("camel-script-javascript"); //$NON-NLS-1$
+    private static final FeatureModel FEATURE_CAMEL_SCRIPT = new FeatureModel("camel-script"); //$NON-NLS-1$
 
-	// ActiveMQ Karaf integration issue
-	private static final FeatureModel FEATURE_ACTIVEMQ_OPTIONAL = new FeatureModel("camel-http4"); //$NON-NLS-1$
+    // ActiveMQ Karaf integration issue
+    private static final FeatureModel FEATURE_ACTIVEMQ_OPTIONAL = new FeatureModel("camel-http4"); //$NON-NLS-1$
 
-	private static final FeatureModel FEATURE_ESB_SAM = new FeatureModel("tesb-sam-agent"); //$NON-NLS-1$
-	private static final FeatureModel FEATURE_ESB_LOCATOR = new FeatureModel("tesb-locator-client"); //$NON-NLS-1$
+    private static final FeatureModel FEATURE_ESB_SAM = new FeatureModel("tesb-sam-agent"); //$NON-NLS-1$
+    private static final FeatureModel FEATURE_ESB_LOCATOR = new FeatureModel("tesb-locator-client"); //$NON-NLS-1$
 
     @SuppressWarnings("serial")
     private static final Map<String, FeatureModel[]> camelFeaturesMap = new HashMap<String, FeatureModel[]>() {{
@@ -84,10 +86,10 @@ public final class CamelFeatureUtil {
         put("camel-jetty", new FeatureModel[] { new FeatureModel("camel-jetty9") });
     }};
 
-	private static final String JAVA_SCRIPT = "javaScript"; //$NON-NLS-1$
+    private static final String JAVA_SCRIPT = "javaScript"; //$NON-NLS-1$
 
-	private static final String LANGUAGES = "LANGUAGES"; //$NON-NLS-1$
-	private static final String LOOP_TYPE = "LOOP_TYPE"; //$NON-NLS-1$
+    private static final String LANGUAGES = "LANGUAGES"; //$NON-NLS-1$
+    private static final String LOOP_TYPE = "LOOP_TYPE"; //$NON-NLS-1$
 
 
     private static Collection<FeatureModel> computeFeature(String libraryName) {
@@ -117,32 +119,32 @@ public final class CamelFeatureUtil {
         return index != 0 ? libraryName.substring(0, index) : libraryName;
     }
 
-	private static void addNodesSpecialFeatures(Collection<FeatureModel> features, ProcessType processType) {
-		for (Object o : processType.getNode()) {
-			if (o instanceof NodeType) {
-				NodeType currentNode = (NodeType) o;
-				if (!EmfModelUtils.isComponentActive(currentNode)) {
-				    continue;
-				}
-				String componentName = currentNode.getComponentName();
-				if ("cSOAP".equals(componentName) || "cREST".equals(componentName)) {
-					handleCXFcase(features, currentNode);
-				} else if ("cLoop".equals(componentName)) {
-					handleLoopCase(features, currentNode);
-				} else if ("cMessageFilter".equals(componentName)) {
-				    handleLanguagesJavascript(features, currentNode);
-				} else if ("cRecipientList".equals(componentName)) {
-				    handleLanguagesJavascript(features, currentNode);
-				} else if ("cSetBody".equals(componentName)) {
-					handleLanguagesJavascript(features, currentNode);
-				} else if ("cSetHeader".equals(componentName)) {
-					handleSetHeaderCase(features, currentNode);
-				} else if ("cMQConnectionFactory".equals(componentName)) {
-					handleMQConnectionFactory(features, currentNode);
-				}
-			}
-		}
-	}
+    private static void addNodesSpecialFeatures(Collection<FeatureModel> features, ProcessType processType) {
+        for (Object o : processType.getNode()) {
+            if (o instanceof NodeType) {
+                NodeType currentNode = (NodeType) o;
+                if (!EmfModelUtils.isComponentActive(currentNode)) {
+                    continue;
+                }
+                String componentName = currentNode.getComponentName();
+                if ("cSOAP".equals(componentName) || "cREST".equals(componentName)) {
+                    handleCXFcase(features, currentNode);
+                } else if ("cLoop".equals(componentName)) {
+                    handleLoopCase(features, currentNode);
+                } else if ("cMessageFilter".equals(componentName)) {
+                    handleLanguagesJavascript(features, currentNode);
+                } else if ("cRecipientList".equals(componentName)) {
+                    handleLanguagesJavascript(features, currentNode);
+                } else if ("cSetBody".equals(componentName)) {
+                    handleLanguagesJavascript(features, currentNode);
+                } else if ("cSetHeader".equals(componentName)) {
+                    handleSetHeaderCase(features, currentNode);
+                } else if ("cMQConnectionFactory".equals(componentName)) {
+                    handleMQConnectionFactory(features, currentNode);
+                }
+            }
+        }
+    }
 
     private static void handleMQConnectionFactory(Collection<FeatureModel> features, NodeType currentNode) {
         if ("ActiveMQ".equals(EmfModelUtils.findElementParameterByName("MQ_TYPE", currentNode).getValue())
@@ -151,58 +153,58 @@ public final class CamelFeatureUtil {
         }
     }
 
-	private static void addConnectionsSpecialFeatures(
-			Collection<FeatureModel> features, ProcessType processType) {
-		EList<?> connections = processType.getConnection();
-		Iterator<?> iterator = connections.iterator();
-		while(iterator.hasNext()){
-			Object next = iterator.next();
-			if(!(next instanceof ConnectionType)){
-				continue;
-			}
-			ConnectionType con = (ConnectionType) next;
-			if(!EConnectionType.ROUTE_WHEN.getName().equals(con.getConnectorName())){
-				continue;
-			}
-			EList<?> elementParameters = con.getElementParameter();
-			Iterator<?> paraIter = elementParameters.iterator();
-			while(paraIter.hasNext()){
-				Object paraNext = paraIter.next();
-				if(!(paraNext instanceof ElementParameterType)){
-					continue;
-				}
-				ElementParameterType ept = (ElementParameterType) paraNext;
-				if(!EParameterName.ROUTETYPE.getName().equals(ept.getName())){
-					continue;
-				}
-//	            String[] strList = { "constant", "el", "groovy", "header", "javaScript", "jxpath", "mvel", "ognl", "php", "property",
-//	                    "python", "ruby", "simple", "spel", "sql", "xpath", "xquery" };
-				if("groovy".equals(ept.getValue())){
-					features.add(FEATURE_CAMEL_GROOVY);
-				} else if ("javaScript".equals(ept.getValue())) {
-					features.add(FEATURE_CAMEL_SCRIPT);
-					features.add(FEATURE_CAMEL_SCRIPT_JAVASCRIPT);
-				}
-			}
-		}
-	}
+    private static void addConnectionsSpecialFeatures(
+            Collection<FeatureModel> features, ProcessType processType) {
+        EList<?> connections = processType.getConnection();
+        Iterator<?> iterator = connections.iterator();
+        while(iterator.hasNext()){
+            Object next = iterator.next();
+            if(!(next instanceof ConnectionType)){
+                continue;
+            }
+            ConnectionType con = (ConnectionType) next;
+            if(!EConnectionType.ROUTE_WHEN.getName().equals(con.getConnectorName())){
+                continue;
+            }
+            EList<?> elementParameters = con.getElementParameter();
+            Iterator<?> paraIter = elementParameters.iterator();
+            while(paraIter.hasNext()){
+                Object paraNext = paraIter.next();
+                if(!(paraNext instanceof ElementParameterType)){
+                    continue;
+                }
+                ElementParameterType ept = (ElementParameterType) paraNext;
+                if(!EParameterName.ROUTETYPE.getName().equals(ept.getName())){
+                    continue;
+                }
+//              String[] strList = { "constant", "el", "groovy", "header", "javaScript", "jxpath", "mvel", "ognl", "php", "property",
+//                      "python", "ruby", "simple", "spel", "sql", "xpath", "xquery" };
+                if("groovy".equals(ept.getValue())){
+                    features.add(FEATURE_CAMEL_GROOVY);
+                } else if ("javaScript".equals(ept.getValue())) {
+                    features.add(FEATURE_CAMEL_SCRIPT);
+                    features.add(FEATURE_CAMEL_SCRIPT_JAVASCRIPT);
+                }
+            }
+        }
+    }
 
-	private static void handleSetHeaderCase(Collection<FeatureModel> features, NodeType currentNode) {
-		ElementParameterType element = EmfModelUtils.findElementParameterByName("VALUES", currentNode);
-		Iterator<?> iterator = element.getElementValue().iterator();
-		while (iterator.hasNext()) {
-			Object next = iterator.next();
-			if(!(next instanceof ElementValueType)) {
-				continue;
-			}
-			ElementValueType evt = (ElementValueType) next;
-			String elementRef = evt.getElementRef();
-			if ("LANGUAGE".equals(elementRef) && JAVA_SCRIPT.equals(evt.getValue())) {
-				features.add(FEATURE_CAMEL_SCRIPT_JAVASCRIPT);
-				break;
-			}
-		}
-	}
+    private static void handleSetHeaderCase(Collection<FeatureModel> features, NodeType currentNode) {
+        ElementParameterType element = EmfModelUtils.findElementParameterByName("VALUES", currentNode);
+        Iterator<?> iterator = element.getElementValue().iterator();
+        while (iterator.hasNext()) {
+            Object next = iterator.next();
+            if(!(next instanceof ElementValueType)) {
+                continue;
+            }
+            ElementValueType evt = (ElementValueType) next;
+            String elementRef = evt.getElementRef();
+            if ("LANGUAGE".equals(elementRef) && JAVA_SCRIPT.equals(evt.getValue())) {
+                features.add(FEATURE_CAMEL_SCRIPT_JAVASCRIPT);
+                break;
+            }
+        }
+    }
 
     private static void handleLanguagesJavascript(Collection<FeatureModel> features, NodeType currentNode) {
         if (JAVA_SCRIPT.equals(EmfModelUtils.findElementParameterByName(LANGUAGES, currentNode).getValue())){
@@ -227,12 +229,24 @@ public final class CamelFeatureUtil {
         }
     }
 
-	/**
-	 * Add feature and bundle to Feature Model
-	 *
-	 * @param node
-	 * @param featuresModel
-	 */
+    private static void addChildSpecificFeatures(Collection<FeatureModel> features, ProcessItem routeProcess, IDesignerCoreService designerService) {
+        Set<JobInfo> childrenJobInfo = ProcessorUtilities.getChildrenJobInfo(routeProcess);
+        for(JobInfo jobInfo: childrenJobInfo) {
+            //APPINT-34618 add pax-jdbc-mssql feature if mssql is used in child job.
+            if(designerService.getProcessFromProcessItem(jobInfo.getProcessItem(), false)
+                    .getNeededLibraries(TalendProcessOptionConstants.MODULES_DEFAULT).stream()
+                    .anyMatch(lib -> lib.matches("mssql-jdbc.jar"))) {
+                features.addAll( Arrays.asList(new FeatureModel[] { new FeatureModel("pax-jdbc-mssql") }));
+                break;
+            }
+        }
+    }
+    /**
+     * Add feature and bundle to Feature Model
+     *
+     * @param node
+     * @param featuresModel
+     */
     public static void addFeatureAndBundles(ProcessItem routeProcess, FeaturesModel featuresModel) {
         IDesignerCoreService designerService = RepositoryPlugin.getDefault().getDesignerCoreService();
         IProcess process = designerService.getProcessFromProcessItem(routeProcess, false);
@@ -245,6 +259,7 @@ public final class CamelFeatureUtil {
             }
         }
 
+        addChildSpecificFeatures(features, routeProcess, designerService);
         addNodesSpecialFeatures(features, routeProcess.getProcess());
         addConnectionsSpecialFeatures(features, routeProcess.getProcess());
 
@@ -253,27 +268,27 @@ public final class CamelFeatureUtil {
         }
     }
 
-	/**
-	 *
-	 * DOC ggu Comment method "getMavenGroupId".
-	 *
-	 * @param item
-	 * @return
-	 */
-	public static String getMavenGroupId(Item item) {
-		if (item != null) {
-		    return PomIdsHelper.getJobGroupId(item.getProperty());
-		}
-		return null;
-	}
+    /**
+     *
+     * DOC ggu Comment method "getMavenGroupId".
+     *
+     * @param item
+     * @return
+     */
+    public static String getMavenGroupId(Item item) {
+        if (item != null) {
+            return PomIdsHelper.getJobGroupId(item.getProperty());
+        }
+        return null;
+    }
 
-	@Deprecated
-	public static String getMavenGroupId(String jobId, String jobName, String defaultProject) {
-		return JavaResourcesHelper.getGroupItemName(
-				getJobProjectName(jobId, jobName, defaultProject), jobName);
-	}
+    @Deprecated
+    public static String getMavenGroupId(String jobId, String jobName, String defaultProject) {
+        return JavaResourcesHelper.getGroupItemName(
+                getJobProjectName(jobId, jobName, defaultProject), jobName);
+    }
 
-	private static String getJobProjectName(String jobId, String jobName, String defaultProject) {
+    private static String getJobProjectName(String jobId, String jobName, String defaultProject) {
 
         if (jobId == null || jobId.isEmpty()) {
             return defaultProject;
@@ -292,14 +307,14 @@ public final class CamelFeatureUtil {
             }
             for (Project p : projects) {
                 List<IRepositoryViewObject> jobs = ProxyRepositoryFactory.getInstance().getAll(
-                		p, ERepositoryObjectType.PROCESS);
+                        p, ERepositoryObjectType.PROCESS);
                 if (jobs == null) {
                     continue;
                 }
                 for (IRepositoryViewObject job : jobs) {
                     if (job.getId().equals(jobId)) {
                         referencedJobNode = new RepositoryNode(
-                        		job, null, IRepositoryNode.ENodeType.REPOSITORY_ELEMENT);
+                                job, null, IRepositoryNode.ENodeType.REPOSITORY_ELEMENT);
                         referenceProject = p;
                         break;
                     }
@@ -321,7 +336,7 @@ public final class CamelFeatureUtil {
         String jobLabelFound = p.getLabel();
 
         if ((jobNameFound == null || !jobNameFound.equals(jobName)) &&
-        		(jobLabelFound == null || !jobNameFound.equals(jobName))) {
+                (jobLabelFound == null || !jobNameFound.equals(jobName))) {
             return defaultProject;
         }
 
@@ -330,5 +345,5 @@ public final class CamelFeatureUtil {
         }
 
         return defaultProject;
-	}
+    }
 }
