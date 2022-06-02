@@ -2,13 +2,10 @@ package org.talend.camel.designer.migration;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import org.talend.camel.core.model.camelProperties.CamelProcessItem;
 import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.general.Project;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
@@ -37,30 +34,6 @@ public class UpdateBuildTypeForCTalendJobMigrationTask extends AbstractRouteItem
     public boolean execute(NodeType node) throws PersistenceException {
         return updateBuildTypeForCTalendJob(node);
     }
-    
-    @Override
-    protected List<ERepositoryObjectType> getAllTypes() {
-        List<ERepositoryObjectType> allTypes = super.getAllTypes();
-        allTypes.add(ERepositoryObjectType.getType("PROCESS"));
-        return allTypes;
-    }
-    
-	@Override
-	public ExecutionResult execute(Item item) {
-		
-		ERepositoryObjectType repObjType = ERepositoryObjectType.getType(item.getProperty());
-		ERepositoryObjectType jobDesigns = ERepositoryObjectType.getType("PROCESS");
-		
-		if (item instanceof CamelProcessItem) {
-			return super.execute((CamelProcessItem) item);
-		} else if (jobDesigns == repObjType) {
-            // to fix cTalendJob issue TESB-21780, we need update build type of the job
-			updateItem(item, ProjectManager.getInstance().getCurrentProject());
-			return ExecutionResult.SUCCESS_NO_ALERT;
-		}
-		//never goes here, all Item should be CamelProcessItem.
-		return ExecutionResult.FAILURE;
-	}
 
     @SuppressWarnings("unchecked")
     private boolean updateBuildTypeForCTalendJob(NodeType currentNode) {
@@ -75,6 +48,7 @@ public class UpdateBuildTypeForCTalendJobMigrationTask extends AbstractRouteItem
         if (processID != null && processVersion != null) {
             ProcessItem item = ItemCacheManager.getProcessItem(processID, processVersion);
             Project itemProject = ProjectManager.getInstance().getCurrentProject();
+
             if (item == null) {
                 for (Project refProject : ProjectManager.getInstance().getAllReferencedProjects()) {
                     item = ItemCacheManager.getRefProcessItem(getProject(), processID);
@@ -84,23 +58,22 @@ public class UpdateBuildTypeForCTalendJobMigrationTask extends AbstractRouteItem
                     }
                 }
             }
-            return updateItem(item, itemProject);
+            if (item != null) {
+                boolean isRouteProcess = ERepositoryObjectType.getType(item.getProperty())
+                        .equals(ERepositoryObjectType.PROCESS_ROUTE);
+                if (isRouteProcess) {
+                    item.getProperty().getAdditionalProperties().put(TalendProcessArgumentConstant.ARG_BUILD_TYPE, "ROUTE");
+                }
+                try {
+                    ProxyRepositoryFactory.getInstance().save(itemProject, item, true);
+                } catch (PersistenceException e) {
+                    ExceptionHandler.process(e);
+                    return false;
+                }
+                return true;
+            }
         }
         return false;
     }
-
-	private boolean updateItem(Item item, Project itemProject) {
-		if (item != null) {
-		    item.getProperty().getAdditionalProperties().put(TalendProcessArgumentConstant.ARG_BUILD_TYPE, "ROUTE");
-		    try {
-		        ProxyRepositoryFactory.getInstance().save(itemProject, item, true);
-		    } catch (PersistenceException e) {
-		        ExceptionHandler.process(e);
-		        return false;
-		    }
-		    return true;
-		}
-		return false;
-	}
 
 }

@@ -76,6 +76,7 @@
             name="${tesb-cxf-rt-bindings-soap}"
             id="cxf-rt-bindings-soap"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-bindings-soap}"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-bindings-soap/3.3.10"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-wsdl}"
@@ -244,6 +245,7 @@
             name="${tesb-cxf-rt-transports-http-jetty}"
             id="cxf-rt-transports-http-jetty"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-transports-http-jetty}"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-transports-http-jetty/3.3.10"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-transports-http}"
@@ -391,12 +393,14 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-ws-security}"
             id="cxf-rt-ws-security"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-ws-security/3.3.10"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-ws-security}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-security-saml}"
             id="cxf-rt-security-saml"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-security-saml}"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-security-saml/3.3.10"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-security}"
@@ -418,6 +422,7 @@
             name="commons-codec-1.15.jar"
             id="commons-codec-1.15"
             uripath="platform:/plugin/org.talend.libraries.apache.common/lib/commons-codec-1.15.jar"
+            mvn_uri="mvn:commons-codec/commons-codec/1.15"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-opensaml-saml-impl}"
@@ -777,6 +782,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
                        name="jaxb-runtime-2.3.3.jar"
                        id="jaxb-runtime"
+                       mvn_uri="mvn:org.glassfish.jaxb/jaxb-runtime/2.3.3"
                        uripath="platform:/plugin/org.talend.libraries.esb/lib/jaxb-runtime-2.3.3.jar"
                        bundleID="" />
         <!-- libraryNeeded context="plugin:org.talend.libraries.esb"
@@ -797,6 +803,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
                        name="txw2-2.3.3.jar"
                        id="txw2"
+                       mvn_uri="mvn:org.glassfish.jaxb/txw2/2.3.3"
                        uripath="platform:/plugin/org.talend.libraries.esb/lib/txw2-2.3.3.jar"
                        bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
