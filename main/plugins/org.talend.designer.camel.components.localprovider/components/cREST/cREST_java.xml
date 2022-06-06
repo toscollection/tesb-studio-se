@@ -312,12 +312,12 @@
                 UrlPath="platform:/plugin/org.talend.libraries.esb/lib/snakeyaml-1.30.jar"
                 REQUIRED_IF="(EXPOSE_SWAGGER_SPEC == 'true')"/>
 
-            <IMPORT MODULE="jakarta.xml.ws-api-2.3.2.jar" MVN="mvn:org.talend.libraries/jakarta.xml.ws-api/2.3.2" NAME="jakarta.xml.ws-api-2.3.2"
-                UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.ws-api-2.3.2.jar"
+            <IMPORT MODULE="jakarta.xml.ws-api-2.3.3.jar" MVN="mvn:org.talend.libraries/jakarta.xml.ws-api/2.3.3" NAME="jakarta.xml.ws-api-2.3.3"
+                UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.ws-api-2.3.3.jar"
                 REQUIRED="true"/>
 
-            <IMPORT MODULE="jakarta.xml.bind-api-2.3.2.jar" MVN="mvn:org.talend.libraries/jakarta.xml.bind-api/2.3.2" NAME="jakarta.xml.bind-api-2.3.2"
-                UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.bind-api-2.3.2.jar"
+            <IMPORT MODULE="jakarta.xml.bind-api-2.3.3.jar" MVN="mvn:org.talend.libraries/jakarta.xml.bind-api/2.3.3" NAME="jakarta.xml.bind-api-2.3.3"
+                UrlPath="platform:/plugin/org.talend.libraries.esb/lib/jakarta.xml.bind-api-2.3.3.jar"
                 REQUIRED="true"/>
 
 		</IMPORTS>
