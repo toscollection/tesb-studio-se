@@ -76,7 +76,7 @@
             name="${tesb-cxf-rt-bindings-soap}"
             id="cxf-rt-bindings-soap"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-bindings-soap}"
-            mvn_uri="mvn:org.apache.cxf/cxf-rt-bindings-soap/3.3.10"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-bindings-soap/3.4.7"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-wsdl}"
@@ -97,7 +97,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-databinding-jaxb}"
             id="cxf-rt-databinding-jaxb"
-             mvn_uri="mvn:org.apache.cxf/cxf-rt-databinding-jaxb/3.3.10"
+             mvn_uri="mvn:org.apache.cxf/cxf-rt-databinding-jaxb/3.4.7"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-databinding-jaxb}"
             bundleID="" />
 
@@ -148,7 +148,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-bindings-xml}"
             id="cxf-rt-bindings-xml"
-            mvn_uri="mvn:org.apache.cxf/cxf-rt-bindings-xml/3.3.10"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-bindings-xml/3.4.7"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-bindings-xml}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
@@ -245,7 +245,7 @@
             name="${tesb-cxf-rt-transports-http-jetty}"
             id="cxf-rt-transports-http-jetty"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-transports-http-jetty}"
-            mvn_uri="mvn:org.apache.cxf/cxf-rt-transports-http-jetty/3.3.10"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-transports-http-jetty/3.4.7"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-transports-http}"
@@ -393,19 +393,19 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-ws-security}"
             id="cxf-rt-ws-security"
-            mvn_uri="mvn:org.apache.cxf/cxf-rt-ws-security/3.3.10"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-ws-security/3.4.7"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-ws-security}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-security-saml}"
             id="cxf-rt-security-saml"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-security-saml}"
-            mvn_uri="mvn:org.apache.cxf/cxf-rt-security-saml/3.3.10"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-security-saml/3.4.7"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-cxf-rt-security}"
             id="cxf-rt-security"
-            mvn_uri="mvn:org.apache.cxf/cxf-rt-security/3.3.10"
+            mvn_uri="mvn:org.apache.cxf/cxf-rt-security/3.4.7"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-security}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
