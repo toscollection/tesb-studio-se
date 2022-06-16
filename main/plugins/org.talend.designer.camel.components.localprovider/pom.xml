@@ -210,11 +210,6 @@
 			<artifactId>geronimo-jms_1.1_spec</artifactId>
 			<version>${geronimo-jms.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-all</artifactId>
-			<version>${activemq.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
