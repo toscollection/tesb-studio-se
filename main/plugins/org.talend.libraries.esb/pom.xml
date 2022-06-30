@@ -426,6 +426,10 @@
 				<groupId>wsdl4j</groupId>
 				<artifactId>wsdl4j</artifactId>
 			</exclusion>
+			<exclusion>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-cxf</artifactId>
+			</exclusion>
 		</exclusions>
 	</dependency>
 	<dependency>
@@ -482,6 +486,12 @@
 		<groupId>org.talend.camel</groupId>
 		<artifactId>camel-talendjob</artifactId>
 		<version>${tesb.version}</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-core</artifactId>
+			</exclusion>
+		</exclusions>
 	</dependency>	
 	
 	<!-- Scala -->
