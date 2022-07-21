@@ -56,7 +56,7 @@ public class NormalizeDataServiceJobBuildTypeMigrationTask extends AbstractDataS
 
             if (!c.isEmpty()) {
                 Object buildType = item.getProperty().getAdditionalProperties().get(BUILD_TYPE_PROPERTY);
-                if (BUILD_TYPE_ROUTE.equals(buildType) || null == buildType) {
+                if (BUILD_TYPE_ROUTE.equals(buildType)) {
                     item.getProperty().getAdditionalProperties().put(BUILD_TYPE_PROPERTY, BUILD_TYPE_OSGI);
                     try {
                         save(item);
