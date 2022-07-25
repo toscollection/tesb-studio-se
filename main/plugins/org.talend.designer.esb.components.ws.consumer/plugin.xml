@@ -458,9 +458,9 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cryptacular}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-bcprov-jdk15on}"
+            name="bcprov-jdk15on-1.70.jar"
             id="bcprov-jdk15on"
-            mvn_uri="mvn:org.bouncycastle/bcprov-jdk15on/1.69"
+            mvn_uri="mvn:org.bouncycastle/bcprov-jdk15on/1.70"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-opensaml-xmlsec-impl}"
