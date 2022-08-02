@@ -96,7 +96,7 @@
 		</releases>
 	</repository-->
   </repositories>
-  
+
   <pluginRepositories>
 	<pluginRepository>
 		<id>trojanbug.plugins</id>
@@ -108,7 +108,7 @@
 		</releases>
 	</pluginRepository>
   </pluginRepositories>
-  
+
   <modules>
     <module>main/features/org.talend.camel.feature</module>
     <module>main/features/org.talend.camel.core.feature</module>
@@ -138,14 +138,6 @@
     <module>main/plugins/org.talend.repository.services</module>
     <module>main/plugins/org.talend.repository.view.route</module>
     <module>main/plugins/org.talend.resources.export.route</module>
-    <module>test/features/org.talend.esb.tooling.test.feature</module>
-    <module>test/plugins/org.talend.esb.designer.esb.routines.test</module>
-    <module>test/plugins/org.talend.esb.designer.camel.dependencies.core.test</module>
-    <module>test/plugins/org.talend.esb.designer.camel.resource.core.test</module>
-    <module>test/plugins/org.talend.esb.camel.designer.codegen.test</module>
-    <module>test/plugins/org.talend.esb.repository.view.route.test</module>
-    <module>test/plugins/org.talend.esb.repository.services.test</module>
-    <module>test/plugins/org.talend.esb.camel.designer.test</module>
   </modules>
   <build>
     <plugins>
@@ -297,4 +289,25 @@
 			</plugins>
 		</pluginManagement>
   </build>
+	<profiles>
+		<profile>
+			<id>junit.p2</id>
+			<activation>
+				<property>
+					<name>junit.product</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<modules>
+				<module>test/features/org.talend.esb.tooling.test.feature</module>
+				<module>test/plugins/org.talend.esb.designer.esb.routines.test</module>
+				<module>test/plugins/org.talend.esb.designer.camel.dependencies.core.test</module>
+				<module>test/plugins/org.talend.esb.designer.camel.resource.core.test</module>
+				<module>test/plugins/org.talend.esb.camel.designer.codegen.test</module>
+				<module>test/plugins/org.talend.esb.repository.view.route.test</module>
+				<module>test/plugins/org.talend.esb.repository.services.test</module>
+				<module>test/plugins/org.talend.esb.camel.designer.test</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
