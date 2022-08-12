@@ -338,15 +338,6 @@
                 name="ChangeRouteResourceItemToResourceItemTask"
                 version="7.1.1">
           </projecttask>
-          <projecttask
-                beforeLogon="false"
-                breaks="7.3.0"
-                class="org.talend.camel.designer.migration.NormalizeDataServiceJobBuildTypeMigrationTask"
-                description="Normalize Build Type for DataService jobs"
-                id="org.talend.camel.designer.migration.NormalizeDataServiceJobBuildTypeMigrationTask"
-                name="NormalizeDataServiceJobBuildTypeMigrationTask"
-                version="7.3.1">
-          </projecttask>
     </extension>
 
         <extension
