@@ -112,6 +112,7 @@ public class RouteJavaScriptOSGIForESBManager extends AdaptedJobJavaScriptOSGIFo
      * Value - Import-package string
      */
     private Map<String, String> subjobImportPackages = null;
+    private Map<String, String> subjobRequireBundles = null;
 
     public RouteJavaScriptOSGIForESBManager(Map<ExportChoice, Object> exportChoiceMap, String contextName,
             Collection<String> routelets, Set<String> modulesProvidedByFeatures) {
@@ -166,6 +167,10 @@ public class RouteJavaScriptOSGIForESBManager extends AdaptedJobJavaScriptOSGIFo
 
     public void setSubjobImportPackages(Map<String, String> importPackages) {
         this.subjobImportPackages = importPackages;
+    }
+
+    public void setSubjobRequireBundles(Map<String, String> requireBundles) {
+        this.subjobRequireBundles = requireBundles;
     }
 
     public static String getClassName(ProcessItem processItem) {
@@ -258,14 +263,20 @@ public class RouteJavaScriptOSGIForESBManager extends AdaptedJobJavaScriptOSGIFo
         final DependenciesResolver resolver = new DependenciesResolver(processItem);
 
         // add manifest items
-        analyzer.setProperty(Analyzer.REQUIRE_BUNDLE, resolver.getManifestRequireBundle(MANIFEST_ITEM_SEPARATOR));
+        // analyzer.setProperty(Analyzer.REQUIRE_BUNDLE, resolver.getManifestRequireBundle(MANIFEST_ITEM_SEPARATOR));
         StringBuilder manifestImportPackage = new StringBuilder();
-        if (subjobImportPackages != null && subjobImportPackages.containsKey(processItem.getProperty().getId())) {
+        /* if (subjobImportPackages != null && subjobImportPackages.containsKey(processItem.getProperty().getId())) {
             // Add subjob import packages
             manifestImportPackage.append(subjobImportPackages.get(processItem.getProperty().getId()));
             manifestImportPackage.append(MANIFEST_ITEM_SEPARATOR);
+        } */
+        StringBuilder manifestRequireBundle = new StringBuilder();
+        if (subjobRequireBundles != null && subjobRequireBundles.containsKey(processItem.getProperty().getId())) {
+            // Add subjob require bundles
+            manifestRequireBundle.append(subjobRequireBundles.get(processItem.getProperty().getId()));
         }
-        
+        analyzer.setProperty(Analyzer.REQUIRE_BUNDLE, manifestRequireBundle.toString());
+
         IDesignerCoreService designerService = RepositoryPlugin.getDefault().getDesignerCoreService();
         IProcess process = designerService.getProcessFromProcessItem(processItem, false);
 
