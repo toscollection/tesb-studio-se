@@ -388,6 +388,7 @@ try {
 		conduit_<%=cid%>.getClient().setAutoRedirect(true);
 		clientConfig_<%=cid%>.getRequestContext().put("http.redirect.relative.uri", true);
 		clientConfig_<%=cid%>.getRequestContext().put("http.redirect.same.host.only", <%=!paramsHelper.getBoolParam("__REDIRECT_NON_SAME_HOST__")%>);
+		clientConfig_<%=cid%>.getRequestContext().put(org.apache.cxf.message.Message.MAINTAIN_SESSION, true);
 	<% } %>
 
 	<% if (paramsHelper.getBoolParam("__DISABLE_CHUNKED_ENCODING__")) { %>
@@ -528,9 +529,27 @@ try {
 			}
 			<% } %>
 
+			java.util.Map<String, javax.ws.rs.core.NewCookie> cookies_<%=cid%> = new java.util.HashMap<String, javax.ws.rs.core.NewCookie>();
+			
+			if (webClient_<%=cid%>.getResponse() != null && webClient_<%=cid%>.getResponse().getCookies() != null ) { 
+				cookies_<%=cid%>.putAll(webClient_<%=cid%>.getResponse().getCookies());
+			}
+			
+			<% if (paramsHelper.getBoolParam("__FOLLOW_REDIRECTS__")) { %>
+			    if (conduit_<%=cid%>.getCookies() != null ) { 
+		            conduit_<%=cid%>.getCookies().entrySet().stream().forEach(x -> cookies_<%=cid%>.put(x.getKey(), new javax.ws.rs.core.NewCookie(x.getValue().getName(),
+		    		x.getValue().getValue(),
+		    		x.getValue().getPath(),
+		    		null,
+		    		"Session cookie",
+		    		x.getValue().getMaxAge(),
+		    		true)));
+			    }
+			<% } %>
+
 
 			globalMap.put("<%=cid%>_HEADERS", webClient_<%=cid%>.getResponse().getHeaders());
-			globalMap.put("<%=cid%>_COOKIES", webClient_<%=cid%>.getResponse().getCookies());
+			globalMap.put("<%=cid%>_COOKIES", cookies_<%=cid%>);
 			<% if (useBusinessCorrelation) { %>
 			if (null != webClient_<%=cid%>.getResponse().getHeaders().get("CorrelationID")) {
 				globalMap.put("<%=cid%>_CORRELATION_ID", webClient_<%=cid%>.getResponse().getHeaders().get("CorrelationID").get(0));
