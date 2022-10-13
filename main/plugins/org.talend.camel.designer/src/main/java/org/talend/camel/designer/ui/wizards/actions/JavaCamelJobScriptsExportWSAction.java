@@ -254,7 +254,7 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
         this.monitor = monitor;
         String groupId = getGroupId();
         String routeName = getArtifactId();
-        String routeVersion = getArtifactVersion();
+        String routeVersion = getRouteVersion();
 
         // FIXME temporary solution for TESB-27587, in case of artivact id is diff with parent route name
 //        if (CommonUIPlugin.isFullyHeadless()) {
@@ -296,7 +296,7 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
             return;
         }
 
-        featuresModel = new FeaturesModel(groupId, routeName, routeVersion);
+        featuresModel = new FeaturesModel(groupId, routeName, getFeatureRouteVersion());
         try {
             File routeFile;
             try {
@@ -919,5 +919,13 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                 }
             }
         }
+    }
+
+    protected String getRouteVersion() {
+        return PomIdsHelper.getBundleVersion(routeObject.getProperty(), bundleVersion);
+    }
+
+    protected String getFeatureRouteVersion() {
+        return PomIdsHelper.getFeatureVersion(routeObject.getProperty(), bundleVersion);
     }
 }

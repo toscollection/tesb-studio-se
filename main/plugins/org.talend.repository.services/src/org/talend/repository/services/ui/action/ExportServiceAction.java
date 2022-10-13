@@ -170,7 +170,7 @@ public class ExportServiceAction implements IRunnableWithProgress {
             }
         }
 
-        FeaturesModel feature = new FeaturesModel(getGroupId(), getServiceName(), getServiceVersion());
+        FeaturesModel feature = new FeaturesModel(getGroupId(), getServiceName(), getFeatureArtifactVersion());
         feature.setConfigName(getServiceName());
         feature.setContexts(contextValues);
 
@@ -431,6 +431,9 @@ public class ExportServiceAction implements IRunnableWithProgress {
     }
 
     public String getBundleVersion() {
+    	if(exportChoiceMap.containsKey(ExportChoice.bundleVersion)) {
+    		return PomIdsHelper.getBundleVersion(serviceItem.getProperty(), (String) exportChoiceMap.get(ExportChoice.bundleVersion));
+    	}
         return serviceVersion;
     }
 
@@ -458,4 +461,10 @@ public class ExportServiceAction implements IRunnableWithProgress {
         }
     }
 
+    protected String getFeatureArtifactVersion() {
+    	if(exportChoiceMap.containsKey(ExportChoice.bundleVersion)) {
+    		return PomIdsHelper.getFeatureVersion(serviceItem.getProperty(), (String) exportChoiceMap.get(ExportChoice.bundleVersion));
+    	}
+        return PomIdsHelper.getFeatureVersion(serviceItem.getProperty(), getServiceVersion());
+    }
 }
