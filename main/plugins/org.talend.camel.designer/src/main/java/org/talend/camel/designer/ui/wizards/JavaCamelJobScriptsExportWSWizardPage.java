@@ -911,7 +911,7 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
                               }
 
                           } catch (Exception e) {
-                              MessageBoxExceptionHandler.process(e.getCause() == null ? e : e.getCause(), getShell());
+                            MessageBoxExceptionHandler.process(e.getCause() == null ? e : e.getCause(), getShell(), false);
                           }
 
                     }
