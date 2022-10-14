@@ -431,7 +431,7 @@ public class ExportServiceAction implements IRunnableWithProgress {
     }
 
     public String getBundleVersion() {
-    	if(exportChoiceMap.containsKey(ExportChoice.bundleVersion)) {
+    	if(exportChoiceMap != null && exportChoiceMap.containsKey(ExportChoice.bundleVersion)) {
     		return PomIdsHelper.getBundleVersion(serviceItem.getProperty(), (String) exportChoiceMap.get(ExportChoice.bundleVersion));
     	}
         return serviceVersion;
@@ -462,7 +462,7 @@ public class ExportServiceAction implements IRunnableWithProgress {
     }
 
     protected String getFeatureArtifactVersion() {
-    	if(exportChoiceMap.containsKey(ExportChoice.bundleVersion)) {
+    	if(exportChoiceMap != null && exportChoiceMap.containsKey(ExportChoice.bundleVersion)) {
     		return PomIdsHelper.getFeatureVersion(serviceItem.getProperty(), (String) exportChoiceMap.get(ExportChoice.bundleVersion));
     	}
         return PomIdsHelper.getFeatureVersion(serviceItem.getProperty(), getServiceVersion());
