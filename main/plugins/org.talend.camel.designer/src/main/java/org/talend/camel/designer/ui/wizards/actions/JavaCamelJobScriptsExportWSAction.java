@@ -922,10 +922,16 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
     }
 
     protected String getRouteVersion() {
-        return PomIdsHelper.getNotIteratedBundleVersion(routeObject.getProperty(), bundleVersion);
+    	if (bundleVersion.contains("SNAPSHOT")) {
+    		return PomIdsHelper.getNotIteratedBundleVersion(routeObject.getProperty(), getArtifactVersion());
+    	}
+		return PomIdsHelper.getNotIteratedBundleVersion(routeObject.getProperty(), bundleVersion);
     }
 
     protected String getFeatureRouteVersion() {
-        return PomIdsHelper.getNotIteratedFeatureVersion(routeObject.getProperty(), bundleVersion);
+    	if (bundleVersion.contains("SNAPSHOT")) {
+    		return PomIdsHelper.getNotIteratedFeatureVersion(routeObject.getProperty(), getArtifactVersion());
+    	}
+		return PomIdsHelper.getNotIteratedBundleVersion(routeObject.getProperty(), bundleVersion);
     }
 }

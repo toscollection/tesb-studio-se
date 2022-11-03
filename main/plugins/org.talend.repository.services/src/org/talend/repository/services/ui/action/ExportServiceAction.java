@@ -465,6 +465,6 @@ public class ExportServiceAction implements IRunnableWithProgress {
     	if(exportChoiceMap != null && exportChoiceMap.containsKey(ExportChoice.bundleVersion)) {
     		return PomIdsHelper.getNotIteratedFeatureVersion(serviceItem.getProperty(), (String) exportChoiceMap.get(ExportChoice.bundleVersion));
     	}
-        return PomIdsHelper.getFeatureVersion(serviceItem.getProperty(), getServiceVersion());
+        return PomIdsHelper.getNotIteratedFeatureVersion(serviceItem.getProperty(), getServiceVersion());
     }
 }
