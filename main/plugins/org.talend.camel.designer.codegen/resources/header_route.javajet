@@ -2265,23 +2265,23 @@ if (isProvider) {
                 doConfig();
             }
 
-			class DefaultRegistry extends org.apache.camel.support.DefaultRegistry{
-			
-				private org.apache.camel.spi.Registry registry = null;
-				
-				public DefaultRegistry(org.apache.camel.spi.Registry registry){
-					this.registry = registry;
-				}
-		
-				public void put(String k, Object v) {
-					registry.bind(k, (v == null) ? Object.class: v.getClass(), v);
-				}
-				
-				public Object get(String k) {
-					return registry.lookupByName(k);
-				}
-		
-			}
+            class DefaultRegistry extends org.apache.camel.support.DefaultRegistry{
+            
+                private org.apache.camel.spi.Registry registry = null;
+                
+                public DefaultRegistry(org.apache.camel.spi.Registry registry){
+                    this.registry = registry;
+                }
+        
+                public void put(String k, Object v) {
+                    registry.bind(k, (v == null) ? Object.class: v.getClass(), v);
+                }
+                
+                public Object get(String k) {
+                    return registry.lookupByName(k);
+                }
+        
+            }
 
             public void destroy() {
 <%
@@ -2307,27 +2307,27 @@ if (isProvider) {
             public void doConfig() throws java.lang.Exception {
                 final /*org.apache.camel.model.Model*/CamelContext camelContext = getContext();
                 
-				camelContext.setDebugging(true);
-				camelContext.setBacklogTracing(true);
-		        org.apache.camel.spi.Registry realRegistry = camelContext.getRegistry();
-		        
-		        if (realRegistry == null) {
-		            realRegistry = new org.apache.camel.support.DefaultRegistry();
-		        }
-		        
-		        DefaultRegistry registry = new DefaultRegistry(realRegistry);
-		        
-		        ((org.apache.camel.impl.DefaultCamelContext) camelContext).setRegistry(realRegistry);
-				
-			// add notifier
-			java.util.Collection<org.apache.camel.management.JmxNotificationEventNotifier> jmxEventNotifiers = camelContext
-				.getRegistry().findByType(
-					org.apache.camel.management.JmxNotificationEventNotifier.class);
-			if (jmxEventNotifiers != null && !jmxEventNotifiers.isEmpty()) {
-			    camelContext.getManagementStrategy().addEventNotifier(
-				    jmxEventNotifiers.iterator().next());
-			}
-				
+                camelContext.setDebugging(true);
+                camelContext.setBacklogTracing(true);
+                org.apache.camel.spi.Registry realRegistry = camelContext.getRegistry();
+                
+                if (realRegistry == null) {
+                    realRegistry = new org.apache.camel.support.DefaultRegistry();
+                }
+                
+                DefaultRegistry registry = new DefaultRegistry(realRegistry);
+                
+                ((org.apache.camel.impl.DefaultCamelContext) camelContext).setRegistry(realRegistry);
+                
+                // add notifier
+                java.util.Collection<org.apache.camel.management.JmxNotificationEventNotifier> jmxEventNotifiers = camelContext
+                    .getRegistry().findByType(
+                        org.apache.camel.management.JmxNotificationEventNotifier.class);
+                if (jmxEventNotifiers != null && !jmxEventNotifiers.isEmpty()) {
+                    camelContext.getManagementStrategy().addEventNotifier(
+                        jmxEventNotifiers.iterator().next());
+                }
+                
 
                 <%if(exportTypeSpringBoot){%>
                     <%
@@ -2761,7 +2761,7 @@ if (isProvider) {
                                 new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.SETUP_ENDING) {
                             @Override
                             public void handleMessage(org.apache.cxf.message.Message msg) {
-                                org.slf4j.MDC.remove("org.talend.esb.jobname");
+                                org.slf4j.MDC.remove("org.talend.esb.jobclass.name");
                             }
                         };
                         provider.getInInterceptors().add(icIn);
@@ -3248,7 +3248,7 @@ if (isProvider) {
                                 public boolean isLenientProperties() {
                                     return true;
                                 }
-							 };
+                             };
                              this.setProperties(endpoint, parameters);
                              org.apache.camel.component.paho.PahoConfiguration config = endpoint.getConfiguration();
 <%
@@ -3421,20 +3421,64 @@ if (isProvider) {
 <%
             }
 %>
-                // CXF endpoint for <%=cid%>
-                org.apache.camel.component.cxf.CxfEndpoint <%=endpointVar%> = getCxfEndpoint(<%=uri%>, <%=isProvider%>, <%=isUseAuthorization%>, <%=isUsePropagateSamlAP%>, <%=securityToken%>
+            // CXF endpoint for <%=cid%>
+            org.apache.camel.component.cxf.CxfEndpoint <%=endpointVar%> = getCxfEndpoint(<%=uri%>, <%=isProvider%>, <%=isUseAuthorization%>, <%=isUsePropagateSamlAP%>, <%=securityToken%>
 <%
-                if((useSecurity || useRegistry) && !isProvider){
+            if((useSecurity || useRegistry) && !isProvider){
 %>
-                            ,<%=username%>,decryptedPassword_<%=cid%>, <%=roleName%>, <%=alias%>
+                        ,<%=username%>,decryptedPassword_<%=cid%>, <%=roleName%>, <%=alias%>
 <%
-                }
+            }
 %>
-                        );
+            );
 
-                        <%if("true".equals(ElementParameterParser.getValue(node, "__ENABLE_CXF_MESSAGE_GZIP__"))){%>
-                                <%=endpointVar%>.getFeatures().add(new org.apache.cxf.transport.common.gzip.GZIPFeature());
-                        <%}%>
+            <%if("true".equals(ElementParameterParser.getValue(node, "__ENABLE_CXF_MESSAGE_GZIP__"))){%>
+                    <%=endpointVar%>.getFeatures().add(new org.apache.cxf.transport.common.gzip.GZIPFeature());
+            <%}%>
+            
+            java.util.List<org.apache.cxf.feature.Feature> fts_<%=cid%> = endpoint_<%=cid%>.getFeatures(); 
+            java.util.List<org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message>> icsIn_<%=cid%> = <%=endpointVar%>
+                    .getInInterceptors();
+            if (icsIn_<%=cid%> == null) {
+                icsIn_<%=cid%> = new java.util.ArrayList<>();
+            }
+            java.util.List<org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message>> icsOut_<%=cid%> = <%=endpointVar%>
+                    .getOutInterceptors();
+            if (icsOut_<%=cid%> == null) {
+                icsOut_<%=cid%> = new java.util.ArrayList<>();
+            }
+
+            org.apache.cxf.feature.Feature ft_<%=cid%> = new org.apache.cxf.feature.AbstractFeature() {
+                @Override
+                protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider,
+                        org.apache.cxf.Bus bus) {
+                    org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icIn = new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(
+                            org.apache.cxf.phase.Phase.RECEIVE) {
+                        @Override
+                        public void handleMessage(org.apache.cxf.message.Message msg) {
+                            org.slf4j.MDC.put("org.talend.esb.jobclass.name", "<%=packageName%>.<%=className%>");                                   
+                        }
+                    };
+                    org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icOut = new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(
+                            org.apache.cxf.phase.Phase.SETUP_ENDING) {
+                        @Override
+                        public void handleMessage(org.apache.cxf.message.Message msg) {
+                            org.slf4j.MDC.remove("org.talend.esb.jobclass.name");
+                        }
+                    };
+                    provider.getInInterceptors().add(icIn);
+                    provider.getInFaultInterceptors().add(icIn);
+                    provider.getOutInterceptors().add(icOut);
+                    provider.getOutFaultInterceptors().add(icOut);
+                }
+            };
+
+            fts_<%=cid%>.add(ft_<%=cid%>);
+
+            registry.put("features_<%=cid%>", fts_<%=cid%>);
+            registry.put("inInterceptors_<%=cid%>", icsIn_<%=cid%>);
+            registry.put("outInterceptors_<%=cid%>", icsOut_<%=cid%>);
+            
 <%
 
             if((isUsePropagateSamlUP || isUsePropagateSamlAP) && !isProvider){
