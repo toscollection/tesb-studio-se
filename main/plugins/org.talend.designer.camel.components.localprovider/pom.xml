@@ -73,8 +73,8 @@
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<reactive.streams.version>1.0.2</reactive.streams.version>
 		<hamcrest.version>1.3</hamcrest.version>
-		<jackson.version>2.13.2</jackson.version>
-		<jackson.databind.version>2.13.2.2</jackson.databind.version>
+		<jackson.version>2.13.4</jackson.version>
+		<jackson.databind.version>2.13.4.2</jackson.databind.version>
 		<joda-time.version>2.8.1</joda-time.version>
 		<plexus.component.annotations.versions>2.1.0</plexus.component.annotations.versions>
 		<wagon.provider.api.version>3.2.0</wagon.provider.api.version>
