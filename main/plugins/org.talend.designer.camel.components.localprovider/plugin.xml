@@ -185,7 +185,7 @@
               context="plugin:org.talend.designer.camel.components.localprovider"
               id="jackson-databind"
               name="${tesb-jackson-databind}"
-              mvn_uri="mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}"
+              mvn_uri="mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.databind.version}"
               uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-jackson-databind}">
         </libraryNeeded>
         <libraryNeeded
