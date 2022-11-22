@@ -427,9 +427,9 @@
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cryptacular}"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="bcprov-jdk15on-1.70.jar"
-		    id="bcprov-jdk15on"
-		    mvn_uri="mvn:org.bouncycastle/bcprov-jdk15on/1.70"
+		    name="bcprov-jdk18on-1.72.jar"
+		    id="bcprov-jdk18on"
+		    mvn_uri="mvn:org.bouncycastle/bcprov-jdk18on/1.72"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-opensaml-xmlsec-impl}"
@@ -535,7 +535,7 @@
 		    <library id="opensaml-security-impl" />
 		    <library id="opensaml-security-api" />
 		    <library id="cryptacular" />
-		    <library id="bcprov-jdk15on" />
+		    <library id="bcprov-jdk18on" />
 		    <library id="opensaml-xmlsec-impl" />
 		    <!--library id="java-support" /-->
 		    <library id="guava" />
