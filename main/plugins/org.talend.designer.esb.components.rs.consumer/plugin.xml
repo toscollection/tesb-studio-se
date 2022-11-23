@@ -427,7 +427,7 @@
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cryptacular}"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="bcprov-jdk18on-1.70.jar"
+		    name="bcprov-jdk18on-1.72.jar"
 		    id="bcprov-jdk18on"
 		    mvn_uri="mvn:org.bouncycastle/bcprov-jdk18on/1.72"
 		    bundleID="" />
