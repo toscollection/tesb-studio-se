@@ -11,7 +11,7 @@
   <packaging>eclipse-plugin</packaging>
   <name>Talend Designer ESB Tooling REST Service provider plugin</name>
   <properties>
-	  <slf4j-api.version>1.7.32</slf4j-api.version>
+	  <slf4j-api.version>1.7.34</slf4j-api.version>
 	  <reflections.version>0.9.11</reflections.version>
 	  <guava.version>30.0-jre</guava.version>
 	  <snakeyaml.version>1.32</snakeyaml.version>
