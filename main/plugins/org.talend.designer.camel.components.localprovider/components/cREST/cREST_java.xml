@@ -239,7 +239,7 @@
             <IMPORT MODULE_GROUP="security-common"
                 REQUIRED_IF="(ENABLE_SECURITY == 'true') AND ((SECURITY_TYPE == 'SAML') OR  (SECURITY_TYPE == 'OIDC'))" />
 
-            <IMPORT MODULE="cxf-rt-rs-service-description-common-openapi-${cxf.version}.jar" MVN="mvn:org.talend.libraries/cxf-rt-rs-service-description-common-openapi/6.0.0"
+            <IMPORT MODULE="cxf-rt-rs-service-description-common-openapi-${cxf.version}.jar" MVN="mvn:org.apache.cxf/cxf-rt-rs-service-description-common-openapi/${cxf.version}"
                 NAME="cxf-rt-rs-service-description-common-openapi-${cxf.version}"
                 UrlPath="platform:/plugin/org.talend.libraries.esb/lib/cxf-rt-rs-service-description-common-openapi-${cxf.version}.jar"
                 REQUIRED="true"/>
