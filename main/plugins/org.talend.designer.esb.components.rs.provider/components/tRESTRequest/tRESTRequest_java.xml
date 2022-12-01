@@ -194,7 +194,7 @@
                 UrlPath="platform:/plugin/org.talend.libraries.esb/lib/slf4j-api-${slf4j-api.version}.jar"
                 REQUIRED="true"/>
 
-            <IMPORT MODULE="reflections-${reflections.version}.jar" MVN="mvn:org.talend.libraries/reflections/6.0.0" NAME="reflections-${reflections.version}"
+            <IMPORT MODULE="reflections-${reflections.version}.jar" MVN="mvn:org.reflections/reflections/${reflections.version}" NAME="reflections-${reflections.version}"
                 UrlPath="platform:/plugin/org.talend.libraries.esb/lib/reflections-${reflections.version}.jar"
                 REQUIRED="true"/>
 

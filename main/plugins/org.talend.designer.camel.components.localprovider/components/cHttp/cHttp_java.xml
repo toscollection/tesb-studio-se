@@ -147,7 +147,7 @@
             <IMPORT MODULE_GROUP="camel-jetty" REQUIRED_IF="SERVER=='true'" />
 
             <IMPORT NAME="commons-codec-1.15.jar" MODULE="commons-codec-1.15.jar"
-                MVN="mvn:org.talend.libraries/commons-codec-1.15/6.0.0"
+                MVN="mvn:commons-codec/commons-codec/1.15"
                 UrlPath="platform:/plugin/org.talend.libraries.apache.common/lib/commons-codec-1.15.jar"
                 REQUIRED="true" />
 		</IMPORTS>
