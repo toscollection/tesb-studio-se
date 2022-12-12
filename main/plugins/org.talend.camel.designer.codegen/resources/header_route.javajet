@@ -2369,7 +2369,7 @@ if (isProvider) {
                     }
                     <%}%>
                     //read context values
-                    readContextValues(contextStr);
+                    readContextValues(contextStr, camelContext);
 
                 <%}%>
 
