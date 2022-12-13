@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.camel.designer.runprocess.maven;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -94,13 +96,21 @@ public class BundleJavaProcessor extends MavenJavaProcessor {
         String packageFolder = JavaResourcesHelper.getJobClassPackageFolder(property.getItem(), true);
         IFolder srcFolder = getTalendJavaProject().getSrcSubFolder(null, packageFolder);
 
-        IFile talendManagementWebSecurityAutoConfiguration = srcFolder
-                .getFile("TalendManagementWebSecurityAutoConfiguration.java");
-        if (talendManagementWebSecurityAutoConfiguration.exists()) {
-            try {
-                talendManagementWebSecurityAutoConfiguration.delete(true, monitor);
-            } catch (CoreException e) {
-                e.printStackTrace();
+        List<String> msSourceFiles = Arrays.asList(
+        		"ContextProperties.java", 
+        		"MSContextProperties.java", 
+        		"PropertiesWithType.java", 
+        		"TalendManagementWebSecurityAutoConfiguration.java");
+        
+        for (String msSourceFile : msSourceFiles) {
+            IFile f = srcFolder
+                    .getFile(msSourceFile);
+            if (f.exists()) {
+                try {
+                    f.delete(true, monitor);
+                } catch (CoreException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
