@@ -484,6 +484,16 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         guavaDep.setArtifactId("guava");
         guavaDep.setVersion("30.0-jre");
 
+        Dependency slf4jDep = new Dependency();
+        slf4jDep.setGroupId("org.slf4j");
+        slf4jDep.setArtifactId("slf4j-jdk14");
+        slf4jDep.setVersion("1.7.34");      
+        
+        Dependency slf4jJclDep = new Dependency();
+        slf4jJclDep.setGroupId("org.slf4j");
+        slf4jJclDep.setArtifactId("jcl-over-slf4j");
+        slf4jJclDep.setVersion("1.7.34");      
+        
         dependencies.add(mavensharedDep);
         dependencies.add(commonsioDep);
         dependencies.add(httpclientDep);
@@ -501,6 +511,8 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         dependencies.add(mavenModelDep);
         dependencies.add(commonsCodecDep);
         dependencies.add(guavaDep);
+        dependencies.add(slf4jDep);
+        dependencies.add(slf4jJclDep);
         plugin.setDependencies(dependencies);
 
         return plugin;
