@@ -634,7 +634,7 @@ if (isTestContainer) {
              * read context values from specified context
              * @parameter contextName : the name of context while will be used
              */
-            private void readContextValues(String contextName){
+            private void readContextValues(String contextName, org.apache.camel.CamelContext camelContext){
                 if (contextValuesRead) {
                     return;
                 }
@@ -648,14 +648,14 @@ if (isTestContainer) {
 				if (null != <% if(isTestContainer){ %>
 								context()
 							<% } else {%>
-								getContext()
+								camelContext
 							<% } %>
-				.hasComponent("<%=className %>_properties")) {
+				.getPropertiesComponent()) {
 				
 					<% if(isTestContainer){ %>
 						org.apache.camel.component.properties.PropertiesComponent props = (org.apache.camel.component.properties.PropertiesComponent) context().getComponent("TestR_properties");
 					<% } else {%>
-						org.apache.camel.component.properties.PropertiesComponent props = (org.apache.camel.component.properties.PropertiesComponent) getContext().getComponent("TestR_properties");
+						org.apache.camel.component.properties.PropertiesComponent props = (org.apache.camel.component.properties.PropertiesComponent) camelContext.getPropertiesComponent();
 					<% } %>
 	                
 	                	context.putAll(props.getOverrideProperties());

@@ -84,14 +84,14 @@ public class CLASS {
 	            if(userDefinedParams!=null && userDefinedParams.size()>0){
 	            	code.append("final Properties overwriteContext_"+instanceName+" = new Properties();\n");
 	            	if (!exportTypeSpringBoot) {
-	            	    code.append("readContextValues(contextStr);\n");
+	                    code.append("readContextValues(contextStr, camelContext);\n");
 	            	} 
 	            	for(Map<String,String> map :userDefinedParams){
 	            		code.append("overwriteContext_"+instanceName+".put(\""+map.get("Parameters")+"\", "+map.get("Values")+");\n"); 
 	            	}
 	            	code.append(instanceName +".setArguments(overwriteContext_"+instanceName+");\n");
 					code.append(instanceName +"_props.setOverrideProperties(overwriteContext_" + instanceName + ");\n");
-					code.append("camelContext.addComponent(\"" + instanceName + "_properties\", " + instanceName +"_props);\n\n");
+					code.append("camelContext.setPropertiesComponent(" + instanceName +"_props);\n\n");
 	            }
 
 	            if (exportTypeSpringBoot) code.append("camelContext.addRoutes("+instanceName+");");
@@ -124,7 +124,7 @@ public class CLASS {
 	            }
 	            if(userDefinedParams!=null && userDefinedParams.size()>0){
 	                if (!exportTypeSpringBoot) {
-	                    code.append("readContextValues(contextStr);\n");
+	                    code.append("readContextValues(contextStr, camelContext);\n");
 	                }
 	            	code.append("final Map<String, String> overwriteContext_"+instanceName+" = new HashMap<String, String>();\n"); 
 	            	for(Map<String,String> map :userDefinedParams){
@@ -157,7 +157,7 @@ public class CLASS {
 	            }
 	            if(userDefinedParams!=null && userDefinedParams.size()>0){
 	                if (!exportTypeSpringBoot) {
-	                    code.append("readContextValues(contextStr);\n");
+	                    code.append("readContextValues(contextStr, camelContext);\n");
 	                }
 	            	code.append("final Map<String, String> overwriteContext_"+instanceName+" = new HashMap<String, String>();\n"); 
 	            	for(Map<String,String> map :userDefinedParams){
