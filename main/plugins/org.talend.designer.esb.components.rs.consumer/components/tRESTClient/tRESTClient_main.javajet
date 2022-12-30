@@ -393,6 +393,9 @@ try {
 		conduit_<%=cid%>.getClient().setAutoRedirect(true);
 		clientConfig_<%=cid%>.getRequestContext().put("http.redirect.relative.uri", true);
 		clientConfig_<%=cid%>.getRequestContext().put("http.redirect.same.host.only", <%=!paramsHelper.getBoolParam("__REDIRECT_NON_SAME_HOST__")%>);
+	<% } %>
+
+	<% if (paramsHelper.getBoolParam("__MAINTAIN_SESSION__")) { %>
 		clientConfig_<%=cid%>.getRequestContext().put(org.apache.cxf.message.Message.MAINTAIN_SESSION, true);
 	<% } %>
 
