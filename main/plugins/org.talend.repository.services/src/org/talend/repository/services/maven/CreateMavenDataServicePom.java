@@ -437,7 +437,7 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         Dependency jsoupDep = new Dependency();
         jsoupDep.setGroupId("org.jsoup");
         jsoupDep.setArtifactId("jsoup");
-        jsoupDep.setVersion("1.14.2");
+        jsoupDep.setVersion("1.15.3");
 
         Dependency mavenModelDep = new Dependency();
         mavenModelDep.setGroupId("org.apache.maven");
