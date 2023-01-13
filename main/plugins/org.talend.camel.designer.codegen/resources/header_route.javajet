@@ -2763,7 +2763,7 @@ if (isProvider) {
                                 new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(org.apache.cxf.phase.Phase.SETUP_ENDING) {
                             @Override
                             public void handleMessage(org.apache.cxf.message.Message msg) {
-                                org.slf4j.MDC.remove("org.talend.esb.jobname");
+                                org.slf4j.MDC.remove("org.talend.esb.jobclass.name");
                             }
                         };
                         provider.getInInterceptors().add(icIn);
@@ -3442,6 +3442,50 @@ if (isProvider) {
                         <%if("true".equals(ElementParameterParser.getValue(node, "__ENABLE_CXF_MESSAGE_GZIP__"))){%>
                                 <%=endpointVar%>.getFeatures().add(new org.apache.cxf.transport.common.gzip.GZIPFeature());
                         <%}%>
+
+            java.util.List<org.apache.cxf.feature.Feature> fts_<%=cid%> = endpoint_<%=cid%>.getFeatures();
+            java.util.List<org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message>> icsIn_<%=cid%> = <%=endpointVar%>
+                    .getInInterceptors();
+            if (icsIn_<%=cid%> == null) {
+                icsIn_<%=cid%> = new java.util.ArrayList<>();
+            }
+            java.util.List<org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message>> icsOut_<%=cid%> = <%=endpointVar%>
+                    .getOutInterceptors();
+            if (icsOut_<%=cid%> == null) {
+                icsOut_<%=cid%> = new java.util.ArrayList<>();
+            }
+
+            org.apache.cxf.feature.Feature ft_<%=cid%> = new org.apache.cxf.feature.AbstractFeature() {
+                @Override
+                protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider,
+                        org.apache.cxf.Bus bus) {
+                    org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icIn = new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(
+                            org.apache.cxf.phase.Phase.RECEIVE) {
+                        @Override
+                        public void handleMessage(org.apache.cxf.message.Message msg) {
+                            org.slf4j.MDC.put("org.talend.esb.jobclass.name", "<%=packageName%>.<%=className%>");
+                        }
+                    };
+                    org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icOut = new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(
+                            org.apache.cxf.phase.Phase.SETUP_ENDING) {
+                        @Override
+                        public void handleMessage(org.apache.cxf.message.Message msg) {
+                            org.slf4j.MDC.remove("org.talend.esb.jobclass.name");
+                        }
+                    };
+                    provider.getInInterceptors().add(icIn);
+                    provider.getInFaultInterceptors().add(icIn);
+                    provider.getOutInterceptors().add(icOut);
+                    provider.getOutFaultInterceptors().add(icOut);
+                }
+            };
+
+            fts_<%=cid%>.add(ft_<%=cid%>);
+
+            registry.put("features_<%=cid%>", fts_<%=cid%>);
+            registry.put("inInterceptors_<%=cid%>", icsIn_<%=cid%>);
+            registry.put("outInterceptors_<%=cid%>", icsOut_<%=cid%>);
+
 <%
 
             if((isUsePropagateSamlUP || isUsePropagateSamlAP) && !isProvider){
