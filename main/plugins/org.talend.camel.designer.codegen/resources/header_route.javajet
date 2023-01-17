@@ -3174,13 +3174,28 @@ if (isProvider) {
                     StringBuilder ep = new StringBuilder();
                     String username = helper.getStringParam("__AMQP_USERNAME__");
 
-                    if (!host.isEmpty() && host.startsWith("\"failover")) {
+                    if (host.startsWith("\"failover")) {
                         ep.append(host);
+                    } else if (host.startsWith("context.")) {
+                        String currentCTXName = codeGenArgument.getContextName();
+                        String currentHost = process.getContextManager().getContext(currentCTXName).getContextParameter(host.substring(8)).getValue();
+                        if (!currentHost.isEmpty() && currentHost.startsWith("\"failover")) {
+                            ep.append(host);
+                        } else {
+                            ep.append("\"");
+                            ep.append(useSSL?"amqps":"amqp");
+                            ep.append("://\" + ");
+                            ep.append(host);
+                            if (!port.isEmpty()) {
+                                ep.append("+ \":\" + ");
+                                ep.append(port);
+                            }
+                        }
                     } else {
                         ep.append("\"");
                         ep.append(useSSL?"amqps":"amqp");
                         ep.append("://\" + ");
-					    ep.append(host);
+                        ep.append(host);
                         if (!port.isEmpty()) {
                             ep.append("+ \":\" + ");
                             ep.append(port);
