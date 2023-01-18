@@ -48,7 +48,7 @@ Import-Package: org.talend.utils.wsdl
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.
 Bundle-ClassPath: .,
- lib/xmlschema-core-2.0.3.jar
+ lib/xmlschema-core-2.2.5.jar
 Export-Package: org.talend.repository.services.action,
  org.talend.repository.services.model.services,
  org.talend.repository.services.model.services.util,
