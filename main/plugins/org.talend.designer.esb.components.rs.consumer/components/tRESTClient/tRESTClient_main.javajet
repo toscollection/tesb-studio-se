@@ -73,6 +73,23 @@ if (!node.getElementParameter("USE_PROXY").isContextMode()) {
 boolean isSLEnable = paramsHelper.getBoolParam("__SERVICE_LOCATOR__");
 boolean isSAMEnable = paramsHelper.getBoolParam("__SERVICE_ACTIVITY_MONITOR__");
 boolean useBusinessCorrelation = paramsHelper.getBoolParam("__USE_BUSINESS_CORRELATION__");
+String mainURL = paramsHelper.getStringParam("__URL__");
+String[] split = null;
+String protocol = null;
+String plainURL = null;
+if(mainURL != null) {
+	split = mainURL.replaceAll("\"", "").split(":");
+}
+
+if(split != null && split[0] != null) {
+	protocol = split[0];
+}
+
+if(split != null && split.length > 1 && split[1] != null) {
+	plainURL = split[1].replaceAll("/", "_").replaceAll("\\.", "_");
+}
+
+String URLSuffix = protocol + "_" + plainURL;
 
 /*GENERATE CODE*/
 //clear connection row data
@@ -311,16 +328,37 @@ try {
 
 	<%}%>
 
-	org.apache.cxf.jaxrs.client.WebClient webClient_<%=cid%> = factoryBean_<%=cid%>.createWebClient();
+	org.apache.cxf.jaxrs.client.WebClient webClient_<%=cid%>_<%=URLSuffix%> = null;
+	<% if (paramsHelper.getBoolParam( "__REUSE_SSL_CONNECTION__")) { %>
+		if(globalMap.get("webClient_<%=cid%>_<%=URLSuffix%>") == null) {
+			webClient_<%=cid%>_<%=URLSuffix%> = factoryBean_<%=cid%>.createWebClient();
+			globalMap.put("webClient_<%=cid%>_<%=URLSuffix%>", webClient_<%=cid%>_<%=URLSuffix%>);
+		}else {
+			webClient_<%=cid%>_<%=URLSuffix%> = (org.apache.cxf.jaxrs.client.WebClient) globalMap.get("webClient_<%=cid%>_<%=URLSuffix%>");
+		}
+	<% } else{ %>
+		webClient_<%=cid%>_<%=URLSuffix%> = factoryBean_<%=cid%>.createWebClient();
+	<% } %>
 
 	// set request path
-	webClient_<%=cid%>.path(<%=paramsHelper.getStringParam("__PATH__")%>);
+	webClient_<%=cid%>_<%=URLSuffix%>.replacePath(<%=paramsHelper.getStringParam("__PATH__")%>);
 
 	// set connection properties
-	org.apache.cxf.jaxrs.client.ClientConfiguration clientConfig_<%=cid%> = org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>);
+	org.apache.cxf.jaxrs.client.ClientConfiguration clientConfig_<%=cid%> = org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>_<%=URLSuffix%>);
 	org.apache.cxf.transport.http.auth.HttpAuthSupplier httpAuthSupplerHttpConduit = null;
-	org.apache.cxf.transport.http.HTTPConduit conduit_<%=cid%> = clientConfig_<%=cid%>.getHttpConduit();
+	org.apache.cxf.transport.http.HTTPConduit conduit_<%=cid%>_<%=URLSuffix%> = null;
 
+	<% if (paramsHelper.getBoolParam( "__REUSE_SSL_CONNECTION__")) { %>
+		if(globalMap.get("conduit_<%=cid%>_<%=URLSuffix%>") == null) {
+			conduit_<%=cid%>_<%=URLSuffix%> = clientConfig_<%=cid%>.getHttpConduit();
+			globalMap.put("conduit_<%=cid%>_<%=URLSuffix%>", conduit_<%=cid%>_<%=URLSuffix%>);
+		}else {
+			conduit_<%=cid%>_<%=URLSuffix%> = (org.apache.cxf.transport.http.HTTPConduit) globalMap.get("conduit_<%=cid%>_<%=URLSuffix%>");
+		}
+	<% } else{ %>
+		conduit_<%=cid%>_<%=URLSuffix%> = clientConfig_<%=cid%>.getHttpConduit();
+	<% } %>
+	
     if (clientConfig_<%=cid%>.getEndpoint() != null) {
 		org.apache.cxf.service.model.EndpointInfo endpointInfo_<%=cid%> = clientConfig_<%=cid%>.getEndpoint().getEndpointInfo();
 		if(endpointInfo_<%=cid%> != null) {
@@ -332,7 +370,7 @@ try {
 
         org.apache.cxf.configuration.jsse.TLSClientParameters tlsClientParameters_<%=cid%> = new org.apache.cxf.configuration.jsse.TLSClientParameters();
         tlsClientParameters_<%=cid%>.setDisableCNCheck(true);
-        conduit_<%=cid%>.setTlsClientParameters(tlsClientParameters_<%=cid%>);
+        conduit_<%=cid%>_<%=URLSuffix%>.setTlsClientParameters(tlsClientParameters_<%=cid%>);
 
 	<% } %>
 
@@ -347,7 +385,7 @@ try {
 				authPolicy_<%=cid%>.setAuthorizationType("Basic");
 				authPolicy_<%=cid%>.setUserName(<%=paramsHelper.getStringParam("__AUTH_USERNAME__")%>);
 				authPolicy_<%=cid%>.setPassword(decryptedPassword_<%=cid%>);
-			conduit_<%=cid%>.setAuthorization(authPolicy_<%=cid%>);
+			conduit_<%=cid%>_<%=URLSuffix%>.setAuthorization(authPolicy_<%=cid%>);
 		} else if (use_auth_<%=cid%> && "HTTP Digest".equals(<%=authType%>)) {
 			// set Digest auth
 			<% passwordFieldName = "__AUTH_PASSWORD__"; %>
@@ -357,22 +395,22 @@ try {
 			authPolicy_<%=cid%>.setAuthorizationType("Digest");
 			authPolicy_<%=cid%>.setUserName(<%=paramsHelper.getStringParam("__AUTH_USERNAME__")%>);
 			authPolicy_<%=cid%>.setPassword(decryptedPassword_<%=cid%>);
-			conduit_<%=cid%>.setAuthorization(authPolicy_<%=cid%>);
+			conduit_<%=cid%>_<%=URLSuffix%>.setAuthorization(authPolicy_<%=cid%>);
 		}
 
 	<%}%>
 
 	if (!inOSGi) {
-		conduit_<%=cid%>.getClient().setReceiveTimeout((long)(<%=paramsHelper.getStringParam("__RECEIVE_TIMEOUT__")%> * 1000L));
-		conduit_<%=cid%>.getClient().setConnectionTimeout((long)(<%=paramsHelper.getStringParam("__CONNECTION_TIMEOUT__")%> * 1000L));
+		conduit_<%=cid%>_<%=URLSuffix%>.getClient().setReceiveTimeout((long)(<%=paramsHelper.getStringParam("__RECEIVE_TIMEOUT__")%> * 1000L));
+		conduit_<%=cid%>_<%=URLSuffix%>.getClient().setConnectionTimeout((long)(<%=paramsHelper.getStringParam("__CONNECTION_TIMEOUT__")%> * 1000L));
                 <% if("true".equals(useProxy)){%>   
 			<% passwordFieldName = "__PROXY_PASSWORD__"; %>
 			<%@ include file="@{org.talend.designer.components.localprovider}/components/templates/password.javajet"%>
 
-			conduit_<%=cid%>.getClient().setProxyServer(<%=paramsHelper.getStringParam("__PROXY_HOST__")%>);
-			conduit_<%=cid%>.getClient().setProxyServerPort(Integer.valueOf(<%=paramsHelper.getStringParam("__PROXY_PORT__")%>));
-			conduit_<%=cid%>.getProxyAuthorization().setUserName(<%=paramsHelper.getStringParam("__PROXY_USERNAME__")%>);
-			conduit_<%=cid%>.getProxyAuthorization().setPassword(decryptedPassword_<%=cid%>);
+			conduit_<%=cid%>_<%=URLSuffix%>.getClient().setProxyServer(<%=paramsHelper.getStringParam("__PROXY_HOST__")%>);
+			conduit_<%=cid%>_<%=URLSuffix%>.getClient().setProxyServerPort(Integer.valueOf(<%=paramsHelper.getStringParam("__PROXY_PORT__")%>));
+			conduit_<%=cid%>_<%=URLSuffix%>.getProxyAuthorization().setUserName(<%=paramsHelper.getStringParam("__PROXY_USERNAME__")%>);
+			conduit_<%=cid%>_<%=URLSuffix%>.getProxyAuthorization().setPassword(decryptedPassword_<%=cid%>);
                 <% }%>
 	}
 	<%
@@ -383,13 +421,13 @@ try {
 	%>
 	        org.apache.cxf.configuration.jsse.TLSClientParameters clientParameters = new org.apache.cxf.configuration.jsse.TLSClientParameters();
 	        clientParameters.setUseHttpsURLConnectionDefaultHostnameVerifier(true);
-	        conduit_<%=cid%>.setTlsClientParameters(clientParameters);
+	        conduit_<%=cid%>_<%=URLSuffix%>.setTlsClientParameters(clientParameters);
 	<%
 	    }
 	}
 	%>
 	<% if (paramsHelper.getBoolParam("__FOLLOW_REDIRECTS__")) { %>
-		conduit_<%=cid%>.getClient().setAutoRedirect(true);
+		conduit_<%=cid%>_<%=URLSuffix%>.getClient().setAutoRedirect(true);
 		clientConfig_<%=cid%>.getRequestContext().put("http.redirect.relative.uri", true);
 		clientConfig_<%=cid%>.getRequestContext().put("http.redirect.same.host.only", <%=!paramsHelper.getBoolParam("__REDIRECT_NON_SAME_HOST__")%>);
 	<% } %>
@@ -399,29 +437,29 @@ try {
 	<% } %>	
 
 	<% if (paramsHelper.getBoolParam("__DISABLE_CHUNKED_ENCODING__")) { %>
-		conduit_<%=cid%>.getClient().setAllowChunking(false);
+		conduit_<%=cid%>_<%=URLSuffix%>.getClient().setAllowChunking(false);
 	<% } %>
 
 	<% if (!"GET".equals(method) && !"DELETE".equals(method)) { %>
 		// set Content-Type
-		webClient_<%=cid%>.type("<%=contentType%>");
+		webClient_<%=cid%>_<%=URLSuffix%>.type("<%=contentType%>");
 	<% } %>
 
 	<% if (!acceptType.isEmpty()) { %>
 		// set Accept-Type
-		webClient_<%=cid%>.accept("<%=acceptType%>");
+		webClient_<%=cid%>_<%=URLSuffix%>.accept("<%=acceptType%>");
 	<% } %>
 
 	<% List<Map<String, String>> headers = paramsHelper.getObjectParam("__HEADERS__"); %>
 		// set optional query and header properties if any
 	<% for (Map<String, String> header : headers) { %>
-		webClient_<%=cid%>.header(<%=header.get("NAME")%>, <%=header.get("VALUE")%>);
+		webClient_<%=cid%>_<%=URLSuffix%>.header(<%=header.get("NAME")%>, <%=header.get("VALUE")%>);
 	<% } %>
 	if (use_auth_<%=cid%> && "OAUTH2_BEARER".equals(<%=authType%>)) {
 		// set oAuth2 bearer token
 		org.apache.cxf.rs.security.oauth2.client.BearerAuthSupplier authSupplier = new org.apache.cxf.rs.security.oauth2.client.BearerAuthSupplier();
 		authSupplier.setAccessToken((String) <%=paramsHelper.getStringParam("__AUTH_BEARER_TOKEN__")%>);
-		conduit_<%=cid%>.setAuthSupplier(authSupplier);
+		conduit_<%=cid%>_<%=URLSuffix%>.setAuthSupplier(authSupplier);
 	}
 
 	<%if("true".equals(useAuth)){%>
@@ -449,7 +487,7 @@ try {
 	            throw new javax.ws.rs.WebApplicationException("Failed to get OIDC access token: ", ex);
 	        }
 
-			webClient_<%=cid%>.header("Authorization", bearerHeader_<%=cid%>);
+			webClient_<%=cid%>_<%=URLSuffix%>.header("Authorization", bearerHeader_<%=cid%>);
 		}
 
 	<%}%>
@@ -463,8 +501,9 @@ try {
 		<% } %>
 		requestBody_<%=cid%> = form_<%=cid%>;
 	<% } else { %>
+		webClient_<%=cid%>_<%=URLSuffix%>.resetQuery();
 		<% for (Map<String, String> query : queries) { %>
-			webClient_<%=cid%>.query(<%=query.get("NAME")%> ,<%=query.get("VALUE")%>);
+			webClient_<%=cid%>_<%=URLSuffix%>.query(<%=query.get("NAME")%> ,<%=query.get("VALUE")%>);
 		<% } %>
 	<% } %>
 
@@ -472,7 +511,7 @@ try {
 	try {
 		// start send request
 		<% if ("GET".equals(method)) { %>
-			responseDoc_<%=cid%> = webClient_<%=cid%>.get<%if (MULTIPART_MIXED.equals(acceptType)) {%>Collection<%}%>();
+			responseDoc_<%=cid%> = webClient_<%=cid%>_<%=URLSuffix%>.get<%if (MULTIPART_MIXED.equals(acceptType)) {%>Collection<%}%>();
 			javax.ws.rs.core.Response responseObjBase_<%=cid%> = (javax.ws.rs.core.Response)responseDoc_<%=cid%>;
             int status_<%=cid%> = responseObjBase_<%=cid%>.getStatus();
             if (status_<%=cid%> != 304 && status_<%=cid%> >= 300 && responseClass_<%=cid%> != javax.ws.rs.core.Response.class) {
@@ -483,25 +522,25 @@ try {
 			}
 		<% } else if ("POST".equals(method)) { %>
 			<%if (MULTIPART_MIXED.equals(acceptType)) { %>
-				responseDoc_<%=cid%> = webClient_<%=cid%>.postObjectGetCollection(requestBody_<%=cid%>, responseClass_<%=cid%>);
+				responseDoc_<%=cid%> = webClient_<%=cid%>_<%=URLSuffix%>.postObjectGetCollection(requestBody_<%=cid%>, responseClass_<%=cid%>);
 			<% } else { %>
-				responseDoc_<%=cid%> = webClient_<%=cid%>.post(requestBody_<%=cid%>);
+				responseDoc_<%=cid%> = webClient_<%=cid%>_<%=URLSuffix%>.post(requestBody_<%=cid%>);
 			<% } %>
 		<% } else if ("PUT".equals(method)) { %>
-			responseDoc_<%=cid%> = webClient_<%=cid%>.put(requestBody_<%=cid%>);
+			responseDoc_<%=cid%> = webClient_<%=cid%>_<%=URLSuffix%>.put(requestBody_<%=cid%>);
 		<% } else if ("PATCH".equals(method)) { %>
-			org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>).getRequestContext().put("use.httpurlconnection.method.reflection", true);
-			responseDoc_<%=cid%> = webClient_<%=cid%>.invoke("PATCH", requestBody_<%=cid%>);
+			org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>_<%=URLSuffix%>).getRequestContext().put("use.httpurlconnection.method.reflection", true);
+			responseDoc_<%=cid%> = webClient_<%=cid%>_<%=URLSuffix%>.invoke("PATCH", requestBody_<%=cid%>);
 		<% } else if ("DELETE".equals(method)) { %>
-		    responseDoc_<%=cid%> = webClient_<%=cid%>.invoke("<%=method%>", requestBody_<%=cid%>);
+		    responseDoc_<%=cid%> = webClient_<%=cid%>_<%=URLSuffix%>.invoke("<%=method%>", requestBody_<%=cid%>);
 		<% } else { %>
-			webClient_<%=cid%>.invoke("<%=method%>", requestBody_<%=cid%>);
+			webClient_<%=cid%>_<%=URLSuffix%>.invoke("<%=method%>", requestBody_<%=cid%>);
 		<% } %>
 
 
-		int webClientResponseStatus_<%=cid%> = webClient_<%=cid%>.getResponse().getStatus();
+		int webClientResponseStatus_<%=cid%> = webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getStatus();
 		if (webClientResponseStatus_<%=cid%> >= 300) {
-			throw new javax.ws.rs.WebApplicationException(webClient_<%=cid%>.getResponse());
+			throw new javax.ws.rs.WebApplicationException(webClient_<%=cid%>_<%=URLSuffix%>.getResponse());
 		}
 
 		<% if (null != connResponse) {
@@ -540,13 +579,13 @@ try {
 
 			java.util.Map<String, javax.ws.rs.core.NewCookie> cookies_<%=cid%> = new java.util.HashMap<String, javax.ws.rs.core.NewCookie>();
 
-			if (webClient_<%=cid%>.getResponse() != null && webClient_<%=cid%>.getResponse().getCookies() != null ) { 
-				cookies_<%=cid%>.putAll(webClient_<%=cid%>.getResponse().getCookies());
+			if (webClient_<%=cid%>_<%=URLSuffix%>.getResponse() != null && webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getCookies() != null ) { 
+				cookies_<%=cid%>.putAll(webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getCookies());
 			}
 
 			<% if (paramsHelper.getBoolParam("__FOLLOW_REDIRECTS__")) { %>
-			    if (conduit_<%=cid%>.getCookies() != null ) { 
-		            conduit_<%=cid%>.getCookies().entrySet().stream().forEach(x -> cookies_<%=cid%>.put(x.getKey(), new javax.ws.rs.core.NewCookie(x.getValue().getName(),
+			    if (conduit_<%=cid%>_<%=URLSuffix%>.getCookies() != null ) { 
+		            conduit_<%=cid%>_<%=URLSuffix%>.getCookies().entrySet().stream().forEach(x -> cookies_<%=cid%>.put(x.getKey(), new javax.ws.rs.core.NewCookie(x.getValue().getName(),
 		    		x.getValue().getValue(),
 		    		x.getValue().getPath(),
 		    		null,
@@ -557,11 +596,11 @@ try {
 			<% } %>
 
 
-			globalMap.put("<%=cid%>_HEADERS", webClient_<%=cid%>.getResponse().getHeaders());
+			globalMap.put("<%=cid%>_HEADERS", webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getHeaders());
 			globalMap.put("<%=cid%>_COOKIES", cookies_<%=cid%>);
 			<% if (useBusinessCorrelation) { %>
-			if (null != webClient_<%=cid%>.getResponse().getHeaders().get("CorrelationID")) {
-				globalMap.put("<%=cid%>_CORRELATION_ID", webClient_<%=cid%>.getResponse().getHeaders().get("CorrelationID").get(0));
+			if (null != webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getHeaders().get("CorrelationID")) {
+				globalMap.put("<%=cid%>_CORRELATION_ID", webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getHeaders().get("CorrelationID").get(0));
 			}
 			<% } %>
 		<% } %>
@@ -589,8 +628,8 @@ try {
 			globalMap.put("<%=cid%>_HEADERS", ex_<%=cid%>.getResponse().getHeaders());
 			globalMap.put("<%=cid%>_COOKIES", ex_<%=cid%>.getResponse().getCookies());
 			<% if (useBusinessCorrelation) { %>
-			if (null != webClient_<%=cid%>.getResponse().getHeaders().get("CorrelationID")) {
-				globalMap.put("<%=cid%>_CORRELATION_ID", webClient_<%=cid%>.getResponse().getHeaders().get("CorrelationID").get(0));
+			if (null != webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getHeaders().get("CorrelationID")) {
+				globalMap.put("<%=cid%>_CORRELATION_ID", webClient_<%=cid%>_<%=URLSuffix%>.getResponse().getHeaders().get("CorrelationID").get(0));
 			}
 			<% } %>
 		<% } else { %>
