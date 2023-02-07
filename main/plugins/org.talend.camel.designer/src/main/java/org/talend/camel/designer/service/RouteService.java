@@ -107,5 +107,14 @@ public class RouteService implements IESBRouteService {
 
         return new CreateMavenBundlePom(jobProcessor, pomFile);
     }
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.talend.core.service.IESBMicroService#getExternalizedDependencies()
+     */
+    public List<String> getExternalizedDependencies() {
+        return null;
+    }
 
 }
