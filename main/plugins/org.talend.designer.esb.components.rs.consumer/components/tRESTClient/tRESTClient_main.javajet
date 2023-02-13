@@ -316,15 +316,18 @@ try {
 		if(globalMap.get("webClient_<%=cid%>" + url) == null) {
 			webClient_<%=cid%> = factoryBean_<%=cid%>.createWebClient();
 			globalMap.put("webClient_<%=cid%>" + url, webClient_<%=cid%>);
+			// set request path
+			webClient_<%=cid%>.path(<%=paramsHelper.getStringParam("__PATH__")%>);
 		}else {
 			webClient_<%=cid%> = (org.apache.cxf.jaxrs.client.WebClient) globalMap.get("webClient_<%=cid%>" + url);
+			// set request path
+			webClient_<%=cid%>.replacePath(<%=paramsHelper.getStringParam("__PATH__")%>);
 		}
 	<% } else{ %>
 		webClient_<%=cid%> = factoryBean_<%=cid%>.createWebClient();
+		// set request path
+		webClient_<%=cid%>.path(<%=paramsHelper.getStringParam("__PATH__")%>);
 	<% } %>
-
-	// set request path
-	webClient_<%=cid%>.replacePath(<%=paramsHelper.getStringParam("__PATH__")%>);
 
 	// set connection properties
 	org.apache.cxf.jaxrs.client.ClientConfiguration clientConfig_<%=cid%> = org.apache.cxf.jaxrs.client.WebClient.getConfig(webClient_<%=cid%>);
