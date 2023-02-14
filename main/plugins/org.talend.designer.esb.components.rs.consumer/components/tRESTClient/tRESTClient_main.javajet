@@ -150,10 +150,12 @@ try {
 	final java.util.List<org.apache.cxf.feature.Feature> features_<%=cid%> =
 			new java.util.ArrayList<org.apache.cxf.feature.Feature>();
 
+	String url = null;
 	<% if (isSLEnable) { %>
+	    url = <%=paramsHelper.getStringParam("__SERVICE_NAMESPACE__")%>;
 		factoryBean_<%=cid%>.setAddress("locator://rest");
 		factoryBean_<%=cid%>.setServiceName(new javax.xml.namespace.QName(
-			<%=paramsHelper.getStringParam("__SERVICE_NAMESPACE__")%>,
+			url,
 			<%=paramsHelper.getStringParam("__SERVICE_NAME__")%>));
 
 		org.talend.esb.servicelocator.cxf.LocatorFeature feature_<%=cid%> = null;
@@ -179,7 +181,7 @@ try {
 
 		features_<%=cid%>.add(feature_<%=cid%>);
 	<% } else { %>
-		String url = <%=paramsHelper.getStringParam("__URL__")%>;
+		url = <%=paramsHelper.getStringParam("__URL__")%>;
 		// {baseUri}tRESTClient
 		factoryBean_<%=cid%>.setServiceName(new javax.xml.namespace.QName(url, "tRESTClient"));
 		factoryBean_<%=cid%>.setAddress(url);
