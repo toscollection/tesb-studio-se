@@ -73,6 +73,7 @@ if (!node.getElementParameter("USE_PROXY").isContextMode()) {
 boolean isSLEnable = paramsHelper.getBoolParam("__SERVICE_LOCATOR__");
 boolean isSAMEnable = paramsHelper.getBoolParam("__SERVICE_ACTIVITY_MONITOR__");
 boolean useBusinessCorrelation = paramsHelper.getBoolParam("__USE_BUSINESS_CORRELATION__");
+boolean reuseSSLConnection = paramsHelper.getBoolParam( "__REUSE_SSL_CONNECTION__");
 
 /*GENERATE CODE*/
 //clear connection row data
@@ -314,7 +315,7 @@ try {
 	<%}%>
 
 	org.apache.cxf.jaxrs.client.WebClient webClient_<%=cid%> = null;
-	<% if (paramsHelper.getBoolParam( "__REUSE_SSL_CONNECTION__")) { %>
+	<% if (reuseSSLConnection) { %>
 		if(globalMap.get("webClient_<%=cid%>" + url) == null) {
 			webClient_<%=cid%> = factoryBean_<%=cid%>.createWebClient();
 			globalMap.put("webClient_<%=cid%>" + url, webClient_<%=cid%>);
@@ -336,7 +337,7 @@ try {
 	org.apache.cxf.transport.http.auth.HttpAuthSupplier httpAuthSupplerHttpConduit = null;
 	org.apache.cxf.transport.http.HTTPConduit conduit_<%=cid%> = null;
 
-	<% if (paramsHelper.getBoolParam( "__REUSE_SSL_CONNECTION__")) { %>
+	<% if (reuseSSLConnection) { %>
 		if(globalMap.get("conduit_<%=cid%>" + url) == null) {
 			conduit_<%=cid%> = clientConfig_<%=cid%>.getHttpConduit();
 			globalMap.put("conduit_<%=cid%>" + url, conduit_<%=cid%>);
@@ -489,7 +490,9 @@ try {
 		<% } %>
 		requestBody_<%=cid%> = form_<%=cid%>;
 	<% } else { %>
-		webClient_<%=cid%>.resetQuery();
+		<% if (reuseSSLConnection) { %>
+		    webClient_<%=cid%>.resetQuery();
+		<% } %>
 		<% for (Map<String, String> query : queries) { %>
 			webClient_<%=cid%>.query(<%=query.get("NAME")%> ,<%=query.get("VALUE")%>);
 		<% } %>
