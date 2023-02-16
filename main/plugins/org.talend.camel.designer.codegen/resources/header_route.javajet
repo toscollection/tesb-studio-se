@@ -2972,7 +2972,7 @@ if (isProvider) {
                         if (useInitSQL) {
                             String initSQL = helper.getStringParam("__INIT_QUERY__");
                             initSQL = org.talend.core.model.utils.NodeUtil.replaceCRLFInMEMO_SQL(initSQL);
-		                    initSQL = initSQL.replace("\\n", "");
+                            initSQL = initSQL.replace("\\n", "");
 %>
                         ds_<%=cid%>.setConnectionInitSqls(java.util.Arrays.asList(<%=initSQL%>));
 <%
@@ -3169,27 +3169,32 @@ if (isProvider) {
 
                     StringBuilder ep = new StringBuilder();
                     String username = helper.getStringParam("__AMQP_USERNAME__");
-
-                    if (host.startsWith("\"failover")) {
-                        ep.append(host);
-                    } else if (host.startsWith("context.")) {
-                        String currentCTXName = codeGenArgument.getContextName();
-                        String currentHost = process.getContextManager().getContext(currentCTXName).getContextParameter(host.substring(8)).getValue();
-                        if (!currentHost.isEmpty() && currentHost.startsWith("\"failover")) {
-                            ep.append(host);
-                        } else {
-                            ep.append("\"");
-                            ep.append(useSSL?"amqps":"amqp");
-                            ep.append("://\" + ");
-                            ep.append(host);
-                            if (!port.isEmpty()) {
-                                ep.append("+ \":\" + ");
-                                ep.append(port);
+%>
+                    StringBuilder hostValue = new StringBuilder();
+<%
+                   
+                    if (host.startsWith("context.")) {
+                        String contextKey4host = host.substring(8);
+%>
+                        String cMQConnectionFactoryHost =(String) context.getProperty("<%=contextKey4host%>");
+                        
+                        if (!cMQConnectionFactoryHost.isEmpty() && (cMQConnectionFactoryHost.startsWith("\"failover") || cMQConnectionFactoryHost.startsWith("failover"))) {
+                            hostValue.append(cMQConnectionFactoryHost);
+                        } else {                         
+                            hostValue.append(<%=useSSL%>?"amqps":"amqp");
+                            hostValue.append("://");
+                            hostValue.append(cMQConnectionFactoryHost);
+                            if (!<%=port%>.isEmpty()) {
+                                hostValue.append(":");
+                                hostValue.append(<%=port%>);
                             }
                         }
+<%                      
+                    }else if (host.startsWith("\"failover") || host.startsWith("failover")) {
+                        ep.append(host);
                     } else {
                         ep.append("\"");
-                        ep.append(useSSL?"amqps":"amqp");
+                        ep.append(useSSL ? "amqps" : "amqp");
                         ep.append("://\" + ");
                         ep.append(host);
                         if (!port.isEmpty()) {
@@ -3219,17 +3224,25 @@ if (isProvider) {
                         }
                     }
                     if (!amqpParamsMap.isEmpty()) {
-                        String amqpParamString = " + \"?";
+                        String amqpParamString = "\"\"?";
                         for (String argName : amqpParamsMap.keySet()) {
                             String argValue = amqpParamsMap.get(argName);
                             amqpParamString = amqpParamString + argName + "=" + argValue + "&";
                         }
-                        amqpParamString = amqpParamString.substring(1, amqpParamString.length()-1);
+                        amqpParamString = amqpParamString.substring(1, amqpParamString.length()-1);  // remove the "&" in the end
                         amqpParamString = amqpParamString + "\"";
+                        
+                        if (ep.length() >= 1) {
+                            ep.append(" + ");
+                        } 
                         ep.append(amqpParamString);
                     }
-
-
+                    
+                    if (ep.length() >= 1) {
+%>
+                    hostValue.append(<%=ep.toString()%>);
+<%                  
+                    }
                     if(useAuth) {
 
                         String passwordFieldName = "__AMQP_PASSWORD__";
@@ -3240,9 +3253,9 @@ if (isProvider) {
 %>
 
                     <% if (useAuth) {%>
-                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(<%=username%>, decryptedPassword_<%=cid%>, <%=ep.toString()%>);
+                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(<%=username%>, decryptedPassword_<%=cid%>, hostValue.toString());
                     <%} else {%>
-                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(<%=ep.toString()%>);
+                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(hostValue.toString());
                     <%}%>
 
                     if(camelContext.getComponent(<%=name%>)==null){
