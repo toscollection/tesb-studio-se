@@ -526,18 +526,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-component-annotations</artifactId>
-			<version>${plexus.component.annotations.versions}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-provider-api</artifactId>
-			<version>${wagon.provider.api.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-management</artifactId>
 			<version>${camel.version}</version>
