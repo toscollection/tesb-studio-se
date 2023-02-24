@@ -32,22 +32,22 @@
 
     <extension point="org.talend.core.runtime.librariesNeeded">
 
-        <!-- ${tesb-commons-collections} -->
         <libraryNeeded context="plugin:org.talend.libraries.apache.common"
             name="commons-collections-3.2.2.jar"
             id="commons-collections"
+            mvn_uri="mvn:commons-collections/commons-collections/3.2.2"
             uripath="platform:/plugin/org.talend.libraries.apache.common/lib/commons-collections-3.2.2.jar"
             bundleID="" />
-        <!-- ${tesb-commons-io} -->
         <libraryNeeded context="plugin:org.talend.libraries.apache.common"
             name="commons-io-2.10.0.jar"
             id="commons-io"
+            mvn_uri="mvn:commons-io/commons-io/2.10.0"
             uripath="platform:/plugin/org.talend.libraries.apache.common/lib/commons-io-2.10.0.jar"
             bundleID="" />
-        <!-- ${tesb-commons-pool} -->
         <libraryNeeded context="plugin:org.talend.libraries.apache.common"
             name="commons-pool-1.6.jar"
             id="commons-pool"
+            mvn_uri="mvn:commons-pool/commons-pool/1.6"
             uripath="platform:/plugin/org.talend.libraries.apache.common/lib/commons-pool-1.6.jar"
             bundleID="" />
 
@@ -461,34 +461,26 @@
                 context="plugin:org.talend.designer.camel.components.localprovider"
                 id="hamcrest-all"
                 name="${tesb-hamcrest-all}"
+                mvn_uri="mvn:org.hamcrest/hamcrest-all/${hamcrest.version}"
                 uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-hamcrest-all}">
-        </libraryNeeded>
-        <libraryNeeded
-              context="plugin:org.talend.designer.camel.components.localprovider"
-              id="camel-test-spring"
-              name="${tesb-camel-test-spring}"
-              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-test-spring}">
-        </libraryNeeded>
-        <libraryNeeded
-              context="plugin:org.talend.designer.camel.components.localprovider"
-              id="camel-test"
-              name="${tesb-camel-test}"
-              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-test}">
         </libraryNeeded>
         <libraryNeeded
               context="plugin:org.talend.designer.camel.components.localprovider"
               id="spring-test"
               name="${tesb-spring-test}"
+              mvn_uri="mvn:org.springframework/spring-test/${spring.version}"
               uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-spring-test}">
         </libraryNeeded>
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="jaxb-impl-2.2.11.jar"
             id="jaxb-impl"
+            mvn_uri="mvn:com.sun.xml.bind/jaxb-impl/2.2.11"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/jaxb-impl-2.2.11.jar"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="jaxb-core-2.2.11.jar"
             id="jaxb-core"
+            mvn_uri="mvn:com.sun.xml.bind/jaxb-core/2.2.11"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/jaxb-core-2.2.11.jar"
             bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
@@ -575,18 +567,21 @@
               context="plugin:org.talend.designer.camel.components.localprovider"
               id="camel-leveldb"
               name="${tesb-camel-leveldb}"
+              mvn_uri="mvn:org.apache.camel/camel-leveldb/${camel.version}"
               uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-camel-leveldb}">
         </libraryNeeded>
         <libraryNeeded
               context="plugin:org.talend.designer.camel.components.localprovider"
               id="leveldb"
               name="${tesb-leveldb}"
+              mvn_uri="mvn:org.iq80.leveldb/leveldb/${leveldb-version}"
               uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-leveldb}">
         </libraryNeeded>
         <libraryNeeded
               context="plugin:org.talend.designer.camel.components.localprovider"
               id="leveldb-api"
               name="${tesb-leveldb-api}"
+              mvn_uri="mvn:org.iq80.leveldb/leveldb-api/${leveldb-api-version}"
               uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-leveldb-api}">
         </libraryNeeded>
         <libraryNeeded
@@ -734,18 +729,6 @@
               uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-lz4-java}">
         </libraryNeeded>
 
-        <libraryNeeded
-                context="plugin:org.talend.designer.camel.components.localprovider"
-                id="plexus-component-annotations"
-                name="${tesb-plexus-component-annotations}"
-                uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-plexus-component-annotations}">
-        </libraryNeeded>
-        <libraryNeeded
-                context="plugin:org.talend.designer.camel.components.localprovider"
-                id="wagon-provider-api"
-                name="${tesb-wagon-provider-api}"
-                uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-wagon-provider-api}">
-        </libraryNeeded>
         <libraryNeededGroup
               description="camel-talendjob-alldep"
               id="camel-talendjob-alldep"
@@ -758,6 +741,7 @@
               context="plugin:org.talend.libraries.esb"
               id="camel-talendjob"
               name="${tesb-camel-talendjob}"
+              mvn_uri="mvn:org.talend.camel/camel-talendjob/${tesb.version}"
               uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-camel-talendjob}">
         </libraryNeeded>
 
