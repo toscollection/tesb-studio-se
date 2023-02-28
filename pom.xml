@@ -43,7 +43,8 @@
     <activemq.version>5.16.3</activemq.version>
     <xmlsec.version>2.2.3</xmlsec.version>
     <wss4j.version>2.3.2</wss4j.version>
-    <opensaml.version>3.4.5</opensaml.version>
+    <opensaml.version>3.4.6</opensaml.version>
+    <joda-time.version>2.10.10</joda-time.version>
   </properties>
   <repositories>
 	<repository>
