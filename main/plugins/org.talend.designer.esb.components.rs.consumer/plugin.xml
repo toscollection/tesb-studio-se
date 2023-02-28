@@ -58,7 +58,7 @@
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-wsdl}"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="wsdl4j-1.6.3"
+		    name="wsdl4j-1.6.3.jar"
 		    id="wsdl4j"
 		    mvn_uri="mvn:wsdl4j/wsdl4j/1.6.3"
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/wsdl4j-1.6.3.jar"
@@ -117,10 +117,10 @@
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-frontend-jaxws}"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="xml-resolver-1.2"
+		    name="xml-resolver-1.2.jar"
 		    id="xml-resolver"
 		    mvn_uri="mvn:xml-resolver/xml-resolver/1.2"
-		    uripath="platform:/plugins/org.talend.libraries.esb/lib/xml-resolver-1.2.jar"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/xml-resolver-1.2.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-cxf-rt-bindings-xml}"
@@ -486,10 +486,10 @@
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/guava-30.0-jre.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="${tesb-joda-time}"
+		    name="joda-time-${joda-time.version}.jar"
 		    id="joda-time"
-		    mvn_uri="mvn:joda-time/joda-time/2.9"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-joda-time}"
+		    mvn_uri="mvn:joda-time/joda-time/${joda-time.version}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/joda-time-${joda-time.version}.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-opensaml-xacml-impl}"

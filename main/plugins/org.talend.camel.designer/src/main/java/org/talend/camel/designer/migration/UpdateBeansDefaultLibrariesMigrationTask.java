@@ -140,7 +140,15 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
                             MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, "Adding javax.annotation to deprecated modules",
                             null, null));
                 }
-                
+
+                if (StringUtils.startsWith(importType.getMODULE(), "org.apache.commons.logging_1.2.0") ) {
+                    deprecatedModules.add(importType);
+
+                    generateReportRecord(new MigrationReportRecorder(this,
+                            MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, "Adding org.apache.commons.logging_1.2.0 to deprecated modules",
+                            null, null));
+                }
+
             }
 
             for (ModuleNeeded defaultNeed : modulesNeededForBeans) {
