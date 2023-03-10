@@ -498,7 +498,12 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         slf4jApiDep.setGroupId("org.slf4j");
         slf4jApiDep.setArtifactId("slf4j-api");
         slf4jApiDep.setVersion("1.7.34");  
-        
+
+        Dependency velocityDep = new Dependency();
+        velocityDep.setGroupId("org.apache.velocity");
+        velocityDep.setArtifactId("velocity-engine-core");
+        velocityDep.setVersion("2.3");
+
         dependencies.add(mavensharedDep);
         dependencies.add(commonsioDep);
         dependencies.add(httpclientDep);
@@ -519,6 +524,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         dependencies.add(slf4jDep);
         dependencies.add(slf4jJclDep);
         dependencies.add(slf4jApiDep);
+        dependencies.add(velocityDep);
         plugin.setDependencies(dependencies);
 
         return plugin;
