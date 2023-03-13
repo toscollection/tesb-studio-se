@@ -24,6 +24,7 @@ import org.apache.maven.model.Activation;
 import org.apache.maven.model.ActivationProperty;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.Plugin;
@@ -469,6 +470,17 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         slf4jApiDep.setArtifactId("slf4j-api");
         slf4jApiDep.setVersion("1.7.34");
 
+        Dependency doxiaDep = new Dependency();
+        doxiaDep.setGroupId("org.apache.maven.doxia");
+        doxiaDep.setArtifactId("doxia-site-renderer");
+        doxiaDep.setVersion("1.0");
+        List<Exclusion> exclusionList = new ArrayList<Exclusion>();
+        Exclusion exclusion = new Exclusion();
+        exclusion.setGroupId("org.apache.velocity");
+        exclusion.setArtifactId("velocity");
+        exclusionList.add(exclusion);
+        doxiaDep.setExclusions(exclusionList);
+
         Dependency velocityDep = new Dependency();
         velocityDep.setGroupId("org.apache.velocity");
         velocityDep.setArtifactId("velocity-engine-core");
@@ -494,6 +506,7 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         dependencies.add(slf4jDep);
         dependencies.add(slf4jJclDep);
         dependencies.add(slf4jApiDep);
+        dependencies.add(doxiaDep);
         dependencies.add(velocityDep);
         plugin.setDependencies(dependencies);
 
