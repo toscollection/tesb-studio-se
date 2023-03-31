@@ -70,6 +70,18 @@ if (!node.getElementParameter("USE_PROXY").isContextMode()) {
     }
 }
 
+String logMessages = ElementParameterParser.getValue(node, "__LOG_MESSAGES__");
+if (!node.getElementParameter("LOG_MESSAGES").isContextMode()) {
+	// non-dynamic
+	logMessages = "true".equals(logMessages) ? "true" : "false";
+} else {
+    for (IContextParameter ctxParam: params) {
+        if(ctxParam.getName().equals(logMessages.replace("context.", ""))){
+            logMessages = "true".equals(ctxParam.getValue()) ? "true" : "false";
+        }
+    }
+}
+
 boolean isSLEnable = paramsHelper.getBoolParam("__SERVICE_LOCATOR__");
 boolean isSAMEnable = paramsHelper.getBoolParam("__SERVICE_ACTIVITY_MONITOR__");
 boolean useBusinessCorrelation = paramsHelper.getBoolParam("__USE_BUSINESS_CORRELATION__");
@@ -214,7 +226,7 @@ try {
 		features_<%=cid%>.add(samEventFeature_<%=cid%>);
 	<% } %>
 
-	<% if (paramsHelper.getBoolParam("__LOG_MESSAGES__")) { %>
+	<% if ("true".equals(logMessages)) { %>
 		features_<%=cid%>.add(new org.apache.cxf.feature.LoggingFeature());
 	<% } %>
 
