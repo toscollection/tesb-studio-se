@@ -39,7 +39,8 @@ imports="
 	boolean  ignoreInvalid = paramsHelper.getBoolParam( "__IGNORE_INVALID__");
 	boolean streaming = paramsHelper.getBoolParam( "__STREAMING__");
 	String timeout = paramsHelper.getVisibleStringParam( "__TIMEOUT__");
-	boolean useTimeout = ((timeout!=null)&&(timeout.equals("\\s*\\d+\\s*")));
+	boolean useTimeout = ((timeout!=null)&&(timeout.matches("\\s*\\d+\\s*")));
+	boolean hasTimeoutFromContext=(timeout!=null&&timeout.startsWith("context."));
 	
 	boolean useOnPrepareProcessor = paramsHelper.getBoolParam("__USE_ON_PREPARE_PROCESSOR__");
 	String onPrepareProcessor = paramsHelper.getVisibleStringParam("__ON_PREPARE_PROCESSOR__");
@@ -68,6 +69,7 @@ imports="
 			if(ignoreInvalid){%>.ignoreInvalidEndpoints()							<%}
 			if(streaming){%>.streaming()											<%}
 			if(useTimeout){%>.timeout( <%=timeout%> )								<%}
+				else if(hasTimeoutFromContext){%>.timeout(<%=ElementParameterParser.getValue(node, "__TIMEOUT__")%>)<%}
 			if(useOnPrepareProcessor){%>.onPrepareRef(<%=onPrepareProcessor%>)		<%}
 			if(shareUnitOfWork){%>.shareUnitOfWork()								<%}
 			
