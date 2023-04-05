@@ -359,6 +359,7 @@
                 name="camel-mail">
             <library id="camel-mail" />
             <library id="javax.mail" />
+            <library id="camel-attachments" />
         </libraryNeededGroup>
 
         <libraryNeededGroup
