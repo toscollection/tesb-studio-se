@@ -24,9 +24,7 @@
   </CONNECTORS>
 
   <PARAMETERS>    
-  	<PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" NUM_ROW="2" NB_LINES="3">
-	    <DEFAULT>//import java.util.List;</DEFAULT>
-	 </PARAMETER>   
+  
 	  <PARAMETER NAME="CODE" FIELD="MEMO_JAVA" REQUIRED="false" NUM_ROW="15" NB_LINES="9">
 	    <DEFAULT>
 /*
@@ -35,6 +33,8 @@
 *   Usually you would register custom components in camelContext or
 *   manipulate typeConverterRegistry.
 *  
+*   Needed libraries and import statements must be added in Advanced settings.
+*
 *   For example:
 * 
 *     // Declaring a custom component in the Camel Context
@@ -45,22 +45,24 @@
 */
 </DEFAULT>
 	  </PARAMETER>
-	<PARAMETER NAME="DRIVER_JAR" FIELD="TABLE" NUM_ROW="30"
-		NB_LINES="9" REPOSITORY_VALUE="DRIVER_JAR">
-		<ITEMS>
-			<ITEM NAME="JAR_NAME" FIELD="MODULE_LIST" />
-		</ITEMS>
-	</PARAMETER>
-	<PARAMETER NAME="WARNING" FIELD="LABEL" NUM_ROW="32">
-		<DEFAULT>*Note: External JARs will not be embedded in OSGi bundle by default, to configure it please edit Route Dependencies</DEFAULT>
-	</PARAMETER>
   </PARAMETERS>
    
    
    <ADVANCED_PARAMETERS>
-        <PARAMETER NAME="USE_MDC_LOGGING" FIELD="CHECK" REQUIRED="false" NUM_ROW="10" REPOSITORY_VALUE="USE_MDC_LOGGING">
+        <PARAMETER NAME="USE_MDC_LOGGING" FIELD="CHECK" REQUIRED="false" NUM_ROW="2" REPOSITORY_VALUE="USE_MDC_LOGGING">
             <DEFAULT>false</DEFAULT>
         </PARAMETER>
+        <PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" NUM_ROW="10" NB_LINES="3">
+            <DEFAULT>//import java.util.List;</DEFAULT>
+        </PARAMETER>
+        <PARAMETER NAME="DRIVER_JAR" FIELD="TABLE" NUM_ROW="30" NB_LINES="9" REPOSITORY_VALUE="DRIVER_JAR">
+            <ITEMS>
+                <ITEM NAME="JAR_NAME" FIELD="MODULE_LIST" />
+            </ITEMS>
+         </PARAMETER>
+         <PARAMETER NAME="WARNING" FIELD="LABEL" NUM_ROW="32">
+            <DEFAULT>*Note: External JARs will not be embedded in OSGi bundle by default, to configure it please edit Route Dependencies</DEFAULT>
+         </PARAMETER>
    </ADVANCED_PARAMETERS>
 
    <CODEGENERATION>
