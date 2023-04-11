@@ -58,20 +58,24 @@
 			<ITEMS>
 				<ITEM NAME="VALUE" FIELD="TEXT" />
 			</ITEMS>
-		</PARAMETER>
-		  <PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" NUM_ROW="11" NB_LINES="2" SHOW_IF="CONFIG_BY_CODE == 'true' ">
-		    <DEFAULT>//import java.util.List;</DEFAULT>
-		  </PARAMETER>   
+		</PARAMETER>   
 		<PARAMETER NAME="NOTE" FIELD="LABEL" REQUIRED="false" NUM_ROW="18" SHOW_IF="CONFIG_BY_CODE == 'true' ">
 	      <DEFAULT>Note: Provide own codes to specify *beanInstance* variable</DEFAULT>
 	  	</PARAMETER>
 		<PARAMETER NAME="CODE" FIELD="MEMO_JAVA" REQUIRED="false" NUM_ROW="12" NB_LINES="9" CONTEXT="begin" SHOW_IF="CONFIG_BY_CODE == 'true' ">
-	      <DEFAULT>// beanInstance = ....;</DEFAULT>
+	      <DEFAULT>
+// Needed import statements must be added in Advanced settings
+//
+// beanInstance = ....;
+          </DEFAULT>
 	  </PARAMETER>
 	  
   </PARAMETERS>
 
   <ADVANCED_PARAMETERS>
+          <PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" NUM_ROW="11" NB_LINES="2" SHOW_IF="CONFIG_BY_CODE == 'true' ">
+            <DEFAULT>//import java.util.List;</DEFAULT>
+          </PARAMETER>
   </ADVANCED_PARAMETERS>
 
 	<CODEGENERATION>
