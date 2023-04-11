@@ -34,20 +34,21 @@
 		<CONNECTOR CTYPE="ROUTE_ENDBLOCK" MAX_INPUT="1" MAX_OUTPUT="0" />
   </CONNECTORS>
 
-  <PARAMETERS>
-	 <PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" NUM_ROW="2" NB_LINES="2">
-	    <DEFAULT>//import java.util.List;</DEFAULT>
-	  </PARAMETER>   
+  <PARAMETERS>   
       <PARAMETER NAME="CODE" FIELD="MEMO_JAVA" REQUIRED="false" NUM_ROW="5" NB_LINES="10" CONTEXT="begin">
 	      <DEFAULT>/*
 * Provide own codes to consume or translate the message exchanges.
 * @param org.apache.camel.Exchange exchange
+*
+* Needed import statements must be added in Advanced settings
 */</DEFAULT>
 	  </PARAMETER>
    </PARAMETERS>
    
    <ADVANCED_PARAMETERS>
-
+      <PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" NUM_ROW="2" NB_LINES="2">
+        <DEFAULT>//import java.util.List;</DEFAULT>
+      </PARAMETER>
    </ADVANCED_PARAMETERS>
 
 	<CODEGENERATION>
