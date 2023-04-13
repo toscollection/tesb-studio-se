@@ -74,12 +74,6 @@ String logMessages = ElementParameterParser.getValue(node, "__LOG_MESSAGES__");
 if (!node.getElementParameter("LOG_MESSAGES").isContextMode()) {
 	// non-dynamic
 	logMessages = "true".equals(logMessages) ? "true" : "false";
-} else {
-    for (IContextParameter ctxParam: params) {
-        if(ctxParam.getName().equals(logMessages.replace("context.", ""))){
-            logMessages = "true".equals(ctxParam.getValue()) ? "true" : "false";
-        }
-    }
 }
 
 boolean isSLEnable = paramsHelper.getBoolParam("__SERVICE_LOCATOR__");
@@ -226,9 +220,10 @@ try {
 		features_<%=cid%>.add(samEventFeature_<%=cid%>);
 	<% } %>
 
-	<% if ("true".equals(logMessages)) { %>
+    boolean log_messages_<%=cid%> = Boolean.valueOf(<%=logMessages%>);
+	if (log_messages_<%=cid%>) {
 		features_<%=cid%>.add(new org.apache.cxf.feature.LoggingFeature());
-	<% } %>
+	}
 
 	<% if (useBusinessCorrelation) { %>
 		class EsbJobCorrelationCallbackHandler implements org.talend.esb.policy.correlation.CorrelationIDCallbackHandler {
