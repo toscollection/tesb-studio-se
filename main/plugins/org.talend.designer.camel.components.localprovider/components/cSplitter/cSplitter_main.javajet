@@ -30,6 +30,7 @@ imports="
 	
 	String timeout=ElementParameterParser.getValue(node, "__TIMEOUT__");
 	boolean hasTimeout=(timeout!=null&&timeout.matches("\\s*\\d+\\s*"));
+	boolean hasTimeoutFromContext=(timeout!=null&&timeout.startsWith("context."));
 	String exp = "";
 	if (useResultClassType) {
 		exp = getExpression(language, expression, cid, useNamespaces, resultClassType);
@@ -57,6 +58,7 @@ imports="
 		if(streaming){				%>.streaming()<%										}
 		if(shareUnitOfWork){		%>.shareUnitOfWork()<%									}
 		if(hasTimeout){				%>.timeout(<%=timeout%>)<%								}
+			else if(hasTimeoutFromContext){%>.timeout(<%=ElementParameterParser.getValue(node, "__TIMEOUT__")%>)<%								}
 		if("jsonpath".equals(language) && returnString){ %>.marshal().json(org.apache.camel.model.dataformat.JsonLibrary.Jackson)<% }
 	}
 %>
