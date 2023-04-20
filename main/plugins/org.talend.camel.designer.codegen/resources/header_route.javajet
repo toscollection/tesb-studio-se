@@ -2905,8 +2905,8 @@ if (isProvider) {
                 final String cid = node.getUniqueName();
                 NodeParamsHelper helper = new NodeParamsHelper(node);
 
-                String driverClassName = helper.getStringParam("__DRIVER_CLASS_NAME__");
-                String jdbcURL = helper.getStringParam("__JDBC_URL__");
+                String driverClassName = helper.getStringParam("__DRIVER_CLASS__");
+                String jdbcURL = helper.getStringParam("__URL__");
                 boolean useDsAlias = helper.getBoolParam("__USE_DATA_SOURCE_ALIAS__");
                 boolean authRequired = helper.getBoolParam("__AUTH_REQUIRED__");
                 String dsAlias = helper.getStringParam("__DATA_SOURCE_ALIAS__");
@@ -2927,8 +2927,8 @@ if (isProvider) {
                         ds_<%=cid%>.setUrl(<%=jdbcURL%>);
 <%
                         if (authRequired) {
-                            String username = helper.getStringParam("__SQL_USERNAME__");
-                            String passwordFieldName = "__SQL_PASSWORD__";
+                            String username = helper.getStringParam("__USER__");
+                            String passwordFieldName = "__PASS__";
 %>
                         <%@ include file="@{org.talend.designer.components.localprovider}/components/templates/password.javajet"%>
                         ds_<%=cid%>.setUsername(<%=username%>);
