@@ -28,7 +28,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <cxf.version>3.4.10</cxf.version>
-    <spring.version>5.3.26</spring.version>
+    <spring.version>5.3.27</spring.version>
     <scala.version>2.11.7</scala.version>
     <jettison.version>1.5.4</jettison.version>
     <tesb.version>8.0.1</tesb.version>
