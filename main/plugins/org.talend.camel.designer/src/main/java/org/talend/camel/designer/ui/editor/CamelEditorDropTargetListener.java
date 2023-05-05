@@ -36,14 +36,21 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.ui.IEditorInput;
+import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.core.CorePlugin;
 import org.talend.core.model.components.ComponentUtilities;
 import org.talend.core.model.components.EComponentType;
 import org.talend.core.model.components.IComponent;
 import org.talend.core.model.context.ContextUtils;
+import org.talend.core.model.metadata.IMetadataTable;
+import org.talend.core.model.metadata.builder.ConvertionHelper;
+import org.talend.core.model.metadata.builder.connection.Connection;
+import org.talend.core.model.process.EParameterFieldType;
 import org.talend.core.model.process.IContextManager;
+import org.talend.core.model.process.IElementParameter;
 import org.talend.core.model.process.INode;
 import org.talend.core.model.process.IProcess2;
+import org.talend.core.model.properties.ConnectionItem;
 import org.talend.core.model.properties.ContextItem;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
@@ -53,13 +60,16 @@ import org.talend.core.model.utils.IComponentName;
 import org.talend.core.model.utils.IDragAndDropServiceHandler;
 import org.talend.core.repository.RepositoryComponentManager;
 import org.talend.core.ui.editor.JobEditorInput;
+import org.talend.cwm.helper.ConnectionHelper;
 import org.talend.designer.core.DesignerPlugin;
 import org.talend.designer.core.i18n.Messages;
 import org.talend.designer.core.model.components.EParameterName;
+import org.talend.designer.core.model.components.EmfComponent;
 import org.talend.designer.core.model.utils.emf.talendfile.impl.ContextParameterTypeImpl;
 import org.talend.designer.core.model.utils.emf.talendfile.impl.ContextTypeImpl;
 import org.talend.designer.core.ui.editor.AbstractTalendEditor;
 import org.talend.designer.core.ui.editor.TalendEditor;
+import org.talend.designer.core.ui.editor.cmd.ChangeValuesFromRepository;
 import org.talend.designer.core.ui.editor.cmd.CreateNodeContainerCommand;
 import org.talend.designer.core.ui.editor.cmd.PropertyChangeCommand;
 import org.talend.designer.core.ui.editor.nodecontainer.NodeContainer;
@@ -72,6 +82,7 @@ import org.talend.designer.core.ui.preferences.TalendDesignerPrefConstants;
 import org.talend.metadata.managment.ui.utils.ConnectionContextHelper;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.RepositoryPlugin;
+import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
 
@@ -167,6 +178,14 @@ public class CamelEditorDropTargetListener extends TalendEditorDropTargetListene
                     selectSourceList.add(obj);
                     isContextSource = true;
                 }
+                // Check if API Definition Metadata
+                ERepositoryObjectType type = sourceNode.getObjectType();
+                ERepositoryObjectType restType = ERepositoryObjectType.valueOf(ERepositoryObjectType.class,
+                        "METADATA_DATASERVICES_REST");
+                if (restType != null && type.equals(restType)) {
+                	selectSourceList.add(obj);
+                }
+                
             } else if (obj instanceof PaletteEditPart) {
                 selectSourceList.add(obj);
                 Object newObject = ((CreateRequest) getTargetRequest()).getNewObject();
@@ -378,7 +397,61 @@ public class CamelEditorDropTargetListener extends TalendEditorDropTargetListene
     }
 
     private List<Command> createRefreshingPropertiesCommand(CompoundCommand cc, RepositoryNode selectedNode, Node node) {
-        if (selectedNode.getObject().getProperty().getItem() instanceof ProcessItem) {
+        
+        if (selectedNode.getObject().getProperty().getItem() instanceof ConnectionItem) {
+            String propertyId = selectedNode.getObject().getProperty().getId();
+            ConnectionItem originalConnectionItem = (ConnectionItem) selectedNode.getObject().getProperty().getItem();
+            ConnectionItem connectionItem = originalConnectionItem;
+            Connection originalConnection = connectionItem.getConnection();
+            Connection connection = connectionItem.getConnection();
+            
+	        IElementParameter propertyParam = node.getElementParameterFromField(EParameterFieldType.PROPERTY_TYPE);
+	        if (propertyParam != null) {
+	            propertyParam.getChildParameters().get(EParameterName.PROPERTY_TYPE.getName()).setValue(EmfComponent.REPOSITORY);
+	            propertyParam.getChildParameters().get(EParameterName.REPOSITORY_PROPERTY_TYPE.getName()).setValue(propertyId);
+	        }
+	        IProxyRepositoryFactory factory = DesignerPlugin.getDefault().getProxyRepositoryFactory();
+	
+	        Map<String, IMetadataTable> repositoryTableMap = new HashMap<String, IMetadataTable>();
+	
+	        if (!originalConnection.isReadOnly()) {
+	            for (Object tableObj : ConnectionHelper.getTables(originalConnection)) {
+	                org.talend.core.model.metadata.builder.connection.MetadataTable table;
+	
+	                table = (org.talend.core.model.metadata.builder.connection.MetadataTable) tableObj;
+	
+	                if (factory.getStatus(originalConnectionItem) != ERepositoryStatus.DELETED) {
+	                    if (!factory.isDeleted(table)) {
+	                        String value = table.getId();
+	                        IMetadataTable newTable = ConvertionHelper.convert(table);
+	                        repositoryTableMap.put(value, newTable);
+	                    }
+	                }
+	            }
+	        }
+	        // DesignerPlugin.getDefault().getProxyRepositoryFactory().getLastVersion("")
+	        if (propertyParam != null) {
+	            // command used to set property type
+	            IMetadataTable metadataTable = null;
+	            // if (selectedNode.getContentType() == ERepositoryObjectType.METADATA_MDMCONNECTION
+	            // && selectedNode.getObjectType() == ERepositoryObjectType.METADATA_CON_TABLE) {
+	            if (selectedNode.getObject() instanceof IMetadataTable) {
+	                metadataTable = (IMetadataTable) selectedNode.getObject();
+	                if (metadataTable != null && repositoryTableMap.get(metadataTable.getId()) != null) {
+	                    metadataTable = repositoryTableMap.get(metadataTable.getId());
+	                }
+	            }
+	            // }
+	            ChangeValuesFromRepository command1 = new ChangeValuesFromRepository(node, connection, metadataTable,
+	                    propertyParam.getName() + ":" + EParameterName.REPOSITORY_PROPERTY_TYPE.getName(), propertyId, true); //$NON-NLS-1$
+	            command1.setMaps(repositoryTableMap);
+	            if (selectedNode.getProperties(EProperties.CONTENT_TYPE) != ERepositoryObjectType.METADATA_CON_QUERY) {
+	                command1.setGuessQuery(true);
+	            }
+	
+	            cc.add(command1);
+	        }
+        }else if (selectedNode.getObject().getProperty().getItem() instanceof ProcessItem) {
             ProcessItem processItem = (ProcessItem) selectedNode.getObject().getProperty().getItem();
             // command used to set job
             String value = processItem.getProperty().getId();
