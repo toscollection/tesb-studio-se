@@ -185,7 +185,13 @@ public class CamelEditorDropTargetListener extends TalendEditorDropTargetListene
                 if (restType != null && type.equals(restType)) {
                 	selectSourceList.add(obj);
                 }
-                
+
+        // Check if JDBC DB Connection
+				ERepositoryObjectType jdbcConnType = ERepositoryObjectType.valueOf(ERepositoryObjectType.class, "JDBC");
+				if (jdbcConnType != null && type.equals(jdbcConnType)) {
+					selectSourceList.add(obj);
+				}
+
             } else if (obj instanceof PaletteEditPart) {
                 selectSourceList.add(obj);
                 Object newObject = ((CreateRequest) getTargetRequest()).getNewObject();
