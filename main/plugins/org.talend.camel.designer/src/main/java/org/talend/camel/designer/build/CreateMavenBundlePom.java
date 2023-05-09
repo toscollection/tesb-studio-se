@@ -247,9 +247,11 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         // do nothing for route
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addChildrenDependencies(final List<Dependency> dependencies) {
         String parentId = getJobProcessor().getProperty().getId();
+        String parentBuildType = (String) getJobProcessor().getProperty().getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE);
         final Set<JobInfo> clonedChildrenJobInfors = getJobProcessor().getBuildFirstChildrenJobs();
         for (JobInfo jobInfo : clonedChildrenJobInfors) {
             if (jobInfo.getFatherJobInfo() != null && jobInfo.getFatherJobInfo().getJobId().equals(parentId)) {
@@ -303,6 +305,10 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
                 }
                 if(property != null) {
                     buildType = (String) property.getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE);
+                    
+                    if (buildType== null && "ROUTE".equalsIgnoreCase(parentBuildType)){
+                    	property.getAdditionalProperties().put(TalendProcessArgumentConstant.ARG_BUILD_TYPE, "OSGI");
+                    }
                 }
 
                 JobInfo mainJobInfo = LastGenerationInfo.getInstance().getLastMainJob();
