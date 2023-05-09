@@ -412,6 +412,15 @@
           </projecttask>
           <projecttask
                 beforeLogon="false"
+                breaks="8.0.0"
+                class="org.talend.camel.designer.migration.RenameEleParaForcSQLConnectionMigrationTask"
+                description="Rename cSQLConnection component params"
+                id="org.talend.camel.designer.migration.RenameEleParaForcSQLConnectionMigrationTask"
+                name="RenameEleParaForcSQLConnectionMigrationTask"
+                version="8.0.1">
+          </projecttask>
+          <projecttask
+                beforeLogon="false"
                 breaks="7.3.0"
                 class="org.talend.camel.designer.migration.UpdatecKafkaMigrationTask"
                 description="Update options for cKafka component"
