@@ -252,7 +252,10 @@ if (actAsConsumer) {
                 clientFactory.getFeatures().addAll(esbFeatures);
             }
             if (logMessages) {
-                clientFactory.getFeatures().add(new org.apache.cxf.feature.LoggingFeature());
+                org.apache.cxf.ext.logging.LoggingFeature loggingFeature = new  org.apache.cxf.ext.logging.LoggingFeature();
+                loggingFeature.addSensitiveProtocolHeaderNames(java.util.Set.of(org.apache.cxf.helpers.HttpHeaderHelper.AUTHORIZATION));
+                loggingFeature.addSensitiveElementNames(new java.util.HashSet<>(java.util.Arrays.asList("password")));
+                clientFactory.getFeatures().add(loggingFeature);
             }
             if (null != correlationIDCallbackHandler) {
                 clientFactory.getProperties(true).put("correlation-id.callback-handler", correlationIDCallbackHandler);

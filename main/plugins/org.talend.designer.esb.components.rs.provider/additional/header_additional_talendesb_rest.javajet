@@ -51,6 +51,7 @@ boolean isTestContainer=ProcessUtils.isTestContainer(process);
 String className = isTestContainer ? process.getName() + "Test" : process.getName();
 boolean exportTypeSpringBoot = org.talend.designer.runprocess.ProcessorUtilities.isExportJobAsMicroService();
 boolean logMarkerFeatureNeeded = false;
+boolean logFeatureNeeded = false;
 
 List<? extends INode> httpRequestComponentsList = process.getNodesOfType("tRESTRequest");
 if (!httpRequestComponentsList.isEmpty()) {
@@ -1629,9 +1630,9 @@ class Thread4RestServiceProviderEndpoint extends Thread {
 				features.add(new org.talend.esb.policy.correlation.feature.CorrelationIDFeature());
 			<% } %>
 
-			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__LOG_MESSAGES__"))) { logMarkerFeatureNeeded = true; %>
+			<% if (Boolean.valueOf(ElementParameterParser.getValue(node,"__LOG_MESSAGES__"))) { logMarkerFeatureNeeded = true; logFeatureNeeded= true; %>
 				features.add(new LogMarkerFeature());
-				features.add(new org.apache.cxf.feature.LoggingFeature());
+				features.add(new NoAuthInfoLoggingFeature());
 			<% } %>
 
 			sf.setFeatures(features);
@@ -1743,5 +1744,14 @@ class Thread4RestServiceProviderEndpoint extends Thread {
             provider.getOutInterceptors().add(icOut);
             provider.getOutFaultInterceptors().add(icOut);
         }
+    }
+<% } %>
+<% if (logFeatureNeeded) { %>
+    public static final class NoAuthInfoLoggingFeature extends org.apache.cxf.ext.logging.LoggingFeature {
+	    public NoAuthInfoLoggingFeature() {
+		super();
+		addSensitiveProtocolHeaderNames(new java.util.HashSet<>(java.util.Arrays.asList(org.apache.cxf.helpers.HttpHeaderHelper.AUTHORIZATION)));
+		addSensitiveElementNames(new java.util.HashSet<>(java.util.Arrays.asList("password")));
+	    }
     }
 <% } %>
