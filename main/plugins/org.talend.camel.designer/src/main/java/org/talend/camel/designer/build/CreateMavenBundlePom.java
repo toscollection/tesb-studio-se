@@ -72,6 +72,7 @@ import org.talend.designer.maven.utils.PomUtil;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.IRunProcessService;
 import org.talend.designer.runprocess.ItemCacheManager;
+import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.repository.ProjectManager;
 import org.talend.utils.io.FilesUtils;
 
@@ -396,14 +397,17 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         configuration.addChild(resourcesDir);
         configuration.addChild(featuresFile);
 
-        List<PluginExecution> pluginExecutions = new ArrayList<PluginExecution>();
-        PluginExecution pluginExecution = new PluginExecution();
-        pluginExecution.setId("create-kar");
-        pluginExecution.addGoal("kar");
-        pluginExecution.setConfiguration(configuration);
+        if(!ProcessorUtilities.isCIMode()){
+        	
+        	List<PluginExecution> pluginExecutions = new ArrayList<PluginExecution>();
+        	PluginExecution pluginExecution = new PluginExecution();
+        	pluginExecution.setId("create-kar");
+        	pluginExecution.addGoal("kar");
+        	pluginExecution.setConfiguration(configuration);
 
-        pluginExecutions.add(pluginExecution);
-        plugin.setExecutions(pluginExecutions);
+        	pluginExecutions.add(pluginExecution);
+        	plugin.setExecutions(pluginExecutions);
+        }
 
         List<Dependency> dependencies = new ArrayList<Dependency>();
         Dependency mavensharedDep = new Dependency();
