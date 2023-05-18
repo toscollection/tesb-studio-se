@@ -12,22 +12,34 @@
 // ============================================================================
 package org.talend.camel.designer.codegen;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.talend.camel.designer.codegen.config.ECamelTemplate;
 import org.talend.camel.designer.codegen.i18n.Messages;
 import org.talend.camel.designer.codegen.jet.JetUtil;
 import org.talend.camel.designer.codegen.partgen.PartGeneratorManager;
 import org.talend.camel.designer.codegen.util.NodeUtil;
 import org.talend.camel.model.IRouteProcess;
+import org.talend.core.GlobalServiceRegister;
+import org.talend.core.model.metadata.types.JavaTypesManager;
 import org.talend.core.model.process.IContext;
+import org.talend.core.model.process.IContextParameter;
 import org.talend.core.model.process.INode;
+import org.talend.core.model.process.IProcess;
+import org.talend.core.model.process.IProcess2;
 import org.talend.core.model.temp.ECodePart;
+import org.talend.core.service.IResourcesDependenciesService;
 import org.talend.designer.codegen.IAloneProcessNodeConfigurer;
 import org.talend.designer.codegen.ICodeGenerator;
 import org.talend.designer.codegen.exception.CodeGeneratorException;
+import org.talend.designer.runprocess.ProcessorUtilities;
 
 public class CamelCodeGenerator implements ICodeGenerator {
 
 	private static final boolean DEBUG = false;
+	
+	private IProcess process;
 
 	private final PartGeneratorManager partGeneratorManager;
 
@@ -47,6 +59,7 @@ public class CamelCodeGenerator implements ICodeGenerator {
             NodeUtil.printForDebug(process.getGeneratingNodes());
         }
         partGeneratorManager = new PartGeneratorManager(process, statistics, trace, options);
+        this.process = process;
     }
 	/**
 	 * Generate the code for the process given to the constructor.
@@ -94,6 +107,38 @@ public class CamelCodeGenerator implements ICodeGenerator {
 	 */
 	@Override
 	public String generateContextCode(IContext designerContext) throws CodeGeneratorException {
+		
+		    IContext designerContextCopy = designerContext.clone();
+		    
+            List<IContextParameter> listParameters = designerContextCopy.getContextParameterList();
+
+            if (listParameters != null) {
+                for (IContextParameter iContextParameter : listParameters) {
+                    if ((JavaTypesManager.RESOURCE.getId().equals(iContextParameter.getType())
+                            || JavaTypesManager.RESOURCE.getLabel().equals(iContextParameter.getType()))
+                            && StringUtils.isNotBlank(iContextParameter.getValue())) {
+                        if (GlobalServiceRegister.getDefault().isServiceRegistered(IResourcesDependenciesService.class)) {
+                            IResourcesDependenciesService resourceService = (IResourcesDependenciesService) GlobalServiceRegister
+                                    .getDefault().getService(IResourcesDependenciesService.class);
+                            String resourcePathForContext = null;
+                            if (process instanceof IProcess2) {
+                                String value = iContextParameter.getValue();
+                                // for runtime
+                                if (!ProcessorUtilities.isExportConfig()) {
+                                	iContextParameter.setType(JavaTypesManager.FILE.getId());
+                                }
+                                resourcePathForContext = resourceService.getResourcePathForContext(process, value);
+                            } else {
+                                // for PreviewFileInputContentDataProcess run
+                                resourcePathForContext = resourceService.getResourceItemFilePath(iContextParameter.getValue());
+                            }
+                            if (resourcePathForContext != null) {
+                            	iContextParameter.setValue(resourcePathForContext);
+                            }
+                        }
+                    }
+                }
+            }
 		return partGeneratorManager.generateContextCode(designerContext);
 	}
 
