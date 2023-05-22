@@ -80,6 +80,8 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
     private static final String POM_FEATURE_XML = "pom-feature.xml";
 
     private static final String POM_CONTROL_BUNDLE_XML = "pom-control-bundle.xml";
+    
+    private static final String MAVEN_CORE_VERSION = "3.8.8";
 
     private Model model;
 
@@ -408,22 +410,22 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         Dependency mavenCoreDep = new Dependency();
         mavenCoreDep.setGroupId("org.apache.maven");
         mavenCoreDep.setArtifactId("maven-core");
-        mavenCoreDep.setVersion("3.8.6");
+        mavenCoreDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency mavenCompatDep = new Dependency();
         mavenCompatDep.setGroupId("org.apache.maven");
         mavenCompatDep.setArtifactId("maven-compat");
-        mavenCompatDep.setVersion("3.8.6");
+        mavenCompatDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency mavenSettingsDep = new Dependency();
         mavenSettingsDep.setGroupId("org.apache.maven");
         mavenSettingsDep.setArtifactId("maven-settings");
-        mavenSettingsDep.setVersion("3.8.6");
+        mavenSettingsDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency mavenSettingsBdDep = new Dependency();
         mavenSettingsBdDep.setGroupId("org.apache.maven");
         mavenSettingsBdDep.setArtifactId("maven-settings-builder");
-        mavenSettingsBdDep.setVersion("3.8.6");
+        mavenSettingsBdDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency plexusArchiverDep = new Dependency();
         plexusArchiverDep.setGroupId("org.codehaus.plexus");
@@ -443,7 +445,7 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         Dependency mavenModelDep = new Dependency();
         mavenModelDep.setGroupId("org.apache.maven");
         mavenModelDep.setArtifactId("maven-model");
-        mavenModelDep.setVersion("3.8.6");
+        mavenModelDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency commonsCodecDep = new Dependency();
         commonsCodecDep.setGroupId("commons-codec");
