@@ -527,7 +527,33 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         velocityDep.setGroupId("org.apache.velocity");
         velocityDep.setArtifactId("velocity-engine-core");
         velocityDep.setVersion("2.3");
-
+        
+        //org.apache.karaf.shell.console---to remove dependency to sshd-osgi, then spring-framwork-bom
+        Dependency karafShellConsoleDep = new Dependency();
+        karafShellConsoleDep.setGroupId("org.apache.karaf.shell");
+        karafShellConsoleDep.setArtifactId("org.apache.karaf.shell.console");
+        karafShellConsoleDep.setVersion("4.2.10");
+        List<Exclusion> karafShellConsoleExclusionList = new ArrayList<Exclusion>();
+        Exclusion sshdExclusion1 = new Exclusion();
+        sshdExclusion1.setGroupId("org.apache.sshd");
+        sshdExclusion1.setArtifactId("sshd-osgi");
+        karafShellConsoleExclusionList.add(sshdExclusion1);
+        karafShellConsoleDep.setExclusions(karafShellConsoleExclusionList);
+        dependencies.add(karafShellConsoleDep);
+        
+        //org.apache.karaf.shell.core---to remove dependency to sshd-osgi, then spring-framwork-bom
+        Dependency karafShellCoreDep = new Dependency();
+        karafShellCoreDep.setGroupId("org.apache.karaf.shell");
+        karafShellCoreDep.setArtifactId("org.apache.karaf.shell.core");
+        karafShellCoreDep.setVersion("4.2.10");
+        List<Exclusion> karafShellCoreExclusionList = new ArrayList<Exclusion>();
+        Exclusion sshdExclusion = new Exclusion();
+        sshdExclusion.setGroupId("org.apache.sshd");
+        sshdExclusion.setArtifactId("sshd-osgi");
+        karafShellCoreExclusionList.add(sshdExclusion);
+        karafShellCoreDep.setExclusions(karafShellCoreExclusionList);
+        dependencies.add(karafShellCoreDep);
+        
         dependencies.add(mavensharedDep);
         dependencies.add(commonsioDep);
         dependencies.add(httpclientDep);
