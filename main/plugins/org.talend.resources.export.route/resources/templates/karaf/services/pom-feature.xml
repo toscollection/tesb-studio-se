@@ -102,6 +102,28 @@
                         <artifactId>velocity-engine-core</artifactId>
                         <version>2.3</version>
                     </dependency>
+                    <dependency>
+						<groupId>org.apache.karaf.shell</groupId>
+						<artifactId>org.apache.karaf.shell.console</artifactId>
+						<version>4.2.10</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.apache.sshd</groupId>
+								<artifactId>sshd-osgi</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.karaf.shell</groupId>
+						<artifactId>org.apache.karaf.shell.core</artifactId>
+						<version>4.2.10</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.apache.sshd</groupId>
+								<artifactId>sshd-osgi</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
                 </dependencies>
                 <executions>
                     <execution>
