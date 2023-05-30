@@ -2,7 +2,7 @@ public class CLASS {
 
 	public String getExpression(String language, String expression, String cidd, String useNamespacess, String resultClassType) {
 		if ("bean".equals(language)) {
-			return "method(" + expression + ")";
+			return "method(" + expression.replaceAll("^\"|\"$", "") + ".class" + ")";
 		} else if ("correlation".equals(language)) {
 			return "simple(\"${in.header.CamelCxfMessage[CorrelationID]}\", String.class)";
 		} else if ("xpath".equals(language)) {
