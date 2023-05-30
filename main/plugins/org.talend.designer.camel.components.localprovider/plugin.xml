@@ -22,7 +22,7 @@
 
     <extension point="org.talend.designer.camel.dependencies.bundleClasspath">
         <classpath name="cMQConnectionFactory"
-            parameter="${tesb-qpid-jms-client},${tesb-proton-j},${tesb-netty-buffer},${tesb-netty-common},${tesb-netty-handler},${tesb-netty-codec},${tesb-netty-transport},${tesb-netty-codec-http},${tesb-netty-transport-native-epoll},${tesb-netty-resolver}">
+            parameter="${tesb-qpid-jms-client},${tesb-proton-j},${tesb-netty-buffer},${tesb-netty-common},${tesb-netty-handler},${tesb-netty-codec},${tesb-netty-transport},${tesb-netty-codec-http},${tesb-netty-transport-native-epoll},${tesb-netty-resolver},${tesb-netty-transport-native-unix-common}">
             <predicate
                 attributeName="MQ_TYPE"
                 attributeValue="AMQP">
@@ -309,6 +309,12 @@
             uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-netty-codec-http}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="${tesb-netty-transport-native-unix-common}"
+            id="netty-transport-native-unix-common"
+            mvn_uri="mvn:io.netty/netty-transport-native-unix-common/${io-netty.version}"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-netty-transport-native-unix-common}"
+            bundleID="" />
+       <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
             name="${tesb-netty-transport-native-epoll}"
             id="netty-transport-native-epoll"
             mvn_uri="mvn:io.netty/netty-transport-native-epoll/${io-netty.version}"
@@ -336,6 +342,7 @@
             <library id="netty-transport" />
             <library id="netty-codec-http" />
             <library id="netty-transport-native-epoll" />
+            <library id="netty-transport-native-unix-common" />
             <library id="netty-resolver" />
         </libraryNeededGroup>
 
