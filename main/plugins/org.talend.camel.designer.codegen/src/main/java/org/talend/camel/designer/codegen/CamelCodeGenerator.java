@@ -139,7 +139,7 @@ public class CamelCodeGenerator implements ICodeGenerator {
                     }
                 }
             }
-		return partGeneratorManager.generateContextCode(designerContext);
+		return partGeneratorManager.generateContextCode(designerContextCopy);
 	}
 
 	@Override
