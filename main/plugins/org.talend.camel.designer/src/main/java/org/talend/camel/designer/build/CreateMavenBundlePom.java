@@ -27,6 +27,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.maven.model.Activation;
 import org.apache.maven.model.ActivationProperty;
 import org.apache.maven.model.Build;
+import org.apache.maven.model.BuildBase;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
@@ -188,8 +189,26 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
             Build featureModelBuild = new Build();
 
 
-            featureModelBuild.addPlugin(addFeaturesMavenPlugin(bundleModel.getProperties().getProperty("talend.job.finalName")));
+            List<Profile> profiles = new ArrayList<Profile>();
 
+            Profile profile = new Profile();
+            profile.setId("kar-publisher");
+
+            Activation activation = new Activation();
+            activation.setActiveByDefault(false);
+
+            ActivationProperty property = new ActivationProperty();
+            property.setName("!altDeploymentRepository");
+            activation.setProperty(property);
+            profile.setActivation(activation);
+
+            BuildBase buildBase = new BuildBase();
+            buildBase.addPlugin(addFeaturesMavenPlugin(bundleModel.getProperties().getProperty("talend.job.finalName")));
+            profile.setBuild(buildBase);
+
+            profiles.add(profile);
+
+            featureModel.setProfiles(profiles);
             featureModelBuild.addPlugin(addOsgiHelperMavenPlugin());
             
             // featureModelBuild.addPlugin(addDeployFeatureMavenPlugin(featureModel.getArtifactId(), featureModel.getVersion(), publishAsSnapshot));
