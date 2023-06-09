@@ -88,7 +88,7 @@
             <ref component-id="eventFeature" />
 #end ## ($useSAM)
 #if ($logMessages)
-            <bean class="${job.className}.NoAuthInfoLoggingFeature" />
+            <bean class="org.talend.esb.security.logging.NoAuthInfoLoggingFeature" />
 #end ## ($logMessages)
 #if ($useSecurityToken || $useSecuritySAML)
             <p:policies xmlns:p="http://cxf.apache.org/policy">

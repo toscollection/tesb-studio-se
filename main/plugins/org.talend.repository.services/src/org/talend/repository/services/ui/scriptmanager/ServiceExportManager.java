@@ -192,7 +192,7 @@ public class ServiceExportManager extends JobJavaScriptOSGIForESBManager {
                 "javax.xml.ws,org.talend.esb.job.controller" //$NON-NLS-1$
                         + ",org.osgi.service.cm;version=\"[1.3,2)\"" //$NON-NLS-1$
                         + ",org.apache.cxf,org.apache.cxf.metrics" //$NON-NLS-1$
-                        + (logMessages ? ",org.apache.cxf.feature" : "") //$NON-NLS-1$
+                        + (logMessages ? ",org.apache.cxf.feature,org.apache.cxf.ext.logging,org.talend.esb.security.logging" : "") //$NON-NLS-1$
                         + (useSL ? ",org.talend.esb.servicelocator.cxf" : "") //$NON-NLS-1$
                         + (useSAM ? ",org.talend.esb.sam.agent.feature" : "") //$NON-NLS-1$
                         + (useBusinessCorrelation ? ",org.talend.esb.policy.correlation.feature" : "") //$NON-NLS-1$
