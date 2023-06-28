@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Talend ESB Library 2023-07
+Bundle-Name: Talend ESB Library 2023-07-2
 Bundle-Version: 7.3.1.qualifier
 Bundle-SymbolicName: org.talend.libraries.esb;singleton:=true
 Bundle-ActivationPolicy: lazy
