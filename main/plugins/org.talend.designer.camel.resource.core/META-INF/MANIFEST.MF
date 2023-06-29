@@ -9,7 +9,10 @@ Require-Bundle: org.talend.core,
  org.talend.camel.model,
  org.talend.core.repository,
  org.talend.commons.runtime,
- org.talend.core.runtime
+ org.talend.core.runtime,
+ org.eclipse.equinox.common,
+ org.eclipse.core.resources,
+ org.talend.studio.studio-utils
 Bundle-ActivationPolicy: lazy
 Export-Package: org.talend.designer.camel.resource.core.model,
  org.talend.designer.camel.resource.core.util

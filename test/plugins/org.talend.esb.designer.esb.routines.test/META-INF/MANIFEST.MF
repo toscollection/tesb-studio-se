@@ -6,5 +6,6 @@ Bundle-Version: 8.8.8.qualifier
 Fragment-Host: org.talend.designer.esb.routines
 Require-Bundle: org.talend.testutils,
  org.talend.model,
- org.talend.designer.core
+ org.talend.designer.core,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

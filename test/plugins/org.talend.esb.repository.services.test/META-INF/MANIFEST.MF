@@ -7,6 +7,7 @@ Fragment-Host: org.talend.repository.services
 Require-Bundle: org.talend.testutils,
  org.talend.model,
  org.talend.designer.core,
- org.talend.core.repository
+ org.talend.core.repository,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.apache.commons.io

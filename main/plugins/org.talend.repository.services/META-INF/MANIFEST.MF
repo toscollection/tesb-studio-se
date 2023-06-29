@@ -43,7 +43,20 @@ Require-Bundle: org.apache.commons.collections,
  org.eclipse.debug.ui,
  org.talend.camel.designer,
  org.eclipse.jdt.core,
- org.eclipse.jdt.debug
+ org.eclipse.jdt.debug,
+ org.eclipse.ui.workbench,
+ org.eclipse.equinox.common,
+ org.talend.commons.runtime,
+ org.talend.common.ui.runtime,
+ org.eclipse.jface,
+ org.talend.studio.studio-utils,
+ org.talend.core.repository,
+ org.eclipse.core.runtime,
+ org.apache.log4j,
+ org.apache.commons.lang3,
+ org.talend.repository.view,
+ org.eclipse.core.expressions,
+ org.eclipse.ui.views.properties.tabbed
 Import-Package: org.talend.utils.wsdl
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.

@@ -44,7 +44,14 @@ Require-Bundle: org.talend.commons.ui,
  org.talend.libraries.custom,
  org.talend.librariesmanager,
  org.eclipse.jdt.ui,
- org.talend.utils
+ org.talend.utils,
+ org.talend.commons.runtime,
+ org.apache.log4j,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.gef,
+ org.apache.commons.lang3,
+ org.talend.studio.studio-utils,
+ org.talend.repository.view
 Bundle-ActivationPolicy: lazy
 Export-Package: org.talend.camel.designer.dialog;
   uses:="org.talend.repository.model,

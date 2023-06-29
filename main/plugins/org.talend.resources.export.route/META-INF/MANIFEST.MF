@@ -35,7 +35,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.talend.utils,
  org.talend.camel.model,
- org.talend.designer.camel.resource.core
+ org.talend.designer.camel.resource.core,
+ org.talend.commons.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.
 Eclipse-BundleShape: dir
