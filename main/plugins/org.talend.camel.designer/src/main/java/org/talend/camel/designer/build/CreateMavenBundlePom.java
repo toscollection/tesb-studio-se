@@ -510,7 +510,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency guavaDep = new Dependency();
         guavaDep.setGroupId("com.google.guava");
         guavaDep.setArtifactId("guava");
-        guavaDep.setVersion("30.0-jre");
+        guavaDep.setVersion("32.0.1-jre");
 
         Dependency slf4jDep = new Dependency();
         slf4jDep.setGroupId("org.slf4j");
