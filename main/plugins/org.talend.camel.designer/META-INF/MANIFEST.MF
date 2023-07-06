@@ -53,7 +53,10 @@ Require-Bundle: org.talend.commons.ui,
  org.talend.studio.studio-utils,
  org.talend.repository.view,
  org.talend.core.runtime,
- org.talend.themes.core
+ org.talend.themes.core,
+ org.eclipse.emf.ecore,
+ org.talend.cwm.mip,
+ org.eclipse.emf.ecore.xmi
 Bundle-ActivationPolicy: lazy
 Export-Package: org.talend.camel.designer.dialog;
   uses:="org.talend.repository.model,

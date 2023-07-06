@@ -6,11 +6,11 @@ Bundle-Version: 8.8.8.qualifier
 Bundle-ClassPath: .
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.emf.ecore.xmi;visibility:=reexport,
- org.talend.model;visibility:=reexport,
- org.talend.cwm.mip;visibility:=reexport,
- org.eclipse.gmf.runtime.notation;visibility:=reexport,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.xmi,
+ org.talend.model,
+ org.talend.cwm.mip,
+ org.eclipse.gmf.runtime.notation,
  org.talend.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %providerName

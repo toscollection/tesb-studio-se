@@ -57,7 +57,9 @@ Require-Bundle: org.apache.commons.collections,
  org.talend.repository.view,
  org.eclipse.core.expressions,
  org.eclipse.ui.views.properties.tabbed,
- org.talend.themes.core
+ org.talend.themes.core,
+ org.talend.cwm.mip,
+ org.eclipse.emf.ecore.xmi
 Import-Package: org.talend.utils.wsdl
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.

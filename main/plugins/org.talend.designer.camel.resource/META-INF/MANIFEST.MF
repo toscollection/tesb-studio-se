@@ -23,7 +23,9 @@ Require-Bundle: org.talend.commons.ui,
  org.talend.core.runtime,
  org.eclipse.jface,
  org.eclipse.ui.workbench,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.talend.model,
+ org.eclipse.emf.ecore
 Bundle-ActivationPolicy: lazy
 Import-Package: org.apache.commons.io
 Bundle-Vendor: .Talend SA.
