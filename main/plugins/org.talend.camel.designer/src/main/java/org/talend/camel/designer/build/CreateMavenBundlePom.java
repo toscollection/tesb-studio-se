@@ -27,6 +27,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.maven.model.Activation;
 import org.apache.maven.model.ActivationProperty;
 import org.apache.maven.model.Build;
+import org.apache.maven.model.BuildBase;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
@@ -72,7 +73,6 @@ import org.talend.designer.maven.utils.PomUtil;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.IRunProcessService;
 import org.talend.designer.runprocess.ItemCacheManager;
-import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.repository.ProjectManager;
 import org.talend.utils.io.FilesUtils;
 
@@ -88,6 +88,8 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
     private static final String JOB_FINAL_NAME = "talend.job.finalName";
 
     private static final String PATH_ROUTES = "resources/templates/karaf/routes/";
+    
+    private static final String MAVEN_CORE_VERSION = "3.8.8";
 
     private Model bundleModel;
 
@@ -187,8 +189,26 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
             Build featureModelBuild = new Build();
 
 
-            featureModelBuild.addPlugin(addFeaturesMavenPlugin(bundleModel.getProperties().getProperty("talend.job.finalName")));
+            List<Profile> profiles = new ArrayList<Profile>();
 
+            Profile profile = new Profile();
+            profile.setId("kar-publisher");
+
+            Activation activation = new Activation();
+            activation.setActiveByDefault(false);
+
+            ActivationProperty property = new ActivationProperty();
+            property.setName("!altDeploymentRepository");
+            activation.setProperty(property);
+            profile.setActivation(activation);
+
+            BuildBase buildBase = new BuildBase();
+            buildBase.addPlugin(addFeaturesMavenPlugin(bundleModel.getProperties().getProperty("talend.job.finalName")));
+            profile.setBuild(buildBase);
+
+            profiles.add(profile);
+
+            featureModel.setProfiles(profiles);
             featureModelBuild.addPlugin(addOsgiHelperMavenPlugin());
             
             // featureModelBuild.addPlugin(addDeployFeatureMavenPlugin(featureModel.getArtifactId(), featureModel.getVersion(), publishAsSnapshot));
@@ -397,17 +417,14 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         configuration.addChild(resourcesDir);
         configuration.addChild(featuresFile);
 
-        if(!ProcessorUtilities.isCIMode()){
-        	
-        	List<PluginExecution> pluginExecutions = new ArrayList<PluginExecution>();
-        	PluginExecution pluginExecution = new PluginExecution();
-        	pluginExecution.setId("create-kar");
-        	pluginExecution.addGoal("kar");
-        	pluginExecution.setConfiguration(configuration);
+        List<PluginExecution> pluginExecutions = new ArrayList<PluginExecution>();
+        PluginExecution pluginExecution = new PluginExecution();
+        pluginExecution.setId("create-kar");
+        pluginExecution.addGoal("kar");
+        pluginExecution.setConfiguration(configuration);
 
-        	pluginExecutions.add(pluginExecution);
-        	plugin.setExecutions(pluginExecutions);
-        }
+        pluginExecutions.add(pluginExecution);
+        plugin.setExecutions(pluginExecutions);
 
         List<Dependency> dependencies = new ArrayList<Dependency>();
         Dependency mavensharedDep = new Dependency();
@@ -448,22 +465,22 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency mavenCoreDep = new Dependency();
         mavenCoreDep.setGroupId("org.apache.maven");
         mavenCoreDep.setArtifactId("maven-core");
-        mavenCoreDep.setVersion("3.8.6");
+        mavenCoreDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency mavenCompatDep = new Dependency();
         mavenCompatDep.setGroupId("org.apache.maven");
         mavenCompatDep.setArtifactId("maven-compat");
-        mavenCompatDep.setVersion("3.8.6");
+        mavenCompatDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency mavenSettingsDep = new Dependency();
         mavenSettingsDep.setGroupId("org.apache.maven");
         mavenSettingsDep.setArtifactId("maven-settings");
-        mavenSettingsDep.setVersion("3.8.6");
+        mavenSettingsDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency mavenSettingsBdDep = new Dependency();
         mavenSettingsBdDep.setGroupId("org.apache.maven");
         mavenSettingsBdDep.setArtifactId("maven-settings-builder");
-        mavenSettingsBdDep.setVersion("3.8.6");
+        mavenSettingsBdDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency plexusArchiverDep = new Dependency();
         plexusArchiverDep.setGroupId("org.codehaus.plexus");
@@ -483,7 +500,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency mavenModelDep = new Dependency();
         mavenModelDep.setGroupId("org.apache.maven");
         mavenModelDep.setArtifactId("maven-model");
-        mavenModelDep.setVersion("3.8.6");
+        mavenModelDep.setVersion(MAVEN_CORE_VERSION);
 
         Dependency commonsCodecDep = new Dependency();
         commonsCodecDep.setGroupId("commons-codec");
@@ -493,7 +510,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency guavaDep = new Dependency();
         guavaDep.setGroupId("com.google.guava");
         guavaDep.setArtifactId("guava");
-        guavaDep.setVersion("30.0-jre");
+        guavaDep.setVersion("32.0.1-jre");
 
         Dependency slf4jDep = new Dependency();
         slf4jDep.setGroupId("org.slf4j");
@@ -525,7 +542,33 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         velocityDep.setGroupId("org.apache.velocity");
         velocityDep.setArtifactId("velocity-engine-core");
         velocityDep.setVersion("2.3");
-
+        
+        //org.apache.karaf.shell.console---to remove dependency to sshd-osgi, then spring-framwork-bom
+        Dependency karafShellConsoleDep = new Dependency();
+        karafShellConsoleDep.setGroupId("org.apache.karaf.shell");
+        karafShellConsoleDep.setArtifactId("org.apache.karaf.shell.console");
+        karafShellConsoleDep.setVersion("4.2.10");
+        List<Exclusion> karafShellConsoleExclusionList = new ArrayList<Exclusion>();
+        Exclusion sshdExclusion1 = new Exclusion();
+        sshdExclusion1.setGroupId("org.apache.sshd");
+        sshdExclusion1.setArtifactId("sshd-osgi");
+        karafShellConsoleExclusionList.add(sshdExclusion1);
+        karafShellConsoleDep.setExclusions(karafShellConsoleExclusionList);
+        dependencies.add(karafShellConsoleDep);
+        
+        //org.apache.karaf.shell.core---to remove dependency to sshd-osgi, then spring-framwork-bom
+        Dependency karafShellCoreDep = new Dependency();
+        karafShellCoreDep.setGroupId("org.apache.karaf.shell");
+        karafShellCoreDep.setArtifactId("org.apache.karaf.shell.core");
+        karafShellCoreDep.setVersion("4.2.10");
+        List<Exclusion> karafShellCoreExclusionList = new ArrayList<Exclusion>();
+        Exclusion sshdExclusion = new Exclusion();
+        sshdExclusion.setGroupId("org.apache.sshd");
+        sshdExclusion.setArtifactId("sshd-osgi");
+        karafShellCoreExclusionList.add(sshdExclusion);
+        karafShellCoreDep.setExclusions(karafShellCoreExclusionList);
+        dependencies.add(karafShellCoreDep);
+        
         dependencies.add(mavensharedDep);
         dependencies.add(commonsioDep);
         dependencies.add(httpclientDep);

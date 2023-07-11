@@ -157,7 +157,7 @@ imports="
 		}else{
 			contentType = "\""+contentType+"\"";
 		}
-		if(("POST".equals(method)||"PUT".equals(method))){
+		if(("POST".equals(method)||"PUT".equals(method)||"PATCH".equals(method))){
 			if("true".equals(plainTextStyle)||"true".equals(noContentStyle)){
 				sb1.append(".setHeader(\"Content-Type\", constant("+ contentType + "))");
 				if("true".equals(plainTextStyle)){

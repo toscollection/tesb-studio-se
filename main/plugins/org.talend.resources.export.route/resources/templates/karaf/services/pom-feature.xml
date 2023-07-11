@@ -44,22 +44,22 @@
                     <dependency>
                         <groupId>org.apache.maven</groupId>
                         <artifactId>maven-core</artifactId>
-                        <version>3.8.6</version>		
+                        <version>3.8.8</version>		
                     </dependency>       
                     <dependency>
                         <groupId>org.apache.maven</groupId>
                         <artifactId>maven-compat</artifactId>
-                        <version>3.8.6</version>
+                        <version>3.8.8</version>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.maven</groupId>
                         <artifactId>maven-settings</artifactId>
-                        <version>3.8.6</version>
+                        <version>3.8.8</version>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.maven</groupId>
                         <artifactId>maven-settings-builder</artifactId>
-                        <version>3.8.6</version>
+                        <version>3.8.8</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.plexus</groupId>
@@ -79,7 +79,7 @@
                     <dependency>
                         <groupId>org.apache.maven</groupId>
                         <artifactId>maven-model</artifactId>
-                        <version>3.8.6</version>
+                        <version>3.8.8</version>
                     </dependency>
                     <dependency>
                         <groupId>commons-codec</groupId>
@@ -102,6 +102,28 @@
                         <artifactId>velocity-engine-core</artifactId>
                         <version>2.3</version>
                     </dependency>
+                    <dependency>
+						<groupId>org.apache.karaf.shell</groupId>
+						<artifactId>org.apache.karaf.shell.console</artifactId>
+						<version>4.2.10</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.apache.sshd</groupId>
+								<artifactId>sshd-osgi</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.karaf.shell</groupId>
+						<artifactId>org.apache.karaf.shell.core</artifactId>
+						<version>4.2.10</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.apache.sshd</groupId>
+								<artifactId>sshd-osgi</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
                 </dependencies>
                 <executions>
                     <execution>
