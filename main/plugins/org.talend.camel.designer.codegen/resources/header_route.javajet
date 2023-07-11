@@ -3175,7 +3175,7 @@ if (isProvider) {
                     String username = helper.getStringParam("__AMQP_USERNAME__");
 
 %>
-                    StringBuilder hostValue = new StringBuilder();
+                    StringBuilder hostValue_<%=cid%> = new StringBuilder();
 <%
                     if (host.startsWith("context.")) {
                         String contextKey4host = host.substring(8);
@@ -3183,14 +3183,14 @@ if (isProvider) {
                         String cMQConnectionFactoryHost =(String) context.getProperty("<%=contextKey4host%>");
 
                         if (!cMQConnectionFactoryHost.isEmpty() && (cMQConnectionFactoryHost.startsWith("\"failover") || cMQConnectionFactoryHost.startsWith("failover"))) {
-                            hostValue.append(cMQConnectionFactoryHost);
+                            hostValue_<%=cid%>.append(cMQConnectionFactoryHost);
                         } else {                         
-                            hostValue.append(<%=useSSL%>?"amqps":"amqp");
-                            hostValue.append("://");
-                            hostValue.append(cMQConnectionFactoryHost);
+                            hostValue_<%=cid%>.append(<%=useSSL%>?"amqps":"amqp");
+                            hostValue_<%=cid%>.append("://");
+                            hostValue_<%=cid%>.append(cMQConnectionFactoryHost);
                             if (!<%=port%>.isEmpty()) {
-                                hostValue.append(":");
-                                hostValue.append(<%=port%>);
+                                hostValue_<%=cid%>.append(":");
+                                hostValue_<%=cid%>.append(<%=port%>);
                             }
                         }
 <%                      
@@ -3243,7 +3243,7 @@ if (isProvider) {
 
                     if (ep.length() >= 1) {
 %>
-                    hostValue.append(<%=ep.toString()%>);
+                    hostValue_<%=cid%>.append(<%=ep.toString()%>);
 <%                  
                     }
                     if(useAuth) {
@@ -3256,9 +3256,9 @@ if (isProvider) {
 %>
 
                     <% if (useAuth) {%>
-                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(<%=username%>, decryptedPassword_<%=cid%>, hostValue.toString());
+                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(<%=username%>, decryptedPassword_<%=cid%>, hostValue_<%=cid%>.toString());
                     <%} else {%>
-                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(hostValue.toString());
+                        org.apache.qpid.jms.JmsConnectionFactory jmsConnFactory<%=cid%> = new org.apache.qpid.jms.JmsConnectionFactory(hostValue_<%=cid%>.toString());
                     <%}%>
 
                     if(camelContext.getComponent(<%=name%>)==null){
