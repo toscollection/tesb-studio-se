@@ -3303,42 +3303,23 @@ if (isProvider) {
                             config.setMqttVersion(<%=helper.getIntParam("__MQTT_VERSION__")%>);
                             config.setQos(<%=helper.getIntParam("__MQTT_QOS__")%>);
                             <%if("true".equals(helper.getStringParam("__MQTT_SSL__"))){%>
-                                javax.net.ssl.TrustManagerFactory tmf = javax.net.ssl.TrustManagerFactory
-                                .getInstance(javax.net.ssl.TrustManagerFactory
-                                        .getDefaultAlgorithm());
-
-                                java.io.FileInputStream fis = new java.io.FileInputStream(
-                                        <%=helper.getStringParam("__MQTT_SSL_TRUST_STORE__")%>);
-                                java.security.KeyStore ks = java.security.KeyStore
-                                        .getInstance(java.security.KeyStore.getDefaultType());
-                                <%String passwordFieldName = "__MQTT_SSL_TRUST_STORE_PASSWORD__";%>
-                                <%@ include file="@{org.talend.designer.components.localprovider}/components/templates/password.javajet"%>
-                                ks.load(fis, decryptedPassword_<%=cid%>.toCharArray());
-                                fis.close();
-                                tmf.init(ks);
-
-                                javax.net.ssl.KeyManagerFactory kmf = javax.net.ssl.KeyManagerFactory
-                                .getInstance(javax.net.ssl.KeyManagerFactory
-                                        .getDefaultAlgorithm());
-
-                                java.io.FileInputStream kfis = new java.io.FileInputStream(
-                                        <%=helper.getStringParam("__MQTT_SSL_KEY_STORE__")%>);
-                                java.security.KeyStore kks = java.security.KeyStore
-                                        .getInstance(java.security.KeyStore.getDefaultType());
-                                <%passwordFieldName = "__MQTT_SSL_KEY_STORE_PASSWORD__";%>
-
+                                java.util.Properties sslProps = new java.util.Properties();
+                                
+                                sslProps.setProperty("com.ibm.ssl.keyStore", <%=helper.getStringParam("__MQTT_SSL_KEY_STORE__")%>);
+                                <%String passwordFieldName = "__MQTT_SSL_KEY_STORE_PASSWORD__";%>
                                 <% if (ElementParameterParser.canEncrypt(node, passwordFieldName)) {%>
                                     String kDecryptedPassword_<%=cid%> = routines.system.PasswordEncryptUtil.decryptPassword(<%=ElementParameterParser.getEncryptedValue(node, passwordFieldName)%>);
                                 <%} else {%>
                                     String kDecryptedPassword_<%=cid%> = <%= ElementParameterParser.getValue(node, passwordFieldName)%>;
                                 <%}%>
-                                kks.load(kfis, kDecryptedPassword_<%=cid%>.toCharArray());
-                                kfis.close();
-                                kmf.init(kks, kDecryptedPassword_<%=cid%>.toCharArray());
+                                sslProps.setProperty("com.ibm.ssl.keyStorePassword", kDecryptedPassword_<%=cid%>);
+                                
+                                sslProps.setProperty("com.ibm.ssl.trustStore", <%=helper.getStringParam("__MQTT_SSL_TRUST_STORE__")%>);
+                                <%passwordFieldName = "__MQTT_SSL_TRUST_STORE_PASSWORD__";%>
+                                <%@ include file="@{org.talend.designer.components.localprovider}/components/templates/password.javajet"%>
+                                sslProps.setProperty("com.ibm.ssl.trustStorePassword", decryptedPassword_<%=cid%>);
 
-                                javax.net.ssl.SSLContext sslContext = javax.net.ssl.SSLContext.getInstance("SSL");
-                                sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new java.security.SecureRandom());
-                                config.setSslContext(sslContext);
+                                config.setSslClientProps(sslProps);
                             <%}%>
                             return endpoint;
                         }
