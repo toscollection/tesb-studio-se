@@ -511,10 +511,10 @@
             bundleID="" /-->
         <!-- ${tesb-guava} -->
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="guava-32.0.1-jre.jar"
+            name="guava-${guava.version}.jar"
             id="guava"
-            mvn_uri="mvn:com.google.guava/guava/32.0.1-jre"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/guava-32.0.1-jre.jar"
+            mvn_uri="mvn:com.google.guava/guava/${guava.version}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/guava-${guava.version}.jar"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="joda-time-${joda-time.version}.jar"
