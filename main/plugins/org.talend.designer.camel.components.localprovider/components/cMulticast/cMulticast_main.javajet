@@ -19,7 +19,6 @@ imports="
 	String timeout  = ElementParameterParser.getValue(node, "__TIMEOUT__");
 	boolean useTimeout = "true".equals(ElementParameterParser.getValue(node, "__USE_TIMEOUT__"));
 	boolean stopOnException="true".equals(ElementParameterParser.getValue(node, "__STOP_ON_EXCEPTION__"));
-	boolean stopOnAggregateException="true".equals(ElementParameterParser.getValue(node, "__STOP_ON_AGGREGATE_EXCEPTION__"));
 	int urisCount = uris.size();
 			
 	List< ? extends IConnection> conns = node.getIncomingConnections();
@@ -49,9 +48,6 @@ imports="
 		if(stopOnException){
 			%>.stopOnException()<%
 		
-		}
-		if(stopOnAggregateException){
-			%>.stopOnAggregateException()<%
 		}
 
 		if(urisCount>0) {

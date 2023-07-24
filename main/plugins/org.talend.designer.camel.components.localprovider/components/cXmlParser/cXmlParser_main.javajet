@@ -18,6 +18,9 @@ imports="
   String cid = node.getUniqueName();
 
 	String xmlLib = ElementParameterParser.getValue(node, "__XML_LIBRARY__");
+	if ("jacksonxml".equals(xmlLib)) {
+		xmlLib = "jacksonXml";
+	}
 	String unmarshalType = ElementParameterParser.getValue(node, "__UNMARSHAL_TYPE__");
 
   if ("custom".equals(xmlLib)) {

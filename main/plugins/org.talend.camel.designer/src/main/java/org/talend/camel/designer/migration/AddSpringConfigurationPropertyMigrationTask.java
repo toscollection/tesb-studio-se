@@ -14,6 +14,7 @@ import org.dom4j.tree.DefaultElement;
 import org.talend.camel.core.model.camelProperties.CamelProcessItem;
 import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.migration.MigrationReportRecorder;
 
 public class AddSpringConfigurationPropertyMigrationTask extends AbstractRouteItemMigrationTask {
 
@@ -66,10 +67,43 @@ public class AddSpringConfigurationPropertyMigrationTask extends AbstractRouteIt
 						bean.add(ignoreExchangeElement);
 						item.setSpringContent(document.asXML());
 						saveItem(item);
+						String message = "Add ignoreExchangeEvents=true property into the jmxEventNotifier bean in Spring xml";
+						generateReportRecord(new MigrationReportRecorder(this,
+								MigrationReportRecorder.MigrationOperationType.ADD, item, null, message,
+								null, null));
+					}
+					break;
+				}
+
+			}
+			for (Element bean : beans) {
+				boolean hasStartDelayedSeconds = false;
+				Element startDelayedSecondsEle = null;
+				if ("org.apache.camel.component.quartz.QuartzComponent".equals(bean.attributeValue("class"))) {
+					List<Element> properties = bean.elements(QName.get("property", SPRING_BEANS_NAMESPACE));
+					for (Element property : properties) {
+						List<Attribute> propertyAttributes = property.attributes();
+						for (Attribute propertyAttribute : propertyAttributes) {
+							if (propertyAttribute.getValue().equals("startDelayedSeconds")) {
+								hasStartDelayedSeconds = true;
+								startDelayedSecondsEle = property;
+								break;
+							}
+						}
+					}
+					if (hasStartDelayedSeconds) {
+						bean.remove(startDelayedSecondsEle);
+						item.setSpringContent(document.asXML());
+						saveItem(item);
+						String message = "Remove startDelayedSeconds property from the bean (QuartzComponent) in Spring xml";
+						generateReportRecord(new MigrationReportRecorder(this,
+								MigrationReportRecorder.MigrationOperationType.DELETE, item, null, message,
+								null, null));
 					}
 					break;
 				}
 			}
 		}
 	}
+
 }

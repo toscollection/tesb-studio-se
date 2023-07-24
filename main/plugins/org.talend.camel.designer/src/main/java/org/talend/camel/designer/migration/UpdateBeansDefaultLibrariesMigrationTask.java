@@ -114,6 +114,8 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
         EList imports = beanItem.getImports();
 
         List<IMPORTType> deprecatedModules = new ArrayList<IMPORTType>();
+
+        boolean foundCamelCXF = false;
         for (Object imp : imports) {
 
             if (imp instanceof IMPORTType) {
@@ -146,6 +148,15 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
 
                     generateReportRecord(new MigrationReportRecorder(this,
                             MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, "Adding org.apache.commons.logging_1.2.0 to deprecated modules",
+                            null, null));
+                }
+
+                if (StringUtils.startsWith(importType.getMODULE(), "camel-cxf") ) {
+                    foundCamelCXF = true;
+                    deprecatedModules.add(importType);
+
+                    generateReportRecord(new MigrationReportRecorder(this,
+                            MigrationReportRecorder.MigrationOperationType.MODIFY, beanItem, null, "Adding camel-cxf to deprecated modules",
                             null, null));
                 }
 
@@ -213,6 +224,39 @@ public class UpdateBeansDefaultLibrariesMigrationTask extends AbstractItemMigrat
             }
         }
         imports.addAll(missingModels);
+        if (foundCamelCXF) {
+            addCamelCXFdependencies(imports);
+        }
         imports.removeAll(deprecatedModules);
+    }
+
+    private void addCamelCXFdependencies(EList imports) {
+        IMPORTType addimportType = ComponentFactory.eINSTANCE.createIMPORTType();
+        addimportType.setMODULE("camel-cxf-common-" + camelVersion + ".jar");
+        addimportType.setREQUIRED(false);
+        addimportType.setMVN("mvn:org.apache.camel/camel-cxf-common/" + camelVersion + "/jar");
+        addimportType.setUrlPath("platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-common-" + camelVersion + ".jar");
+        imports.add(addimportType);
+
+        addimportType = ComponentFactory.eINSTANCE.createIMPORTType();
+        addimportType.setMODULE("camel-cxf-soap-" + camelVersion + ".jar");
+        addimportType.setREQUIRED(false);
+        addimportType.setMVN("mvn:org.apache.camel/camel-cxf-soap/" + camelVersion + "/jar");
+        addimportType.setUrlPath("platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-soap-" + camelVersion + ".jar");
+        imports.add(addimportType);
+
+        addimportType = ComponentFactory.eINSTANCE.createIMPORTType();
+        addimportType.setMODULE("camel-cxf-rest-" + camelVersion + ".jar");
+        addimportType.setREQUIRED(false);
+        addimportType.setMVN("mvn:org.apache.camel/camel-cxf-rest/" + camelVersion + "/jar");
+        addimportType.setUrlPath("platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-rest-" + camelVersion + ".jar");
+        imports.add(addimportType);
+
+        addimportType = ComponentFactory.eINSTANCE.createIMPORTType();
+        addimportType.setMODULE("camel-cxf-transport-" + camelVersion + ".jar");
+        addimportType.setREQUIRED(false);
+        addimportType.setMVN("mvn:org.apache.camel/camel-cxf-transport/" + camelVersion + "/jar");
+        addimportType.setUrlPath("platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-transport-" + camelVersion + ".jar");
+        imports.add(addimportType);
     }
 }

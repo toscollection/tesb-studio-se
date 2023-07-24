@@ -555,7 +555,7 @@
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-ehcache}"
             id="ehcache"
-            mvn_uri="mvn:org.ehcache/ehcache/3.8.1"
+            mvn_uri="mvn:org.ehcache/ehcache/3.9.3"
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-ehcache}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
