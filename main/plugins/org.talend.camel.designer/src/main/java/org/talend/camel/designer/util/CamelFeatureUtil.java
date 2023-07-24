@@ -20,8 +20,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.components.ComponentUtilities;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.process.EConnectionType;
 import org.talend.core.model.process.IProcess;
@@ -80,6 +82,13 @@ public final class CamelFeatureUtil {
         put("tdm-camel", new FeatureModel[] { new FeatureModel("talend-data-mapper") });
         put("tdm-lib-di", new FeatureModel[] { new FeatureModel("talend-data-mapper") });
         //put("camel-talendjob", new FeatureModel[] { new FeatureModel("camel-talendjob") });
+        put("camel-cxf-common", new FeatureModel[] { new FeatureModel("camel-cxf") });
+        put("camel-cxf-soap", new FeatureModel[] { });
+        put("camel-cxf-rest", new FeatureModel[] { });
+        put("camel-cxf-spring-common", new FeatureModel[] { });
+        put("camel-cxf-spring-soap", new FeatureModel[] { });
+        put("camel-cxf-spring-rest", new FeatureModel[] { });
+        put("camel-cxf-spring-transport", new FeatureModel[] { });
         put("camel-cxf-transport", new FeatureModel[] { });
         
         put("camel-attachments", new FeatureModel[] { });
@@ -302,6 +311,7 @@ public final class CamelFeatureUtil {
             }
         }
     }
+
 	/**
 	 * Add feature and bundle to Feature Model
 	 *

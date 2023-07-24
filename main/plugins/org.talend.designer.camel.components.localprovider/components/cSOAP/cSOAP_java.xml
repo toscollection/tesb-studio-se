@@ -276,7 +276,7 @@
 		<IMPORTS>
             <IMPORT MODULE_GROUP="camel-core" REQUIRED="true" />
             <IMPORT MODULE_GROUP="camel-spring" REQUIRED="true" />
-            <IMPORT MODULE_GROUP="camel-cxf" REQUIRED="true" />
+            <IMPORT MODULE_GROUP="camel-cxf-soap" REQUIRED="true" />
             <IMPORT MODULE="cxf-rt-rs-service-description" REQUIRED="true" />
 
             <IMPORT MODULE_GROUP="locator"
@@ -301,7 +301,7 @@
                 
             <IMPORT MODULE="org.apache.servicemix.bundles.saaj-impl-1.5.1_1.jar" MVN="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saaj-impl/1.5.1_1" NAME="org.apache.servicemix.bundles.saaj-impl-1.5.1_1"
                 UrlPath="platform:/plugin/org.talend.libraries.esb/lib/org.apache.servicemix.bundles.saaj-impl-1.5.1_1.jar"
-                REQUIRED_IF="(ENABLE_SECURITY == 'true') AND (SECURITY_TYPE == 'USER')"/>
+                REQUIRED="true"/>
 		</IMPORTS>
 	</CODEGENERATION>
 	<RETURNS />

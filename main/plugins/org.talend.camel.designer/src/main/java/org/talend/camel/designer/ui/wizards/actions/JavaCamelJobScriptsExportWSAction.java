@@ -920,7 +920,7 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
             }
         }
     }
-    
+
     protected String getRouteVersion() {
     	if (bundleVersion.contains("SNAPSHOT")) {
     		return PomIdsHelper.getNotIteratedBundleVersion(routeObject.getProperty(), getArtifactVersion());

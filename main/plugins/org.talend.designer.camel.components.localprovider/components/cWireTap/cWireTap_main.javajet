@@ -38,69 +38,69 @@ imports="
 		if("true".equals(expression)){
 			if ("el".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.ELExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.ELExpression(<%=expressiontxt%>))
 <%
 			} else if ("groovy".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.GroovyExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.GroovyExpression(<%=expressiontxt%>))
 <%
 			} else if ("javascript".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.JavaScriptExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.JavaScriptExpression(<%=expressiontxt%>))
 <%
 			} else if ("sql".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.SqlExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.SqlExpression(<%=expressiontxt%>))
 <%
 			} else if ("jsonpath".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.JsonPathExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.JsonPathExpression(<%=expressiontxt%>))
 <%
 			} else if ("jxpath".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.JXPathExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.JXPathExpression(<%=expressiontxt%>))
 <%
 			} else if ("mvel".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.MvelExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.MvelExpression(<%=expressiontxt%>))
 <%
 			} else if ("ognl".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.OgnlExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.OgnlExpression(<%=expressiontxt%>))
 <%
 			} else if ("php".equals(language)) {
 %>			
-			.newExchangeBody(new org.apache.camel.model.language.PhpExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.PhpExpression(<%=expressiontxt%>))
 <%
 			} else if ("python".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.PythonExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.PythonExpression(<%=expressiontxt%>))
 <%
 			} else if ("ruby".equals(language)) {
 %>			
-			.newExchangeBody(new org.apache.camel.model.language.RubyExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.RubyExpression(<%=expressiontxt%>))
 <%
 			} else if ("spel".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.SpELExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.SpELExpression(<%=expressiontxt%>))
 <%
 			} else if ("xpath".equals(language)) {
 %>
-			.newExchangeBody(<%=cid%>ns.xpath(<%=expressiontxt%>))
+			.onPrepare(<%=cid%>ns.xpath(<%=expressiontxt%>))
 <%
 			} else if ("xquery".equals(language)) {
 %>
-			.newExchangeBody(new org.apache.camel.model.language.XQueryExpression(<%=expressiontxt%>))
+			.onPrepare(new org.apache.camel.model.language.XQueryExpression(<%=expressiontxt%>))
 <%
 			} else {
 				String exp = getExpression(language, expressiontxt, cid, useNamespaces, ""); 
 %>
-			.newExchangeBody(<%=exp%>)
+			.onPrepare(<%=exp%>)
 <%
 			}
 		}else if("true".equals(processor)){
 %>
-			.newExchange(new org.apache.camel.Processor() {
+			.onPrepare(new org.apache.camel.Processor() {
 					
 					public void process(org.apache.camel.Exchange exchange) throws Exception {
 						// TODO Auto-generated method stub

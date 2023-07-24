@@ -1262,15 +1262,15 @@ final Map<String, String> contentTypes = new java.util.HashMap<String, String>()
         return endpointUrl;
     }
 
-static class CxfPayloadProvider implements javax.ws.rs.ext.MessageBodyWriter<org.apache.camel.component.cxf.CxfPayload<javax.xml.transform.Source>> {
+static class CxfPayloadProvider implements javax.ws.rs.ext.MessageBodyWriter<org.apache.camel.component.cxf.common.CxfPayload<javax.xml.transform.Source>> {
     public boolean isWriteable(Class<?> cls, java.lang.reflect.Type type, java.lang.annotation.Annotation[] anns, javax.ws.rs.core.MediaType mt) {
-        return cls == org.apache.camel.component.cxf.CxfPayload.class;
+        return cls == org.apache.camel.component.cxf.common.CxfPayload.class;
     }
-    public long getSize(org.apache.camel.component.cxf.CxfPayload<javax.xml.transform.Source> obj, Class<?> cls, java.lang.reflect.Type type,
+    public long getSize(org.apache.camel.component.cxf.common.CxfPayload<javax.xml.transform.Source> obj, Class<?> cls, java.lang.reflect.Type type,
             java.lang.annotation.Annotation[] anns, javax.ws.rs.core.MediaType mt) {
         return -1;
     }
-    public void writeTo(org.apache.camel.component.cxf.CxfPayload<javax.xml.transform.Source> obj, Class<?> cls, java.lang.reflect.Type type,
+    public void writeTo(org.apache.camel.component.cxf.common.CxfPayload<javax.xml.transform.Source> obj, Class<?> cls, java.lang.reflect.Type type,
             java.lang.annotation.Annotation[] anns, javax.ws.rs.core.MediaType mt,
             javax.ws.rs.core.MultivaluedMap<String, Object> headers, java.io.OutputStream os)
             throws java.io.IOException, javax.ws.rs.WebApplicationException {
@@ -1389,10 +1389,10 @@ static class CxfPayloadProvider implements javax.ws.rs.ext.MessageBodyWriter<org
 
         if(hasCXFSAMLPropagateConsumer){
 %>
-            private final static class CXFConsumerBinding extends org.apache.camel.component.cxf.DefaultCxfBinding {
-                private org.apache.camel.component.cxf.CxfEndpoint endpoint;
+            private final static class CXFConsumerBinding extends org.apache.camel.component.cxf.jaxws.DefaultCxfBinding {
+                private org.apache.camel.component.cxf.jaxws.CxfEndpoint endpoint;
 
-                public CXFConsumerBinding(org.apache.camel.component.cxf.CxfEndpoint endpoint){
+                public CXFConsumerBinding(org.apache.camel.component.cxf.jaxws.CxfEndpoint endpoint){
                     this.endpoint = endpoint;
                     setHeaderFilterStrategy(consumerSoapHeaderFilter);
                 }
@@ -1417,7 +1417,7 @@ static class CxfPayloadProvider implements javax.ws.rs.ext.MessageBodyWriter<org
 <%      }
         if(hasCXFRegistryProvider || hasCXFSamlTokenProvider){
 %>
-                private final static class CXFProviderBinding extends org.apache.camel.component.cxf.DefaultCxfBinding{
+                private final static class CXFProviderBinding extends org.apache.camel.component.cxf.jaxws.DefaultCxfBinding{
 
                     @Override
                     protected void propagateHeadersFromCxfToCamel( org.apache.cxf.message.Message cxfMessage,
@@ -1458,11 +1458,11 @@ static class CxfPayloadProvider implements javax.ws.rs.ext.MessageBodyWriter<org
             } if(hasCXFComponent){
 %>
 
-            private org.apache.camel.component.cxf.CxfEndpoint getCxfEndpoint(String uri, boolean isProvider, boolean useAuthorization, boolean usePropagateSamlAP, String... token){
-                final org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint = (org.apache.camel.component.cxf.CxfEndpoint) endpoint(uri);
+            private org.apache.camel.component.cxf.jaxws.CxfEndpoint getCxfEndpoint(String uri, boolean isProvider, boolean useAuthorization, boolean usePropagateSamlAP, String... token){
+                final org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint = (org.apache.camel.component.cxf.jaxws.CxfEndpoint) endpoint(uri);
 
                 <%if(exportTypeSpringBoot){%>
-                    cxfEndpoint.setCxfConfigurer(new org.apache.camel.component.cxf.CxfConfigurer() {
+                    cxfEndpoint.setCxfConfigurer(new org.apache.camel.component.cxf.jaxws.CxfConfigurer() {
                         public void configure(org.apache.cxf.frontend.AbstractWSDLBasedEndpointFactory factory) {
                         }
                         public void configureClient(org.apache.cxf.endpoint.Client client) {
@@ -1544,7 +1544,7 @@ if(hasCXFUsernameTokenProvider || hasCXFSamlTokenProvider || hasCXFSamlTokenCons
 <%
             if (hasCXFHTTPAuthConsumer) {
 %>
-            private void addHttpAuthConsumer(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint, String type, String username, String password) {
+            private void addHttpAuthConsumer(org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint, String type, String username, String password) {
                 org.apache.cxf.configuration.security.AuthorizationPolicy authorizationPolicy = new org.apache.cxf.configuration.security.AuthorizationPolicy();
                 authorizationPolicy.setAuthorizationType(type);
                 authorizationPolicy.setUserName(username);
@@ -1555,7 +1555,7 @@ if(hasCXFUsernameTokenProvider || hasCXFSamlTokenProvider || hasCXFSamlTokenCons
             }
             if (hasCXFHTTPAuthProvider) {
 %>
-            private void addHttpAuthProvider(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint) {
+            private void addHttpAuthProvider(org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint) {
                 org.apache.cxf.interceptor.security.JAASLoginInterceptor jaasLoginInterceptor = new org.apache.cxf.interceptor.security.JAASLoginInterceptor();
                 jaasLoginInterceptor.setContextName("karaf");
                 cxfEndpoint.getInInterceptors().add(jaasLoginInterceptor);
@@ -1633,7 +1633,7 @@ if(hasCXFUsernameTokenProvider || hasCXFSamlTokenProvider || hasCXFSamlTokenCons
 
             }
 
-            private void addUsernameTokenProvider(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint) {
+            private void addUsernameTokenProvider(org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint) {
             PropertyFileValidator validator = new PropertyFileValidator();
 
             cxfEndpoint
@@ -1653,7 +1653,7 @@ if(hasCXFUsernameTokenProvider || hasCXFSamlTokenProvider || hasCXFSamlTokenCons
                     new org.apache.cxf.ws.policy.WSPolicyFeature(policy));
             }
            <%}else{%>
-            private void addUsernameTokenProvider(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint) {
+            private void addUsernameTokenProvider(org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint) {
                 org.apache.wss4j.dom.validate.JAASUsernameTokenValidator validator = new org.apache.wss4j.dom.validate.JAASUsernameTokenValidator();
                 validator.setContextName("karaf");
                 cxfEndpoint.setProperties(java.util.Collections.<String, Object>singletonMap(org.apache.cxf.ws.security.SecurityConstants.USERNAME_TOKEN_VALIDATOR, validator));
@@ -1665,7 +1665,7 @@ if(hasCXFUsernameTokenProvider || hasCXFSamlTokenProvider || hasCXFSamlTokenCons
             }
             if (hasCXFUsernameTokenConsumer) {
 %>
-            private void addUsernameTokenConsumer(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint,
+            private void addUsernameTokenConsumer(org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint,
                     String username, String password) {
                 if (null != policyProvider) {
                     Map<String, Object> props = new HashMap<String, Object>();
@@ -1699,12 +1699,12 @@ public void setClientProperties(Object clientProperties) {
 
 if(hasCXFComponentConsumer){
 %>
-private final static org.apache.camel.component.cxf.common.header.CxfHeaderFilterStrategy consumerSoapHeaderFilter = new org.apache.camel.component.cxf.common.header.CxfHeaderFilterStrategy();
+private final static org.apache.camel.component.cxf.transport.header.CxfHeaderFilterStrategy consumerSoapHeaderFilter = new org.apache.camel.component.cxf.transport.header.CxfHeaderFilterStrategy();
 <%
 }
 if(hasCXFRegistryProvider || hasCXFRegistryConsumer){
 %>
-private void addRegistry(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint,
+private void addRegistry(org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint,
         boolean isProvider, boolean usePropagateSamlAP, final String... token) {
 <%if(hasCXFRegistryConsumer){
 %>
@@ -1794,9 +1794,9 @@ private void addRegistry(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint,
         cxfEndpoint.setProperties(clientProps);
         <%//for fix [TESB-12172], set default address to null to avoid override after wsdl from registry initialized.
         %>
-        final org.apache.camel.component.cxf.CxfConfigurer cxfEndpointConfigurer = cxfEndpoint.getCxfConfigurer();
-        final org.apache.camel.component.cxf.CxfEndpoint cxfEndpointTrans= cxfEndpoint;
-        cxfEndpoint.setCxfConfigurer(new org.apache.camel.component.cxf.CxfConfigurer() {
+        final org.apache.camel.component.cxf.jaxws.CxfConfigurer cxfEndpointConfigurer = cxfEndpoint.getCxfConfigurer();
+        final org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpointTrans= cxfEndpoint;
+        cxfEndpoint.setCxfConfigurer(new org.apache.camel.component.cxf.jaxws.CxfConfigurer() {
             public void configure(org.apache.cxf.frontend.AbstractWSDLBasedEndpointFactory factory) {
                 if (cxfEndpointConfigurer != null) {
                     cxfEndpointConfigurer.configure(factory);
@@ -2001,7 +2001,7 @@ public void setPolicyProvider(org.talend.esb.security.policy.PolicyProvider poli
 if(hasCXFSamlTokenConsumer || hasCXFSamlTokenProvider){
 %>
 
-private void addSAMLToken(org.apache.camel.component.cxf.CxfEndpoint cxfEndpoint,
+private void addSAMLToken(org.apache.camel.component.cxf.jaxws.CxfEndpoint cxfEndpoint,
         boolean isProvider, boolean useAuthorization, boolean usePropagateSamlAP, String... token) {
         final org.apache.cxf.Bus bus = cxfEndpoint.getBus();
 <%
@@ -2265,23 +2265,23 @@ if (isProvider) {
                 doConfig();
             }
 
-			class DefaultRegistry extends org.apache.camel.support.DefaultRegistry{
-			
-				private org.apache.camel.spi.Registry registry = null;
-				
-				public DefaultRegistry(org.apache.camel.spi.Registry registry){
-					this.registry = registry;
-				}
-		
-				public void put(String k, Object v) {
-					registry.bind(k, (v == null) ? Object.class: v.getClass(), v);
-				}
-				
-				public Object get(String k) {
-					return registry.lookupByName(k);
-				}
-		
-			}
+            class DefaultRegistry extends org.apache.camel.support.DefaultRegistry{
+            
+                private org.apache.camel.spi.Registry registry = null;
+                
+                public DefaultRegistry(org.apache.camel.spi.Registry registry){
+                    this.registry = registry;
+                }
+        
+                public void put(String k, Object v) {
+                    registry.bind(k, (v == null) ? Object.class: v.getClass(), v);
+                }
+                
+                public Object get(String k) {
+                    return registry.lookupByName(k);
+                }
+        
+            }
 
             public void destroy() {
 <%
@@ -2307,27 +2307,27 @@ if (isProvider) {
             public void doConfig() throws java.lang.Exception {
                 final /*org.apache.camel.model.Model*/CamelContext camelContext = getContext();
                 
-				camelContext.setDebugging(true);
-				camelContext.setBacklogTracing(true);
-		        org.apache.camel.spi.Registry realRegistry = camelContext.getRegistry();
-		        
-		        if (realRegistry == null) {
-		            realRegistry = new org.apache.camel.support.DefaultRegistry();
-		        }
-		        
-		        DefaultRegistry registry = new DefaultRegistry(realRegistry);
-		        
-		        ((org.apache.camel.impl.DefaultCamelContext) camelContext).setRegistry(realRegistry);
-				
-			// add notifier
-			java.util.Collection<org.apache.camel.management.JmxNotificationEventNotifier> jmxEventNotifiers = camelContext
-				.getRegistry().findByType(
-					org.apache.camel.management.JmxNotificationEventNotifier.class);
-			if (jmxEventNotifiers != null && !jmxEventNotifiers.isEmpty()) {
-			    camelContext.getManagementStrategy().addEventNotifier(
-				    jmxEventNotifiers.iterator().next());
-			}
-				
+                camelContext.setDebugging(true);
+                camelContext.setStreamCaching(false);
+                org.apache.camel.spi.Registry realRegistry = camelContext.getRegistry();
+                
+                if (realRegistry == null) {
+                    realRegistry = new org.apache.camel.support.DefaultRegistry();
+                }
+                
+                DefaultRegistry registry = new DefaultRegistry(realRegistry);
+                
+                ((org.apache.camel.impl.DefaultCamelContext) camelContext).setRegistry(realRegistry);
+                
+                // add notifier
+                java.util.Collection<org.apache.camel.management.JmxNotificationEventNotifier> jmxEventNotifiers = camelContext
+                    .getRegistry().findByType(
+                        org.apache.camel.management.JmxNotificationEventNotifier.class);
+                if (jmxEventNotifiers != null && !jmxEventNotifiers.isEmpty()) {
+                    camelContext.getManagementStrategy().addEventNotifier(
+                        jmxEventNotifiers.iterator().next());
+                }
+                
 
                 <%if(exportTypeSpringBoot){%>
                     <%
@@ -2746,9 +2746,6 @@ if (isProvider) {
                     icsOut_<%=cid%> = new java.util.ArrayList<>();
                 }
 
-<%
-                if (isProvider) {
-%>
                 org.apache.cxf.feature.Feature ft_<%=cid%> = new  org.apache.cxf.feature.AbstractFeature() {
                     @Override
                     protected void initializeProvider(org.apache.cxf.interceptor.InterceptorProvider provider, org.apache.cxf.Bus bus) {
@@ -2774,9 +2771,7 @@ if (isProvider) {
                 };
 
                 fts_<%=cid%>.add(ft_<%=cid%>);
-<%
-                }
-%>
+
                 registry.put("features_<%=cid%>", fts_<%=cid%>);
                 registry.put("inInterceptors_<%=cid%>", icsIn_<%=cid%>);
                 registry.put("outInterceptors_<%=cid%>", icsOut_<%=cid%>);
@@ -2976,7 +2971,8 @@ if (isProvider) {
                         if (useInitSQL) {
                             String initSQL = helper.getStringParam("__INIT_QUERY__");
                             initSQL = org.talend.core.model.utils.NodeUtil.replaceCRLFInMEMO_SQL(initSQL);
-		                    initSQL = initSQL.replace("\\n", "");
+
+                            initSQL = initSQL.replace("\\n", "");
 %>
                         ds_<%=cid%>.setConnectionInitSqls(java.util.Arrays.asList(<%=initSQL%>));
 <%
@@ -3173,10 +3169,10 @@ if (isProvider) {
 
                     StringBuilder ep = new StringBuilder();
                     String username = helper.getStringParam("__AMQP_USERNAME__");
-
 %>
                     StringBuilder hostValue_<%=cid%> = new StringBuilder();
 <%
+                   
                     if (host.startsWith("context.")) {
                         String contextKey4host = host.substring(8);
 %>
@@ -3198,7 +3194,7 @@ if (isProvider) {
                         ep.append(host);
                     } else {
                         ep.append("\"");
-                        ep.append(useSSL?"amqps":"amqp");
+                        ep.append(useSSL ? "amqps" : "amqp");
                         ep.append("://\" + ");
                         ep.append(host);
                         if (!port.isEmpty()) {
@@ -3240,7 +3236,6 @@ if (isProvider) {
                         } 
                         ep.append(amqpParamString);
                     }
-
                     if (ep.length() >= 1) {
 %>
                     hostValue_<%=cid%>.append(<%=ep.toString()%>);
@@ -3282,7 +3277,7 @@ if (isProvider) {
                                 public boolean isLenientProperties() {
                                     return true;
                                 }
-							 };
+                             };
                              this.setProperties(endpoint, parameters);
                              org.apache.camel.component.paho.PahoConfiguration config = endpoint.getConfiguration();
 <%
@@ -3436,22 +3431,22 @@ if (isProvider) {
 <%
             }
 %>
-                // CXF endpoint for <%=cid%>
-                org.apache.camel.component.cxf.CxfEndpoint <%=endpointVar%> = getCxfEndpoint(<%=uri%>, <%=isProvider%>, <%=isUseAuthorization%>, <%=isUsePropagateSamlAP%>, <%=securityToken%>
+            // CXF endpoint for <%=cid%>
+            org.apache.camel.component.cxf.jaxws.CxfEndpoint <%=endpointVar%> = getCxfEndpoint(<%=uri%>, <%=isProvider%>, <%=isUseAuthorization%>, <%=isUsePropagateSamlAP%>, <%=securityToken%>
 <%
-                if((useSecurity || useRegistry) && !isProvider){
+            if((useSecurity || useRegistry) && !isProvider){
 %>
-                            ,<%=username%>,decryptedPassword_<%=cid%>, <%=roleName%>, <%=alias%>
+                        ,<%=username%>,decryptedPassword_<%=cid%>, <%=roleName%>, <%=alias%>
 <%
-                }
+            }
 %>
-                        );
+            );
 
-                        <%if("true".equals(ElementParameterParser.getValue(node, "__ENABLE_CXF_MESSAGE_GZIP__"))){%>
-                                <%=endpointVar%>.getFeatures().add(new org.apache.cxf.transport.common.gzip.GZIPFeature());
-                        <%}%>
-
-            java.util.List<org.apache.cxf.feature.Feature> fts_<%=cid%> = endpoint_<%=cid%>.getFeatures();
+            <%if("true".equals(ElementParameterParser.getValue(node, "__ENABLE_CXF_MESSAGE_GZIP__"))){%>
+                    <%=endpointVar%>.getFeatures().add(new org.apache.cxf.transport.common.gzip.GZIPFeature());
+            <%}%>
+            
+            java.util.List<org.apache.cxf.feature.Feature> fts_<%=cid%> = endpoint_<%=cid%>.getFeatures(); 
             java.util.List<org.apache.cxf.interceptor.Interceptor<? extends org.apache.cxf.message.Message>> icsIn_<%=cid%> = <%=endpointVar%>
                     .getInInterceptors();
             if (icsIn_<%=cid%> == null) {
@@ -3471,7 +3466,7 @@ if (isProvider) {
                             org.apache.cxf.phase.Phase.RECEIVE) {
                         @Override
                         public void handleMessage(org.apache.cxf.message.Message msg) {
-                            org.slf4j.MDC.put("org.talend.esb.jobclass.name", "<%=packageName%>.<%=className%>");
+                            org.slf4j.MDC.put("org.talend.esb.jobclass.name", "<%=packageName%>.<%=className%>");                                   
                         }
                     };
                     org.apache.cxf.interceptor.Interceptor<org.apache.cxf.message.Message> icOut = new org.apache.cxf.phase.AbstractPhaseInterceptor<org.apache.cxf.message.Message>(
@@ -3493,7 +3488,6 @@ if (isProvider) {
             registry.put("features_<%=cid%>", fts_<%=cid%>);
             registry.put("inInterceptors_<%=cid%>", icsIn_<%=cid%>);
             registry.put("outInterceptors_<%=cid%>", icsOut_<%=cid%>);
-
 <%
 
             if((isUsePropagateSamlUP || isUsePropagateSamlAP) && !isProvider){
@@ -3744,22 +3738,6 @@ if (isProvider) {
                 <%=cid%>userDefinedHeaders.put(<%=map.get("MESSAGE_HEADER_USER_DEFINED")%>,<%=map.get("MESSAGE_HEADER_VALUE_USER_DEFINED")%>);
             <%}%>
        <%}%>
-<%  } else if("cAWSSES".equals(nodeComponentName)){
-       String cid = node.getUniqueName();
-       List<Map<String, String>> messageHeaders = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__MESSAGE_HEADERS__");
-%>
-       <%if(messageHeaders.size()>0){
-            for (Map<String, String> map : messageHeaders) {
-        %>
-                <%if(map.get("MESSAGE_HEADER").equals("CamelAwsSesTo")){%>
-                    java.util.List<String> <%=cid%>tos = java.util.Arrays.asList(<%=map.get("MESSAGE_HEADER_VALUE")%>.split(","));
-                <%}else if(map.get("MESSAGE_HEADER").equals("CamelAwsSesReplyToAddresses")){%>
-                    java.util.List<String> <%=cid%>replyToAddresses = java.util.Arrays.asList(<%=map.get("MESSAGE_HEADER_VALUE")%>.split(","));
-                <%}%>
-       <%
-            }
-         }
-       %>
 <%
     } else if("cMessageRouter".equals(nodeComponentName)){
         for (IConnection param : node.getOutgoingConnections()) {

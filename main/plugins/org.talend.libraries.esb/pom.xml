@@ -512,17 +512,21 @@
 		<version>1_2</version>
 	</dependency>
 	<dependency>
+        <groupId>org.apache.servicemix.bundles</groupId>
+        <artifactId>org.apache.servicemix.bundles.saaj-impl</artifactId>
+        <version>1.5.1_1</version>
+    </dependency>
+	<dependency>
 	    <groupId>org.apache.zookeeper</groupId>
 	    <artifactId>zookeeper-jute</artifactId>
 	    <version>3.5.9</version>
 	</dependency>
-	<dependency>
-	    <groupId>org.apache.servicemix.bundles</groupId>
-	    <artifactId>org.apache.servicemix.bundles.saaj-impl</artifactId>
-	    <version>1.5.1_1</version>
-	</dependency>
-
 	<!-- SAM -->
+	<dependency>
+		<groupId>org.talend.esb</groupId>
+		<artifactId>sam-common</artifactId>
+		<version>${tesb.version}</version>
+	</dependency>
 	<dependency>
 		<groupId>org.talend.esb</groupId>
 		<artifactId>sam-agent</artifactId>
@@ -535,6 +539,10 @@
 			<exclusion>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>org.talend.esb</groupId>
+				<artifactId>sam-common</artifactId>
 			</exclusion>
 		</exclusions>
 	</dependency>
@@ -656,17 +664,6 @@
         <version>2.9.0</version>
     </dependency>
     
-	<dependency>
-		<groupId>org.apache.activemq</groupId>
-		<artifactId>activemq-camel</artifactId>
-		<version>${activemq.version}</version>
-		<exclusions>
-			<exclusion>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jms</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
     <dependency>
         <groupId>org.apache.activemq</groupId>
         <artifactId>activemq-spring</artifactId>
