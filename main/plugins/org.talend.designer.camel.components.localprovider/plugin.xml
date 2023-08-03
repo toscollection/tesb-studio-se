@@ -58,7 +58,7 @@
             <library id="activemq-spring" />
             <library id="activemq-broker" />
             <library id="activemq-client" />
-            <library id="activemq-camel" />
+            <library id="camel-activemq" />
             <library id="activemq-openwire-legacy" />
             <library id="activemq-pool" />
             <library id="activemq-jms-pool" />
@@ -85,13 +85,6 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-client}"
             bundleID="" />
 	    
-        <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-activemq-camel}"
-            id="activemq-camel"
-            mvn_uri="mvn:org.apache.activemq/activemq-camel/${activemq.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-camel}"
-            bundleID="" />	    
-
         <libraryNeeded context="plugin:org.talend.libraries.esb"
             name="${tesb-activemq-openwire-legacy}"
             id="activemq-openwire-legacy"
@@ -354,10 +347,52 @@
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="${tesb-mail}"
-            id="javax.mail"
-            mvn_uri="mvn:javax.mail/mail/${mail.version}"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-mail}"
+            name="${tesb-jakarta.mail}"
+            id="jakarta.mail"
+            mvn_uri="mvn:com.sun.mail/jakarta.mail/${mail.version}"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-jakarta.mail}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-mail-microsoft-oauth-${camel.version}.jar"
+            id="camel-mail-microsoft-oauth"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-mail-microsoft-oauth-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-mail-microsoft-oauth/${camel.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="msal4j-1.13.8.jar"
+            id="com.microsoft.azure.msal4j"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/msal4j-1.13.8.jar"
+            mvn_uri="mvn:com.microsoft.azure/msal4j/1.13.8"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="oauth2-oidc-sdk-10.7.1.jar"
+            id="oauth2-oidc-sdk"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/oauth2-oidc-sdk-10.7.1.jar"
+            mvn_uri="mvn:com.nimbusds/oauth2-oidc-sdk/10.7.1"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="asm-1.0.2.jar"
+            id="net.minidev.asm"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/asm-1.0.2.jar"
+            mvn_uri="mvn:net.minidev/asm/1.0.2"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="content-type-2.2.jar"
+            id="content-type"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/content-type-2.2.jar"
+            mvn_uri="mvn:com.nimbusds/content-type/2.2"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="nimbus-jose-jwt-9.30.2.jar"
+            id="nimbus-jose-jwt"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/nimbus-jose-jwt-9.30.2.jar"
+            mvn_uri="mvn:com.nimbusds/nimbus-jose-jwt/9.30.2"
             bundleID="" />
 
         <libraryNeededGroup
@@ -365,8 +400,18 @@
                 id="camel-mail"
                 name="camel-mail">
             <library id="camel-mail" />
-            <library id="javax.mail" />
+            <library id="jakarta.mail" />
             <library id="camel-attachments" />
+            <library id="camel-mail-microsoft-oauth" />
+            <library id="com.microsoft.azure.msal4j" />
+            <library id="oauth2-oidc-sdk" />
+            <library id="json-smart" />
+            <library id="net.minidev.asm" />
+            <library id="content-type" />
+            <library id="nimbus-jose-jwt" />
+            <library id="jackson-core"/>
+            <library id="jackson-annotations"/>
+            <library id="jackson-databind"/>
         </libraryNeededGroup>
 
         <libraryNeededGroup
@@ -687,10 +732,10 @@
         </libraryNeeded>
         <libraryNeeded
               context="plugin:org.talend.designer.camel.components.localprovider"
-              id="json-smart-action"
-              name="${tesb-json-smart-action}"
-              mvn_uri="mvn:net.minidev/json-smart-action/${json-smart-action-version}"
-              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-json-smart-action}">
+              id="json-smart"
+              name="${tesb-json-smart}"
+              mvn_uri="mvn:net.minidev/json-smart/${json-smart-version}"
+              uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/${tesb-json-smart}">
         </libraryNeeded>
         <libraryNeeded
               context="plugin:org.talend.designer.camel.components.localprovider"
@@ -858,129 +903,164 @@
 
         <!-- Camel 3 Dependencies Begin -->
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="aws-core-2.16.23.jar"
+            name="aws-core-${aws.sdk.version}.jar"
             id="aws-sdk-aws-core"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-core-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/aws-core/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-core-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/aws-core/${aws.sdk.version}"
             bundleID="" />
         
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="protocol-core-2.16.23.jar"
+            name="protocol-core-${aws.sdk.version}.jar"
             id="protocol-core"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/protocol-core-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/protocol-core/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/protocol-core-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/protocol-core/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="sdk-core-2.16.23.jar"
+            name="sdk-core-${aws.sdk.version}.jar"
             id="aws-sdk-sdk-core"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/sdk-core-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/sdk-core/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/sdk-core-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/sdk-core/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="auth-2.16.23.jar"
+            name="auth-${aws.sdk.version}.jar"
             id="aws-sdk-auth"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/auth-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/auth/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/auth-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/auth/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="s3-2.16.23.jar"
+            name="s3-${aws.sdk.version}.jar"
             id="aws-sdk-s3"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/s3-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/s3/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/s3-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/s3/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="ses-2.16.23.jar"
+            name="ses-${aws.sdk.version}.jar"
             id="aws-sdk-ses"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/ses-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/ses/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/ses-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/ses/${aws.sdk.version}"
             bundleID="" /> 
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="sns-2.16.23.jar"
+            name="sns-${aws.sdk.version}.jar"
             id="aws-sdk-sns"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/sns-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/sns/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/sns-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/sns/${aws.sdk.version}"
             bundleID="" />  
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="sqs-2.16.23.jar"
+            name="sqs-${aws.sdk.version}.jar"
             id="aws-sdk-sqs"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/sqs-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/sqs/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/sqs-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/sqs/${aws.sdk.version}"
             bundleID="" />  
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="utils-2.16.23.jar"
+            name="utils-${aws.sdk.version}.jar"
             id="aws-sdk-utils"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/utils-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/utils/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/utils-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/utils/${aws.sdk.version}"
             bundleID="" />  
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="http-client-spi-2.16.23.jar"
+            name="http-client-spi-${aws.sdk.version}.jar"
             id="aws-sdk-http-client-spi"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/http-client-spi-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/http-client-spi/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/http-client-spi-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/http-client-spi/${aws.sdk.version}"
             bundleID="" /> 
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="apache-client-2.16.23.jar"
+            name="apache-client-${aws.sdk.version}.jar"
             id="aws-sdk-apache-client"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/apache-client-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/apache-client/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/apache-client-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/apache-client/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="aws-xml-protocol-2.16.23.jar"
+            name="aws-xml-protocol-${aws.sdk.version}.jar"
             id="aws-sdk-aws-xml-protocol"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-xml-protocol-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/aws-xml-protocol/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-xml-protocol-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/aws-xml-protocol/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="regions-2.16.23.jar"
+            name="regions-${aws.sdk.version}.jar"
             id="aws-sdk-regions"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/regions-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/regions/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/regions-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/regions/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="profiles-2.16.23.jar"
+            name="profiles-${aws.sdk.version}.jar"
             id="aws-sdk-profiles"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/profiles-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/profiles/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/profiles-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/profiles/${aws.sdk.version}"
             bundleID="" />  
 
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="url-connection-client-2.16.23.jar"
+            name="url-connection-client-${aws.sdk.version}.jar"
             id="aws-sdk-url-connection-client"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/url-connection-client-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/url-connection-client/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/url-connection-client-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/url-connection-client/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="aws-query-protocol-2.16.23.jar"
+            name="aws-query-protocol-${aws.sdk.version}.jar"
             id="aws-sdk-query-protocol"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-query-protocol-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/aws-query-protocol/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-query-protocol-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/aws-query-protocol/${aws.sdk.version}"
             bundleID="" />
             
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="metrics-spi-2.16.23.jar"
+            name="metrics-spi-${aws.sdk.version}.jar"
             id="aws-sdk-metrics-spi"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/metrics-spi-2.16.23.jar"
-            mvn_uri="mvn:software.amazon.awssdk/metrics-spi/2.16.23"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/metrics-spi-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/metrics-spi/${aws.sdk.version}"
             bundleID="" />
-            
+
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="reactive-streams-1.0.2.jar"
+            name="aws-endpoints-spi-${aws.sdk.version}.jar"
+            id="aws-endpoints-spi"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/endpoints-spi-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/endpoints-spi/${aws.sdk.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="aws-json-protocol-${aws.sdk.version}.jar"
+            id="aws-json-protocol"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-json-protocol-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/aws-json-protocol/${aws.sdk.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="aws-cbor-protocol-${aws.sdk.version}.jar"
+            id="aws-cbor-protocol"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/aws-cbor-protocol-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/aws-cbor-protocol/${aws.sdk.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="aws-json-utils-${aws.sdk.version}.jar"
+            id="aws-json-utils"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/json-utils-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/json-utils/${aws.sdk.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="aws-third-party-jackson-core-${aws.sdk.version}.jar"
+            id="aws-third-party-jackson-core"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/third-party-jackson-core-${aws.sdk.version}.jar"
+            mvn_uri="mvn:software.amazon.awssdk/third-party-jackson-core/${aws.sdk.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="reactive-streams-${reactive.streams.version}.jar"
             id="reactive-streams"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/reactive-streams-1.0.2.jar"
-            mvn_uri="mvn:org.reactivestreams/reactive-streams/1.0.2"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/reactive-streams-${reactive.streams.version}.jar"
+            mvn_uri="mvn:org.reactivestreams/reactive-streams/${reactive.streams.version}"
             bundleID="" />
              
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
@@ -1044,6 +1124,13 @@
             id="camel-xml-jaxp"
             uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-xml-jaxp-${camel.version}.jar"
             mvn_uri="mvn:org.apache.camel/camel-xml-jaxp/${camel.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-health-${camel.version}.jar"
+            id="camel-health"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-health-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-health/${camel.version}"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
@@ -1158,7 +1245,7 @@
             uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-bean-${camel.version}.jar"
             mvn_uri="mvn:org.apache.camel/camel-bean/${camel.version}"
             bundleID="" />
-            
+
        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
             name="camel-blueprint-${camel.version}.jar"
             id="camel-blueprint"
@@ -1172,14 +1259,56 @@
             uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-core-osgi-${camel.version}.jar"
             mvn_uri="mvn:org.apache.camel.karaf/camel-core-osgi/${camel.version}"
             bundleID="" />
-            
+
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="camel-cxf-${camel.version}.jar"
-            id="camel-cxf"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-${camel.version}.jar"
-            mvn_uri="mvn:org.apache.camel/camel-cxf/${camel.version}"
+            name="camel-cxf-common-${camel.version}.jar"
+            id="camel-cxf-common"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-common-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-cxf-common/${camel.version}"
             bundleID="" />
-            
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-cxf-rest-${camel.version}.jar"
+            id="camel-cxf-rest"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-rest-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-cxf-rest/${camel.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-cxf-soap-${camel.version}.jar"
+            id="camel-cxf-soap"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-soap-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-cxf-soap/${camel.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-cxf-spring-common-${camel.version}.jar"
+            id="camel-cxf-spring-common"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-spring-common-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-cxf-spring-common/${camel.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-cxf-spring-rest-${camel.version}.jar"
+            id="camel-cxf-spring-rest"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-spring-rest-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-cxf-spring-rest/${camel.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-cxf-spring-soap-${camel.version}.jar"
+            id="camel-cxf-spring-soap"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-spring-soap-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-cxf-spring-soap/${camel.version}"
+            bundleID="" />
+
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-cxf-spring-transport-${camel.version}.jar"
+            id="camel-cxf-spring-transport"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-cxf-spring-transport-${camel.version}.jar"
+            mvn_uri="mvn:org.apache.camel/camel-cxf-spring-transport/${camel.version}"
+            bundleID="" />
+
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
             name="camel-cxf-transport-${camel.version}.jar"
             id="camel-cxf-transport"
@@ -1371,10 +1500,17 @@
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="caffeine-2.9.0.jar"
-            id="caffeine-2.9.0"
-            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/caffeine-2.9.0.jar"
-            mvn_uri="mvn:com.github.ben-manes.caffeine/caffeine/2.9.0"
+            name="caffeine-${caffeine.version}.jar"
+            id="caffeine"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/caffeine-${caffeine.version}.jar"
+            mvn_uri="mvn:com.github.ben-manes.caffeine/caffeine/${caffeine.version}"
+            bundleID="" />
+            
+        <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
+            name="camel-activemq-${camel.version}.jar"
+            id="camel-activemq"
+            mvn_uri="mvn:org.apache.camel/camel-activemq/${camel.version}"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-activemq-${camel.version}.jar"
             bundleID="" />
 
         <!-- camel-paho -->
@@ -1420,7 +1556,7 @@
             <library
                  id="camel-aws2-ses">
            </library>
-            <library id="javax.mail" />
+            <library id="jakarta.mail" />
         </libraryNeededGroup>
         
         
@@ -1504,6 +1640,21 @@
            <library
                  id="aws-sdk-apache-client">
            </library>            
+           <library
+                 id="aws-endpoints-spi">
+           </library>
+           <library
+                 id="aws-json-protocol">
+           </library>
+           <library
+                 id="aws-cbor-protocol">
+           </library>
+           <library
+                 id="aws-json-utils">
+           </library>
+           <library
+                 id="aws-third-party-jackson-core">
+           </library>
         </libraryNeededGroup> 
 
         <libraryNeededGroup
@@ -1515,7 +1666,7 @@
             
             <!-- Camel Core Feature -->
             
-            <library id="caffeine-2.9.0" />
+            <library id="caffeine" />
 
 			<library id="camel-api" />
 			<library id="camel-management-api" />
@@ -1630,10 +1781,14 @@
         </libraryNeededGroup>
 
         <libraryNeededGroup
-                description="camel-cxf"
-                id="camel-cxf"
-                name="camel-cxf">
-            <library id="camel-cxf" />
+                description="camel-cxf-rest"
+                id="camel-cxf-rest"
+                name="camel-cxf-rest">
+            <library id="camel-cxf-common" />
+            <library id="camel-cxf-rest" />
+            <library id="camel-cxf-spring-common" />
+            <library id="camel-cxf-spring-rest" />
+            <library id="camel-cxf-spring-transport" />
             <library id="camel-cxf-transport" />
             <library id="camel-attachments" />
             <library id="camel-http-base" />
@@ -1642,7 +1797,25 @@
             <group id="cxf-rt-rs-client" />
             <group id="cxf-rt-transports-http-jetty" />
         </libraryNeededGroup>
-        
+
+        <libraryNeededGroup
+                description="camel-cxf-soap"
+                id="camel-cxf-soap"
+                name="camel-cxf-soap">
+            <library id="camel-cxf-common" />
+            <library id="camel-cxf-soap" />
+            <library id="camel-cxf-spring-common" />
+            <library id="camel-cxf-spring-soap" />
+            <library id="camel-cxf-spring-transport" />
+            <library id="camel-cxf-transport" />
+            <library id="camel-attachments" />
+            <library id="camel-http-base" />
+            <group id="cxf-core" />
+            <group id="cxf-rt-frontend-jaxws" />
+            <group id="cxf-rt-rs-client" />
+            <group id="cxf-rt-transports-http-jetty" />
+        </libraryNeededGroup>
+
         <libraryNeededGroup
               description="camel-jsonpath-alldep"
               id="camel-jsonpath-alldep"
@@ -1654,7 +1827,7 @@
                  id="json-path">
            </library>
            <library
-                 id="json-smart-action">
+                 id="json-smart">
            </library>
            <library
                  id="accessors-smart">

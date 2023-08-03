@@ -480,10 +480,10 @@
 		    bundleID="" /-->
 		<!-- ${tesb-guava} -->
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="guava-30.0-jre.jar"
+		    name="guava-${guava.version}.jar"
 		    id="guava"
-		    mvn_uri="mvn:com.google.guava/guava/30.0-jre"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/guava-30.0-jre.jar"
+		    mvn_uri="mvn:com.google.guava/guava/${guava.version}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/guava-${guava.version}.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="joda-time-${joda-time.version}.jar"
@@ -524,7 +524,7 @@
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-ehcache}"
 		    id="ehcache"
-		    mvn_uri="mvn:org.ehcache/ehcache/3.8.1"
+		    mvn_uri="mvn:org.ehcache/ehcache/3.9.3"
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-ehcache}"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"

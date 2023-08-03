@@ -664,17 +664,6 @@
         <version>2.9.0</version>
     </dependency>
     
-	<dependency>
-		<groupId>org.apache.activemq</groupId>
-		<artifactId>activemq-camel</artifactId>
-		<version>${activemq.version}</version>
-		<exclusions>
-			<exclusion>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jms</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
     <dependency>
         <groupId>org.apache.activemq</groupId>
         <artifactId>activemq-spring</artifactId>

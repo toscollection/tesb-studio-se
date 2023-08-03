@@ -67,11 +67,7 @@ imports="
             sb1.append(header);
             sb1.append("\",");
             sb1.append("constant(");
-            if(map.get("MESSAGE_HEADER").equals("CamelAwsSesTo")){
-                sb1.append(cid+"tos");
-            }else if(map.get("MESSAGE_HEADER").equals("CamelAwsSesReplyToAddresses")){
-                sb1.append(cid+"replyToAddresses");
-            }else if((map.get("MESSAGE_HEADER").equals("CamelAwsSesHtmlEmail"))){
+            if((map.get("MESSAGE_HEADER").equals("CamelAwsSesHtmlEmail"))){
                 if("true".equals(map.get("MESSAGE_HEADER_VALUE"))){
                     sb1.append(value);
                 }

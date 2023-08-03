@@ -276,7 +276,7 @@
 		<IMPORTS>
             <IMPORT MODULE_GROUP="camel-core" REQUIRED="true" />
             <IMPORT MODULE_GROUP="camel-spring" REQUIRED="true" />
-            <IMPORT MODULE_GROUP="camel-cxf" REQUIRED="true" />
+            <IMPORT MODULE_GROUP="camel-cxf-soap" REQUIRED="true" />
             <IMPORT MODULE="cxf-rt-rs-service-description" REQUIRED="true" />
 
             <IMPORT MODULE_GROUP="locator"

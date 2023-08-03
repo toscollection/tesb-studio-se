@@ -244,8 +244,8 @@
                 breaks="5.4.1"
                 class="org.talend.camel.designer.migration.AddSpringConfigurationPropertyMigrationTask"
                 description="Add ignore exchange event property to JmxNotificationEventNotifier"
-                id="org.talend.camel.designer.migration.AddSpringConfigurationPropertyMigrationTask"
-                name="AddSpringConfigurationPropertyMigrationTask"
+                id="org.talend.camel.designer.migration.AddSpringConfigurationPropertyMigrationTask.8.0.1-R2023-08"
+                name="AddSpringConfigurationPropertyMigrationTask 8.0.1-R2023-08"
                 version="5.6.1">
           </projecttask>
           <projecttask
@@ -307,8 +307,8 @@
                 breaks="7.3.0"
                 class="org.talend.camel.designer.migration.UpdateBeansDefaultLibrariesMigrationTask"
                 description="Update Beans default libraries"
-                id="org.talend.camel.designer.migration.UpdateBeansDefaultLibrariesMigrationTask.8.0.1-2023-05"
-                name="UpdateBeansDefaultLibrariesMigrationTask 8.0.1-2023-03"
+                id="org.talend.camel.designer.migration.UpdateBeansDefaultLibrariesMigrationTask.8.0.1-R2023-08"
+                name="UpdateBeansDefaultLibrariesMigrationTask 8.0.1-R2023-08"
                 version="7.4.1">
           </projecttask>
           <projecttask
@@ -316,8 +316,8 @@
                 breaks="7.3.0"
                 class="org.talend.camel.designer.migration.UpdateBeansPackageReplaceMigrationTask"
                 description="Update Beans default libraries"
-                id="org.talend.camel.designer.migration.UpdateBeansPackageReplaceMigrationTask.7.4.1-2021-09"
-                name="UpdateBeansPackageReplaceMigrationTask 7.4.1-2021-09"
+                id="org.talend.camel.designer.migration.UpdateBeansPackageReplaceMigrationTask.8.0.1-R2023-08"
+                name="UpdateBeansPackageReplaceMigrationTask 8.0.1-R2023-08"
                 version="7.4.1">
           </projecttask>
           <projecttask
@@ -482,6 +482,15 @@
                 name="RenameHawtdbToLeveldbMigrationTask"
                 version="8.0.1">
           </projecttask>	 
+          <projecttask
+                beforeLogon="false"
+                breaks="7.3.1"
+                class="org.talend.camel.designer.migration.RemoveOptionsOfcMulticastMigrationTask"
+                description="Remove the stopOnAggregateException option from cMulticast"
+                id="org.talend.camel.designer.migration.RemoveOptionsOfcMulticastMigrationTask"
+                name="RemoveOptionsOfcMulticastMigrationTask"
+                version="8.0.1">
+          </projecttask>
 
     </extension>
 
@@ -654,5 +663,19 @@
            </buildType>
            </buildProvider>           
         </extension>
-
+       <extension
+             point="org.talend.core.runtime.analysisTask">
+          <analysisTask
+                class="org.talend.camel.designer.analysistask.RemovedCamelComponentsAnalysisTask"
+                description="Check if there are camel components are removed from cMessagingEndpoint component"
+                id="org.talend.camel.designer.analysistask.RemovedCamelComponentsAnalysisTask"
+                name="RemovedCamelComponentsAnalysisTask">
+          </analysisTask>
+          <analysisTask
+                class="org.talend.camel.designer.analysistask.RemovedCamelPropertiesAnalysisTask"
+                description="Check if there are camel properties are removed from cMessagingEndpoint component"
+                id="org.talend.camel.designer.analysistask.RemovedCamelPropertiesAnalysisTask"
+                name="RemovedCamelPropertiesAnalysisTask">
+          </analysisTask>
+       </extension>
 </plugin>

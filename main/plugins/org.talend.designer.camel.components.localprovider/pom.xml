@@ -12,23 +12,21 @@
 	<packaging>eclipse-plugin</packaging>
 
 	<properties>
-		<!-- <camel.version>2.25.2</camel.version> -->
-		<camel.version>3.11.1</camel.version>
+		<camel.version>3.20.6</camel.version>
 		<camel.mqtt.version>${camel.version}.tesb1</camel.mqtt.version>
-		<camel.wmq.version>${camel.version}</camel.wmq.version>
+		<camel.wmq.version>3.20.2</camel.wmq.version>
 		<!-- camel-groovy -->
-		<groovy.version>2.4.8</groovy.version>
+		<groovy.version>3.0.17</groovy.version>
 		<!-- camel-xstream -->
 		<xstream.version>1.4.20</xstream.version>
 		<xpp3.version>1.1.6</xpp3.version>
 		<!-- camel-amqp -->
-		<qpid-jms-client.version>0.61.0</qpid-jms-client.version>
-		<qpid-proton-j.version>0.30.0</qpid-proton-j.version>
-		<io-netty.version>4.1.86.Final</io-netty.version>
+		<qpid-jms-client.version>1.7.0</qpid-jms-client.version>
+		<qpid-proton-j.version>0.34.0</qpid-proton-j.version>
+		<io-netty.version>4.1.92.Final</io-netty.version>
 		<geronimo-jms.version>1.1.1</geronimo-jms.version>
 		<geronimo-j2ee-management.version>1.0.1</geronimo-j2ee-management.version>
-		<!-- camel-mqtt -->
-		<mqtt-client.version>1.15</mqtt-client.version>
+		<!-- hawtbuf -->
 		<hawtbuf.version>1.11</hawtbuf.version>
 		<!-- camel-leveldb -->
 		<leveldb-version>0.12</leveldb-version>
@@ -41,23 +39,23 @@
 		<flatpack.version>4.0.18</flatpack.version>
 		<jdom.version>1.1.3</jdom.version>
 		<!-- camel-jms -->
-		<commons-pool2.version>2.9.0</commons-pool2.version>
+		<commons-pool2.version>2.11.1</commons-pool2.version>
 		<jms-api.version>2.0.1</jms-api.version>
 		<!-- camel-mail -->
-		<mail.version>1.4.7</mail.version>
+		<mail.version>1.6.7</mail.version>
 		<!-- camel-aws -->
-		<aws.sdk.version>2.16.23</aws.sdk.version>
-		<Saxon-HE-version>9.7.0-21</Saxon-HE-version>
+		<aws.sdk.version>2.20.17</aws.sdk.version>
+		<Saxon-HE-version>11.5</Saxon-HE-version>
 		<!-- camel-kafka -->
 		<kafka-clients-version>3.4.0</kafka-clients-version>
-		<snappy-java-version>1.1.7.3</snappy-java-version>
-		<lz4-version>1.6.0</lz4-version>
+		<snappy-java-version>1.1.10.1</snappy-java-version>
+		<lz4-version>1.8.0</lz4-version>
 		<!-- camel-jsonpath -->
-		<json-path-version>2.1.0</json-path-version>
-		<json-smart-action-version>2.3</json-smart-action-version>
-		<accessors-smart-version>1.1</accessors-smart-version>
-		<asm-version>5.0.3</asm-version>
-		<reflections.version>0.9.11</reflections.version>
+		<json-path-version>2.8.0</json-path-version>
+		<json-smart-version>2.4.10</json-smart-version>
+		<accessors-smart-version>2.4.7</accessors-smart-version>
+		<asm-version>9.3</asm-version>
+		<reflections.version>0.9.12</reflections.version>
 		<guava.version>32.0.1-jre</guava.version>
 		<guava.failureaccess.version>1.0.1</guava.failureaccess.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
@@ -68,16 +66,14 @@
 		<mvn-commons-io>mvn:commons-io/commons-io/2.10.0</mvn-commons-io>
 		<mvn-commons-lang>mvn:commons-lang/commons-lang/2.6</mvn-commons-lang>
 		<mvn-commons-pool>mvn:commons-pool/commons-pool/1.6</mvn-commons-pool>
-
-		<jetty-all.version>9.4.48.v20220622</jetty-all.version>
+		<jetty-all.version>9.4.51.v20230217</jetty-all.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-		<reactive.streams.version>1.0.2</reactive.streams.version>
+		<reactive.streams.version>1.0.4</reactive.streams.version>
 		<hamcrest.version>1.3</hamcrest.version>
-		<jackson.version>2.13.4</jackson.version>
-		<jackson.databind.version>2.13.4.2</jackson.databind.version>
+		<joda-time.version>2.11.1</joda-time.version>
 		<plexus.component.annotations.versions>2.1.0</plexus.component.annotations.versions>
 		<wagon.provider.api.version>3.2.0</wagon.provider.api.version>
-		<caffeine.version>2.9.0</caffeine.version>
+		<caffeine.version>3.1.2</caffeine.version>
 		<json-schema-validator.version>1.0.53</json-schema-validator.version>
 		<commons-dbcp2.version>2.9.0</commons-dbcp2.version>
 	</properties>
@@ -89,7 +85,13 @@
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
-		
+
+               <dependency>
+                   <groupId>org.apache.camel</groupId>
+                   <artifactId>camel-activemq</artifactId>
+                   <version>${camel.version}</version>
+               </dependency>
+               
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
@@ -116,7 +118,73 @@
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-cxf</artifactId>
+			<artifactId>camel-cxf-common</artifactId>
+			<version>${camel.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf-rest</artifactId>
+			<version>${camel.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf-soap</artifactId>
+			<version>${camel.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf-spring-common</artifactId>
+			<version>${camel.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf-spring-rest</artifactId>
+			<version>${camel.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf-spring-soap</artifactId>
+			<version>${camel.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf-spring-transport</artifactId>
 			<version>${camel.version}</version>
 			<exclusions>
 				<exclusion>
@@ -144,7 +212,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
+			<artifactId>groovy</artifactId>
 			<version>${groovy.version}</version>
 		</dependency>
 
@@ -313,8 +381,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>jakarta.mail</artifactId>
 			<version>${mail.version}</version>
 		</dependency>
 
@@ -423,8 +491,8 @@
 		</dependency>
 		<dependency>
 			<groupId>net.minidev</groupId>
-			<artifactId>json-smart-action</artifactId>
-			<version>${json-smart-action-version}</version>
+			<artifactId>json-smart</artifactId>
+			<version>${json-smart-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.minidev</groupId>
@@ -617,6 +685,11 @@
 			<artifactId>camel-xml-jaxb</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-health</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -804,6 +877,31 @@
 			<version>${aws.sdk.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>endpoints-spi</artifactId>
+			<version>${aws.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>aws-json-protocol</artifactId>
+			<version>${aws.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>aws-cbor-protocol</artifactId>
+			<version>${aws.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>json-utils</artifactId>
+			<version>${aws.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>third-party-jackson-core</artifactId>
+			<version>${aws.sdk.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.reactivestreams</groupId>
 			<artifactId>reactive-streams</artifactId>
 			<version>${reactive.streams.version}</version>
@@ -879,6 +977,38 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
 			<version>${commons-dbcp2.version}</version>
+		</dependency>
+
+		<!-- cMail additional dependencies for camel-mail-microsoft-oauth -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-mail-microsoft-oauth</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>msal4j</artifactId>
+			<version>1.13.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>oauth2-oidc-sdk</artifactId>
+			<version>10.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>content-type</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>9.30.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.minidev</groupId>
+			<artifactId>asm</artifactId>
+			<version>1.0.2</version>
 		</dependency>
 
 	</dependencies>

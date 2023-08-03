@@ -52,7 +52,7 @@ imports="
 			//fill postorder expression
 			%>).<%=exp%><%
 		}
-		if(useStrategy){			%>.aggregationStrategyRef(<%=aggregationStrategy%>)<%	}
+		if(useStrategy){			%>.aggregationStrategy(<%=aggregationStrategy%>)<%	}
 		if(arallelProcessing){		%>.parallelProcessing()<%								}
 		if(stopOnException){		%>.stopOnException()<%									}
 		if(streaming){				%>.streaming()<%										}

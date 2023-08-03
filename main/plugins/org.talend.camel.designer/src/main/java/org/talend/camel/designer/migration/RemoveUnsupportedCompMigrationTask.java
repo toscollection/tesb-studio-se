@@ -1,7 +1,10 @@
 package org.talend.camel.designer.migration;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.talend.commons.exception.PersistenceException;
@@ -11,6 +14,10 @@ import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
 import org.talend.migration.MigrationReportRecorder;
 
 public class RemoveUnsupportedCompMigrationTask extends AbstractRouteItemComponentMigrationTask {
+
+    public static final List<String> RemovedComponents =
+            Collections.unmodifiableList(Arrays.asList("AHC-WS", "AHC", "ATOMIX", "AZURE", "BEANIO", "BEANSTALK", "ELSQL", "ETCD", "GANGLIA", "HYSTRIX", "JING",
+                "LEVELDB-LEGACY", "MSV", "NAGIOS", "NSQ", "RIBBON", "SIP", "SOROUSH", "SPRING-JAVACONFIG", "TAGSOUP", "YAMMER"));
 
     @Override
     public String getComponentNameRegex() {
@@ -37,7 +44,7 @@ public class RemoveUnsupportedCompMigrationTask extends AbstractRouteItemCompone
                 for (Object pv : elementValue) {
                     ElementValueType evt = (ElementValueType) pv;
                     String evtValue = evt.getValue();
-                    if(null != evtValue && evtValue.contains("AZURE")) {
+                    if(null != evtValue && RemovedComponents.contains(evtValue)) {
                         evt.setValue("");
                         elementValue.remove(evt);
 

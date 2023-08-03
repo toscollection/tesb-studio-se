@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: CamelLocalprovider
+Bundle-Name: CamelLocalprovider 8.0.1-R2023-08
 Bundle-SymbolicName: org.talend.designer.camel.components.localprovider;singleton:=true
 Bundle-Version: 8.0.1.qualifier
 Bundle-Activator: org.talend.designer.camel.components.localprovider.CamelComponentPlugin

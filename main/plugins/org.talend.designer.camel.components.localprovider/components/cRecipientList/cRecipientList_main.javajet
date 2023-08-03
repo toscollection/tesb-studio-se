@@ -62,7 +62,7 @@ imports="
 			).<%=exp%>
 <%	
 			//then append suffix settings.
-			if(useStrategy){%>.aggregationStrategyRef(<%=strategyRef%>)				<%}
+			if(useStrategy){%>.aggregationStrategy(<%=strategyRef%>)				<%}
 			if(parallelProcessing){%>.parallelProcessing()							<%}
 			if(useExecutorService){%>.executorService(<%=executorService%>)			<%}
 			if(stopOnException){%>.stopOnException()								<%}

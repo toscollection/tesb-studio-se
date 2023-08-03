@@ -18,6 +18,9 @@ imports="
   String cid = node.getUniqueName();
 
 	String xmlLib = ElementParameterParser.getValue(node, "__XML_LIBRARY__");
+	if ("jacksonxml".equals(xmlLib)) {
+		xmlLib = "jacksonXml";
+	}
 
   if ("custom".equals(xmlLib)) {
     Object desNode= ElementParameterParser.getValue(node, "____CUSTOM_REFERENCE____");

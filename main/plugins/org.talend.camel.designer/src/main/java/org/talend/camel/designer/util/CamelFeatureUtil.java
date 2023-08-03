@@ -82,6 +82,13 @@ public final class CamelFeatureUtil {
         put("tdm-camel", new FeatureModel[] { new FeatureModel("talend-data-mapper") });
         put("tdm-lib-di", new FeatureModel[] { new FeatureModel("talend-data-mapper") });
         //put("camel-talendjob", new FeatureModel[] { new FeatureModel("camel-talendjob") });
+        put("camel-cxf-common", new FeatureModel[] { new FeatureModel("camel-cxf") });
+        put("camel-cxf-soap", new FeatureModel[] { });
+        put("camel-cxf-rest", new FeatureModel[] { });
+        put("camel-cxf-spring-common", new FeatureModel[] { });
+        put("camel-cxf-spring-soap", new FeatureModel[] { });
+        put("camel-cxf-spring-rest", new FeatureModel[] { });
+        put("camel-cxf-spring-transport", new FeatureModel[] { });
         put("camel-cxf-transport", new FeatureModel[] { });
         
         put("camel-attachments", new FeatureModel[] { });
