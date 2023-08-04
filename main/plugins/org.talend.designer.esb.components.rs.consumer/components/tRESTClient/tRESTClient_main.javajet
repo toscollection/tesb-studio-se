@@ -223,7 +223,7 @@ try {
     boolean log_messages_<%=cid%> = Boolean.valueOf(<%=logMessages%>);
 	if (log_messages_<%=cid%>) {
 		org.apache.cxf.ext.logging.LoggingFeature loggingFeature = new  org.apache.cxf.ext.logging.LoggingFeature();
-		loggingFeature.addSensitiveProtocolHeaderNames(java.util.Set.of(org.apache.cxf.helpers.HttpHeaderHelper.AUTHORIZATION));
+		loggingFeature.addSensitiveProtocolHeaderNames(new java.util.HashSet<>(java.util.Arrays.asList(org.apache.cxf.helpers.HttpHeaderHelper.AUTHORIZATION)));
 		loggingFeature.addSensitiveElementNames(new java.util.HashSet<>(java.util.Arrays.asList("password")));
 		features_<%=cid%>.add(loggingFeature);
 	}

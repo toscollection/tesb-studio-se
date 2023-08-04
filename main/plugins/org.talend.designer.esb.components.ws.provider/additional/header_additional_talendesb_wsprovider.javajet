@@ -477,7 +477,7 @@ class HandlerThread_<%=cid%> extends Thread {
 		serverFactory.setServiceBean(new ESBProvider_<%=cid%>(handler));
 		if (<%=logMessages%>) {
 			org.apache.cxf.ext.logging.LoggingFeature loggingFeature = new  org.apache.cxf.ext.logging.LoggingFeature();
-			loggingFeature.addSensitiveProtocolHeaderNames(java.util.Set.of(org.apache.cxf.helpers.HttpHeaderHelper.AUTHORIZATION));
+			loggingFeature.addSensitiveProtocolHeaderNames(new java.util.HashSet<>(java.util.Arrays.asList(org.apache.cxf.helpers.HttpHeaderHelper.AUTHORIZATION)));
 			loggingFeature.addSensitiveElementNames(new java.util.HashSet<>(java.util.Arrays.asList("password")));
 			serverFactory.getFeatures().add(loggingFeature);
 		}
