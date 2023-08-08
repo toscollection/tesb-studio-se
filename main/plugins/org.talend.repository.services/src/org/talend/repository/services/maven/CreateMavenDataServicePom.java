@@ -430,7 +430,7 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         Dependency plexusArchiverDep = new Dependency();
         plexusArchiverDep.setGroupId("org.codehaus.plexus");
         plexusArchiverDep.setArtifactId("plexus-archiver");
-        plexusArchiverDep.setVersion("3.6.0");
+        plexusArchiverDep.setVersion("4.8.0");
 
         Dependency commonsCompressDep = new Dependency();
         commonsCompressDep.setGroupId("org.apache.commons");
