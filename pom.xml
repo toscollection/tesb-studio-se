@@ -44,6 +44,7 @@
     <opensaml.version>3.4.6</opensaml.version>
     <joda-time.version>2.10.10</joda-time.version>
     <guava.version>32.0.1-jre</guava.version>
+    <plexus.version>4.8.0</plexus.version>
   </properties>
   <repositories>
 	<repository>
