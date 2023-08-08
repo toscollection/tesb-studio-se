@@ -393,6 +393,12 @@
 		<groupId>org.apache.wss4j</groupId>
 		<artifactId>wss4j-ws-security-common</artifactId>
 		<version>${wss4j.version}</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk15on</artifactId>
+			</exclusion>
+		</exclusions>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.wss4j</groupId>
@@ -676,13 +682,24 @@
 		</exclusions>
     </dependency>
 
-	  <!-- fix CVE for TESB-30795 -->
     <dependency>
         <groupId>org.cryptacular</groupId>
         <artifactId>cryptacular</artifactId>
-        <version>1.2.4</version>
+        <version>${cryptacular.version}</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk18on</artifactId>
+			</exclusion>
+		</exclusions>
     </dependency>
-    
+
+	<dependency>
+	    <groupId>org.bouncycastle</groupId>
+	    <artifactId>bcprov-jdk18on</artifactId>
+	    <version>${bouncycastle.version}</version>
+	</dependency>
+
 	<dependency>
 	    <groupId>jakarta.ws.rs</groupId>
 	    <artifactId>jakarta.ws.rs-api</artifactId>
