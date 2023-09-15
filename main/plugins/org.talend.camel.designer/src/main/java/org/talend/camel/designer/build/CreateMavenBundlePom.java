@@ -46,6 +46,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.talend.camel.designer.ui.editor.RouteProcess;
 import org.talend.commons.exception.ExceptionHandler;
+import org.talend.commons.ui.runtime.CommonUIPlugin;
 import org.talend.commons.utils.MojoType;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.CorePlugin;
@@ -154,8 +155,12 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
 
         Model pom = new Model();
 
-        boolean route = "CAMEL".equals(getJobProcessor().getProcess().getComponentsType())
+        boolean isRoute = "CAMEL".equals(getJobProcessor().getProcess().getComponentsType())
                 && ERepositoryObjectType.getType(getJobProcessor().getProperty()).equals(ERepositoryObjectType.PROCESS_ROUTE);
+        
+        boolean isRoutelet = "CAMEL".equals(getJobProcessor().getProcess().getComponentsType())
+                && ERepositoryObjectType.getType(getJobProcessor().getProperty()).equals(ERepositoryObjectType.PROCESS_ROUTELET);
+        
 
         Parent parentPom = new Parent();
         parentPom.setGroupId(bundleModel.getGroupId());
@@ -163,7 +168,9 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         parentPom.setVersion(bundleModel.getVersion());
         parentPom.setRelativePath("/");
 
-        if (route) {
+
+        
+        if (isRoute) {
 
             RouteProcess routeProcess = (RouteProcess) getJobProcessor().getProcess();
 
@@ -209,7 +216,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
             profiles.add(profile);
 
             featureModel.setProfiles(profiles);
-            featureModelBuild.addPlugin(addOsgiHelperMavenPlugin());
+            featureModelBuild.addPlugin(addOsgiHelperMavenPlugin(true, CommonUIPlugin.isFullyHeadless(), false));
             
             // featureModelBuild.addPlugin(addDeployFeatureMavenPlugin(featureModel.getArtifactId(), featureModel.getVersion(), publishAsSnapshot));
 //            featureModelBuild.addPlugin(addSkipDeployFeatureMavenPlugin());
@@ -229,7 +236,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         pom.setPackaging("pom");
 
         pom.addModule("pom-bundle.xml");
-        if (route) {
+        if (isRoute) {
             pom.addModule("pom-feature.xml");
         }
         pom.setDependencies(bundleModel.getDependencies());
@@ -237,7 +244,6 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         if (pom.getBuild() == null) {
             pom.setBuild(new Build());
         }
-
         pom.addProfile(addProfileForCloud());
 
         File pomBundle = new File(parent.getLocation().toOSString() + File.separator + "pom-bundle.xml");
@@ -252,7 +258,10 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         }
 
         bundleModel.getBuild().addPlugin(addSkipDockerMavenPlugin());
-        
+        if (isRoutelet && CommonUIPlugin.isFullyHeadless()) {
+        	bundleModel.getBuild().addPlugin(addOsgiHelperMavenPlugin(false, false, true));
+        }
+      
         updateBundleMainfest(bundleModel);
 
         PomUtil.savePom(monitor, bundleModel, pomBundle);
@@ -287,14 +296,18 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
                 String buildType = null;
                 if (!jobInfo.isJoblet()) {
                     property = jobInfo.getProcessItem().getProperty();
-                    if (isJob(jobInfo) && ProcessUtils.isChildRouteProcess(getProcessor(jobInfo).getProcess()))  {
+                    if ((isJob(jobInfo) && ProcessUtils.isChildRouteProcess(getProcessor(jobInfo).getProcess())) || (isRoutelet(jobInfo) && CommonUIPlugin.isFullyHeadless()))  {
+                        String parentRouteID = PomIdsHelper.getJobArtifactId(getJobProcessor().getProperty());
+                    	String parentRouteVersion = getJobProcessor().getProperty().getVersion().replace(".", "_");
+                    	String prefix = CommonUIPlugin.isFullyHeadless()? parentRouteID + "_" + parentRouteVersion + "_" : "";
+                        artifactId = prefix + PomIdsHelper.getJobArtifactId(jobInfo);
                         groupId = PomIdsHelper.getJobGroupId(getJobProcessor().getProperty());     
                         version = PomIdsHelper.getJobVersion(getJobProcessor().getProperty());
                     }else {
+                        artifactId = PomIdsHelper.getJobArtifactId(jobInfo);
                         groupId = PomIdsHelper.getJobGroupId(property);     
                         version = PomIdsHelper.getJobVersion(property);                    	
                     }
-                    artifactId = PomIdsHelper.getJobArtifactId(jobInfo);
                     // try to get the pom version of children job and load from the pom file.
                     String childPomFileName = PomUtil.getPomFileName(jobInfo.getJobName(), jobInfo.getJobVersion());
                     IProject codeProject = getJobProcessor().getCodeProject();
@@ -596,18 +609,34 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         return plugin;
     }
     
-    private Plugin addOsgiHelperMavenPlugin() {
+    private Plugin addOsgiHelperMavenPlugin(boolean setFeatureFile, boolean setSkipChilds, boolean setInstallProject) {
         Plugin plugin = new Plugin();
+
 
         plugin.setGroupId(TalendMavenConstants.DEFAULT_CI_GROUP_ID);
         plugin.setArtifactId(MojoType.OSGI_HELPER.getArtifactId());
         plugin.setVersion(VersionUtils.getMojoVersion(MojoType.OSGI_HELPER));
 
         Xpp3Dom configuration = new Xpp3Dom("configuration");
-        Xpp3Dom featuresFile = new Xpp3Dom("featuresFile");
-        featuresFile.setValue(PATH_FEATURE);
-        configuration.addChild(featuresFile);
-
+        
+        if (setFeatureFile) {
+	        Xpp3Dom featuresFile = new Xpp3Dom("featuresFile");
+	        featuresFile.setValue(PATH_FEATURE);
+	        configuration.addChild(featuresFile);
+        }
+        
+        if (setSkipChilds) {
+            Xpp3Dom skipChilds = new Xpp3Dom("skipChilds");
+            skipChilds.setValue("true");
+            configuration.addChild(skipChilds);
+        }
+    
+        if (setInstallProject) {
+            Xpp3Dom installProject = new Xpp3Dom("installProject");
+            installProject.setValue("true");
+            configuration.addChild(installProject);
+        }
+        
         List<PluginExecution> pluginExecutions = new ArrayList<PluginExecution>();
         PluginExecution pluginExecution = new PluginExecution();
         pluginExecution.setId("feature-helper");
