@@ -489,7 +489,15 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
             }
 
             String jobName = repositoryObject.getProperty().getDisplayName();
-            String jobBundleName = routeName + "_" + jobName;
+            String routeVersion = routeProcess.getProperty().getVersion().replace(".", "_");
+            
+            String jobBundleName = "";
+            if (CommonUIPlugin.isFullyHeadless()) {
+            	jobBundleName = routeName+ "_" + routeVersion + "_" + jobName;
+            } else {
+            	jobBundleName = routeName + "_" + jobName;
+            }
+            
             String jobBundleSymbolicName = jobBundleName;
 
             String jobPackageName = getJobPackageName(jobProject, jobName, jobVersion);
@@ -530,6 +538,9 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
             }
 
             if (featuresModel.addBundle(jobModel)) {
+            	if(CommonUIPlugin.isFullyHeadless()) {
+            	    repositoryObject.getProperty().setParentItem(routeProcess);
+            	}   
                 exportRouteUsedJobBundle(repositoryObject, jobFile, jobVersion, jobBundleName, jobBundleSymbolicName,
                         jobArtifactVersion.replace("-", "."), getArtifactId(), version, jobContext);
             }
@@ -546,6 +557,9 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
     @SuppressWarnings("unchecked")
     protected final void exportAllReferenceRoutelets(String routeName, ProcessItem routeProcess, Set<String> routelets)
             throws InvocationTargetException, InterruptedException {
+    	
+        Set<String> routeletBundleSymbolicNames = new HashSet<String>();
+        
         for (NodeType node : (Collection<NodeType>) routeProcess.getProcess().getNode()) {
             if (!EmfModelUtils.isComponentActive(node)) {
                 continue;
@@ -588,7 +602,13 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                     throw new InvocationTargetException(e);
                 }
                 String routeletName = referencedRouteletNode.getLabel();
-                String routeletBundleName = routeName + "_" + routeletName;
+                String routeVersion = routeProcess.getProperty().getVersion().replace(".", "_");                
+                String routeletBundleName = "";
+                if (CommonUIPlugin.isFullyHeadless()) {
+                	routeletBundleName = routeName+ "_" + routeVersion + "_" + routeletName;
+                } else {
+                	routeletBundleName = routeName + "_" + routeletName;
+                }
                 String routeletBundleSymbolicName = routeletBundleName;
                 Project project = ProjectManager.getInstance().getCurrentProject();
                 if (project != null) {
@@ -596,6 +616,10 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                     if (projectName != null && projectName.length() > 0) {
                         routeletBundleSymbolicName = projectName.toLowerCase() + '.' + routeletBundleSymbolicName;
                     }
+                }
+                
+                if (!routeletBundleSymbolicNames.contains(routeletBundleSymbolicName)) {
+                	routeletBundleSymbolicNames.add(routeletBundleSymbolicName);
                 }
 
                 String routeletModelVersion = PomIdsHelper.getJobVersion(referencedRouteletNode.getProperty());
@@ -632,6 +656,9 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                         new BundleModel(routeletModelGroupId, routeletBundleName, routeletModelVersion, routeletFile);
 
                 if (featuresModel.addBundle(routeletModel)) {
+                	if(CommonUIPlugin.isFullyHeadless()) {
+                		referencedRouteletNode.getProperty().setParentItem(routeProcess);
+                	}  
                     String routeletBundleVersion = getArtifactVersion();
                     routeletBundleVersion = routeletBundleVersion.replace("-", ".");
                     exportRouteBundle(referencedRouteletNode, routeletFile, routeletVersion, routeletBundleName,
@@ -646,6 +673,8 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                 }
             }
         }
+        
+        addJobNameToOsgiRequireBundle(routeProcess, routeletBundleSymbolicNames);
     }
 
     private static IRepositoryViewObject getJobRepositoryNode(String jobId, ERepositoryObjectType type)
