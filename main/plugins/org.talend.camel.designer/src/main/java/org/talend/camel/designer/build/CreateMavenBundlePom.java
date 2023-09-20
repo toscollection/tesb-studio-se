@@ -386,9 +386,24 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         httpclientDep.setGroupId("org.apache.httpcomponents");
         httpclientDep.setArtifactId("httpclient");
         httpclientDep.setVersion("4.5.13");
+        
+        Dependency plexusArchiverDep = new Dependency();
+        plexusArchiverDep.setGroupId("org.codehaus.plexus");
+        plexusArchiverDep.setArtifactId("plexus-archiver");
+        plexusArchiverDep.setVersion("4.8.0");
+        
+        Dependency plexusIoDep = new Dependency();
+        plexusIoDep.setGroupId("org.codehaus.plexus");
+        plexusIoDep.setArtifactId("plexus-io");
+        plexusIoDep.setVersion("3.4.1");
+        
+        
         dependencies.add(jaxbDependency);
         dependencies.add(xbeanDependency);
         dependencies.add(httpclientDep);
+        dependencies.add(plexusArchiverDep);
+        dependencies.add(plexusIoDep);
+        
         plugin.setDependencies(dependencies);
         Xpp3Dom configuration = new Xpp3Dom("configuration");
 
@@ -461,6 +476,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
 
         plugin.addDependency(jsoupDep);
 
+        
         pluginExecutions.add(pluginExecution);
         plugin.setExecutions(pluginExecutions);
 
