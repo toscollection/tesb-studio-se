@@ -260,6 +260,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         bundleModel.getBuild().addPlugin(addSkipDockerMavenPlugin());
         if (isRoutelet && CommonUIPlugin.isFullyHeadless()) {
         	bundleModel.getBuild().addPlugin(addOsgiHelperMavenPlugin(false, false, true));
+        	bundleModel.addProperty("docker.skip", "true");
         }
       
         updateBundleMainfest(bundleModel);
