@@ -492,7 +492,7 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
             String routeVersion = routeProcess.getProperty().getVersion().replace(".", "_");
             
             String jobBundleName = "";
-            if (CommonUIPlugin.isFullyHeadless()) {
+            if (ProcessorUtilities.isCIMode()) {
             	jobBundleName = routeName+ "_" + routeVersion + "_" + jobName;
             } else {
             	jobBundleName = routeName + "_" + jobName;
@@ -538,7 +538,7 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
             }
 
             if (featuresModel.addBundle(jobModel)) {
-            	if(CommonUIPlugin.isFullyHeadless()) {
+            	if(ProcessorUtilities.isCIMode()) {
             	    repositoryObject.getProperty().setParentItem(routeProcess);
             	}   
                 exportRouteUsedJobBundle(repositoryObject, jobFile, jobVersion, jobBundleName, jobBundleSymbolicName,
@@ -604,7 +604,7 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                 String routeletName = referencedRouteletNode.getLabel();
                 String routeVersion = routeProcess.getProperty().getVersion().replace(".", "_");                
                 String routeletBundleName = "";
-                if (CommonUIPlugin.isFullyHeadless()) {
+                if (ProcessorUtilities.isCIMode()) {
                 	routeletBundleName = routeName+ "_" + routeVersion + "_" + routeletName;
                 } else {
                 	routeletBundleName = routeName + "_" + routeletName;
@@ -656,7 +656,7 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                         new BundleModel(routeletModelGroupId, routeletBundleName, routeletModelVersion, routeletFile);
 
                 if (featuresModel.addBundle(routeletModel)) {
-                	if(CommonUIPlugin.isFullyHeadless()) {
+                	if(ProcessorUtilities.isCIMode()) {
                 		referencedRouteletNode.getProperty().setParentItem(routeProcess);
                 	}  
                     String routeletBundleVersion = getArtifactVersion();
