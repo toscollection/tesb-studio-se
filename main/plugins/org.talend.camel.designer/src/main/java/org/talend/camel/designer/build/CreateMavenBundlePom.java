@@ -46,7 +46,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.talend.camel.designer.ui.editor.RouteProcess;
 import org.talend.commons.exception.ExceptionHandler;
-import org.talend.commons.ui.runtime.CommonUIPlugin;
 import org.talend.commons.utils.MojoType;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.CorePlugin;
@@ -74,6 +73,7 @@ import org.talend.designer.maven.utils.PomUtil;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.IRunProcessService;
 import org.talend.designer.runprocess.ItemCacheManager;
+import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.repository.ProjectManager;
 import org.talend.utils.io.FilesUtils;
 
@@ -216,7 +216,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
             profiles.add(profile);
 
             featureModel.setProfiles(profiles);
-            featureModelBuild.addPlugin(addOsgiHelperMavenPlugin(true, CommonUIPlugin.isFullyHeadless(), false));
+            featureModelBuild.addPlugin(addOsgiHelperMavenPlugin(true, ProcessorUtilities.isCIMode(), false));
             
             // featureModelBuild.addPlugin(addDeployFeatureMavenPlugin(featureModel.getArtifactId(), featureModel.getVersion(), publishAsSnapshot));
 //            featureModelBuild.addPlugin(addSkipDeployFeatureMavenPlugin());
@@ -258,7 +258,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         }
 
         bundleModel.getBuild().addPlugin(addSkipDockerMavenPlugin());
-        if (isRoutelet && CommonUIPlugin.isFullyHeadless()) {
+        if (isRoutelet && ProcessorUtilities.isCIMode()) {
         	bundleModel.getBuild().addPlugin(addOsgiHelperMavenPlugin(false, false, true));
         	bundleModel.addProperty("docker.skip", "true");
         }
@@ -297,10 +297,10 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
                 String buildType = null;
                 if (!jobInfo.isJoblet()) {
                     property = jobInfo.getProcessItem().getProperty();
-                    if ((isJob(jobInfo) && ProcessUtils.isChildRouteProcess(getProcessor(jobInfo).getProcess())) || (isRoutelet(jobInfo) && CommonUIPlugin.isFullyHeadless()))  {
+                    if ((isJob(jobInfo) && ProcessUtils.isChildRouteProcess(getProcessor(jobInfo).getProcess())) || (isRoutelet(jobInfo) && ProcessorUtilities.isCIMode()))  {
                         String parentRouteID = PomIdsHelper.getJobArtifactId(getJobProcessor().getProperty());
                     	String parentRouteVersion = getJobProcessor().getProperty().getVersion().replace(".", "_");
-                    	String prefix = CommonUIPlugin.isFullyHeadless()? parentRouteID + "_" + parentRouteVersion + "_" : "";
+                    	String prefix = ProcessorUtilities.isCIMode()? parentRouteID + "_" + parentRouteVersion + "_" : "";
                         artifactId = prefix + PomIdsHelper.getJobArtifactId(jobInfo);
                         groupId = PomIdsHelper.getJobGroupId(getJobProcessor().getProperty());     
                         version = PomIdsHelper.getJobVersion(getJobProcessor().getProperty());
