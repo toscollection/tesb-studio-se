@@ -39,6 +39,7 @@ import org.talend.camel.designer.ui.wizards.export.RouteJavaScriptOSGIForESBMana
 import org.talend.camel.designer.util.CamelFeatureUtil;
 import org.talend.camel.model.CamelRepositoryNodeType;
 import org.talend.camel.model.RouteProcessingExchange;
+import org.talend.commons.CommonsPlugin;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.CommonUIPlugin;
 import org.talend.commons.utils.io.FilesUtils;
@@ -412,9 +413,9 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
             
             for (Map.Entry<String, File> e1 : m.entrySet()) {
                 String extension = e1.getKey();
-                
+                String fullExtension = extension;
                 if (extension!= null && extension.equalsIgnoreCase("jar") && bundleVersion != null) {
-                    extension = "-"+bundleVersion + "." + extension;
+                	fullExtension = "-"+bundleVersion + "." + extension;
                 }
                 
                 File destination = e1.getValue();
@@ -423,21 +424,35 @@ public class JavaCamelJobScriptsExportWSAction implements IRunnableWithProgress 
                 FilesUtils
                         .getAllFilesFromFolder(talendProcessJavaProject.getTargetFolder().getLocation().toFile(),
                                 fileList, null);
-                if (!fileList.isEmpty()) {
-                    for (File f : fileList) {
-                        if (f.isFile() && f.getName().endsWith(extension) && destination != null
-                                && StringUtils.isNotBlank(destination.getPath())) {
-                            if (!"classpath.jar".equalsIgnoreCase(f.getName())) {
-                                FilesUtils.copyFile(f, destination);
-                                break;
-                            }
-                        }
-                    }
+                
+                File f = findDestinationArtifact(fileList, fullExtension);
+                
+                if (f == null && CommonsPlugin.isHeadless() && !ProcessorUtilities.isCIMode()) {
+                	f = findDestinationArtifact(fileList, extension);
+                }
+                
+                if (f != null) {
+                    FilesUtils.copyFile(f, destination);
                 }
             }
         }
     }
-
+    
+    
+    protected File findDestinationArtifact(List<File> fileList, String extension) {
+        if (!fileList.isEmpty()) {
+            for (File f : fileList) {
+                if (f.isFile() && f.getName().endsWith(extension)) {
+                    if (!"classpath.jar".equalsIgnoreCase(f.getName())) {
+                       return f;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    
     protected void processResults(FeaturesModel featuresModel, IProgressMonitor monitor)
             throws InvocationTargetException, InterruptedException {
         // do nothing (kar will be created by maven)
