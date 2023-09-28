@@ -243,6 +243,12 @@ imports="
         if (!"\"\"".equals(consumerRequestTimeoutMs)) {
             builder.addParam("consumerRequestTimeoutMs", consumerRequestTimeoutMs);
         }
+		
+		String useSchemaRegistry = ElementParameterParser.getValue(node, "__USE_SCHEMA_REGISTRY__").trim();
+        String schemaRegistryURL = ElementParameterParser.getValue(node, "__SCHEMA_REGISTRY_URL__").trim();
+        if (!"\"\"".equals(schemaRegistryURL) && "true".equals(useSchemaRegistry)) {
+            builder.addParam("schemaRegistryURL", schemaRegistryURL);
+        }
     }
 
     List<Map<String, String>> tableValues = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__URI_OPTIONS__");
