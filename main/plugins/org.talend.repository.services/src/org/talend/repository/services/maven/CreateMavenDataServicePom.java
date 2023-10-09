@@ -402,13 +402,6 @@ public class CreateMavenDataServicePom extends CreateMavenJobPom {
         commonsCodec.setVersion("1.15");
         
         plugin.addDependency(commonsCodec);
-        
-        Dependency guavaDep = new Dependency();
-        guavaDep.setGroupId("com.google.guava");
-        guavaDep.setArtifactId("guava");
-        guavaDep.setVersion("32.0.1-jre");
-        
-        plugin.addDependency(guavaDep);
 
         Dependency jsoupDep = new Dependency();
         jsoupDep.setGroupId("org.jsoup");

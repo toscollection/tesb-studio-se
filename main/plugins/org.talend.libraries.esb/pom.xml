@@ -648,7 +648,7 @@
     <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>${guava.version}</version>
+        <version>30.0-jre</version>
     </dependency>
 	  
 	<!-- swagger dependencies TESB-32508 -->  
