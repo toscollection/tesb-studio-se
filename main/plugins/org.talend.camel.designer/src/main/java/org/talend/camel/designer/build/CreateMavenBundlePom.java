@@ -52,6 +52,7 @@ import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.process.IProcess;
 import org.talend.core.model.process.IProcess2;
 import org.talend.core.model.process.JobInfo;
+import org.talend.core.model.process.ProcessUtils;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -276,16 +277,14 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
                 String buildType = null;
                 if (!jobInfo.isJoblet()) {
                     property = jobInfo.getProcessItem().getProperty();
-                    artifactId = PomIdsHelper.getJobArtifactId(jobInfo);
-
-                    if (JobUtils.isJob(jobInfo) && JobUtils.isRoute(getJobProcessor().getProperty())) {
+                    if (isJob(jobInfo) && ProcessUtils.isChildRouteProcess(getProcessor(jobInfo).getProcess()))  {
                         groupId = PomIdsHelper.getJobGroupId(getJobProcessor().getProperty());     
                         version = PomIdsHelper.getJobVersion(getJobProcessor().getProperty());
-                    } else {
+                    }else {
                         groupId = PomIdsHelper.getJobGroupId(property);     
-                        version = PomIdsHelper.getJobVersion(property);   
+                        version = PomIdsHelper.getJobVersion(property);                    	
                     }
-                    
+                    artifactId = PomIdsHelper.getJobArtifactId(jobInfo);
                     if (isRoutelet(jobInfo)){
                     	String parentRouteID = PomIdsHelper.getJobArtifactId(getJobProcessor().getProperty());
                     	String parentRouteVersion = getJobProcessor().getProperty().getVersion().replace(".", "_");
