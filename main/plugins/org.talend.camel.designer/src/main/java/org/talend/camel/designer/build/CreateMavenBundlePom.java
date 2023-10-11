@@ -52,6 +52,7 @@ import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.process.IProcess;
 import org.talend.core.model.process.IProcess2;
 import org.talend.core.model.process.JobInfo;
+import org.talend.core.model.process.ProcessUtils;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -65,13 +66,11 @@ import org.talend.designer.maven.model.TalendMavenConstants;
 import org.talend.designer.maven.template.MavenTemplateManager;
 import org.talend.designer.maven.tools.AggregatorPomsHelper;
 import org.talend.designer.maven.tools.creator.CreateMavenJobPom;
-import org.talend.designer.maven.utils.JobUtils;
 import org.talend.designer.maven.utils.PomIdsHelper;
 import org.talend.designer.maven.utils.PomUtil;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.IRunProcessService;
 import org.talend.designer.runprocess.ItemCacheManager;
-import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.repository.ProjectManager;
 import org.talend.utils.io.FilesUtils;
 
@@ -151,21 +150,16 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
 
         Model pom = new Model();
 
-        boolean isRoute = "CAMEL".equals(getJobProcessor().getProcess().getComponentsType())
+        boolean route = "CAMEL".equals(getJobProcessor().getProcess().getComponentsType())
                 && ERepositoryObjectType.getType(getJobProcessor().getProperty()).equals(ERepositoryObjectType.PROCESS_ROUTE);
 
-
-        boolean isRoutelet = "CAMEL".equals(getJobProcessor().getProcess().getComponentsType())
-                && ERepositoryObjectType.getType(getJobProcessor().getProperty()).equals(ERepositoryObjectType.PROCESS_ROUTELET);
-
-        
         Parent parentPom = new Parent();
         parentPom.setGroupId(bundleModel.getGroupId());
         parentPom.setArtifactId(bundleModel.getArtifactId() + "-Kar");
         parentPom.setVersion(bundleModel.getVersion());
         parentPom.setRelativePath("/");
 
-        if (isRoute) {
+        if (route) {
 
             RouteProcess routeProcess = (RouteProcess) getJobProcessor().getProcess();
 
@@ -213,7 +207,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         pom.setPackaging("pom");
 
         pom.addModule("pom-bundle.xml");
-        if (isRoute) {
+        if (route) {
             pom.addModule("pom-feature.xml");
         }
         pom.setDependencies(bundleModel.getDependencies());
@@ -236,13 +230,6 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         }
 
         bundleModel.getBuild().addPlugin(addSkipDockerMavenPlugin());
-        
-        if (isRoutelet) {
-        	bundleModel.addProperty("docker.skip", "true");
-        	if (ProcessorUtilities.isMicroservice(getJobProcessor().getProperty().getParentItem())) {
-                bundleModel.addProperty("assembly.skipAssembly", "true");	
-        	}
-        }
         
         updateBundleMainfest(bundleModel);
 
@@ -276,24 +263,14 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
                 String buildType = null;
                 if (!jobInfo.isJoblet()) {
                     property = jobInfo.getProcessItem().getProperty();
-                    artifactId = PomIdsHelper.getJobArtifactId(jobInfo);
-
-                    if (JobUtils.isJob(jobInfo) && JobUtils.isRoute(getJobProcessor().getProperty())) {
+                    if (isJob(jobInfo) && ProcessUtils.isChildRouteProcess(getProcessor(jobInfo).getProcess()))  {
                         groupId = PomIdsHelper.getJobGroupId(getJobProcessor().getProperty());     
                         version = PomIdsHelper.getJobVersion(getJobProcessor().getProperty());
-                    } else {
+                    }else {
                         groupId = PomIdsHelper.getJobGroupId(property);     
-                        version = PomIdsHelper.getJobVersion(property);   
+                        version = PomIdsHelper.getJobVersion(property);                    	
                     }
-                    
-                    if (isRoutelet(jobInfo)){
-                    	String parentRouteID = PomIdsHelper.getJobArtifactId(getJobProcessor().getProperty());
-                    	String parentRouteVersion = getJobProcessor().getProperty().getVersion().replace(".", "_");
-                    	String prefix = parentRouteID + "_" + parentRouteVersion + "_";
-                    	artifactId = prefix + PomIdsHelper.getJobArtifactId(jobInfo);
-                    	groupId = PomIdsHelper.getJobGroupId(getJobProcessor().getProperty());     
-                        version = PomIdsHelper.getJobVersion(getJobProcessor().getProperty());
-                    }
+                    artifactId = PomIdsHelper.getJobArtifactId(jobInfo);
                     // try to get the pom version of children job and load from the pom file.
                     String childPomFileName = PomUtil.getPomFileName(jobInfo.getJobName(), jobInfo.getJobVersion());
                     IProject codeProject = getJobProcessor().getCodeProject();

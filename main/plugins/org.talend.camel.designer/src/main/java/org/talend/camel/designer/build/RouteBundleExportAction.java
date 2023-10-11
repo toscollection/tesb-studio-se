@@ -125,7 +125,7 @@ public class RouteBundleExportAction extends JobExportAction {
 
             ProcessItem item = ItemCacheManager.getProcessItem(nodes.get(0).getId(), RelationshipItemBuilder.LATEST_VERSION);
 
-            if (item!= null && GlobalServiceRegister.getDefault().isServiceRegistered(ICamelDesignerCoreService.class)) {
+            if (GlobalServiceRegister.getDefault().isServiceRegistered(ICamelDesignerCoreService.class)) {
                 ICamelDesignerCoreService camelService = (ICamelDesignerCoreService) GlobalServiceRegister.getDefault()
                         .getService(ICamelDesignerCoreService.class);
                 unSelectedBundles = camelService.getUnselectDependenciesBundle(item);
