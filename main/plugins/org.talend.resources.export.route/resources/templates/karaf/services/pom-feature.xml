@@ -16,16 +16,6 @@
                 <artifactId>karaf-maven-plugin</artifactId>
                 <version>4.2.7</version>
                 <dependencies>
-	            	<dependency>
-						<groupId>org.codehaus.plexus</groupId>
-						<artifactId>plexus-archiver</artifactId>
-						<version>4.8.0</version>
-					</dependency>  
-					<dependency>
-						<groupId>org.codehaus.plexus</groupId>
-						<artifactId>plexus-io</artifactId>
-						<version>3.4.1</version>
-					</dependency>              
                     <dependency>
                         <groupId>org.apache.xbean</groupId>
                         <artifactId>xbean-finder-shaded</artifactId>
