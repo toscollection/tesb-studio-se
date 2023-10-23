@@ -187,7 +187,7 @@ public class CamelEditorDropTargetListener extends TalendEditorDropTargetListene
                 }
 
         // Check if JDBC DB Connection
-				ERepositoryObjectType jdbcConnType = ERepositoryObjectType.valueOf(ERepositoryObjectType.class, "JDBC");
+				ERepositoryObjectType jdbcConnType = ERepositoryObjectType.METADATA_TACOKIT_JDBC;
 				if (jdbcConnType != null && type.equals(jdbcConnType)) {
 					selectSourceList.add(obj);
 				}
