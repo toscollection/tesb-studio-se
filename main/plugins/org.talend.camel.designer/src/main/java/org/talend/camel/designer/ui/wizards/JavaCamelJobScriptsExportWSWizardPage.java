@@ -92,6 +92,12 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
     private static final String EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE = Messages
             .getString("JavaCamelJobScriptsExportWSWizardPage.ExportSpringBootDockerImage");//$NON-NLS-1$
 
+    private static final String EXPORTTYPE_STANDALONE_MS = Messages
+            .getString("JavaCamelJobScriptsExportWSWizardPage.ExportStandaloneMS");//$NON-NLS-1$
+
+    private static final String EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE = Messages
+            .getString("JavaCamelJobScriptsExportWSWizardPage.ExportStandslonrMDDockerImage");//$NON-NLS-1$
+
     // dialog store id constants
     private static final String STORE_DESTINATION_NAMES_ID = "JavaJobScriptsExportWizardPage.STORE_DESTINATION_NAMES_ID"; //$NON-NLS-1$
 
@@ -154,9 +160,11 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
         exportTypeCombo.add(EXPORTTYPE_KAR);
         if (PluginChecker.isTIS()) {
             exportTypeCombo.add(EXPORTTYPE_SPRING_BOOT);
+            exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS);
 
             if (canESBMicroServiceDockerImage) {
                 exportTypeCombo.add(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE);
+                exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE);
             }
         }
         // exportTypeCombo.setEnabled(false); // only can export kar file
@@ -175,7 +183,9 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
                 if (source instanceof Combo) {
                     String destination = ((Combo) source).getText();
                     boolean isMS = destination.equals(EXPORTTYPE_SPRING_BOOT)
-                            || destination.equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE);
+                            || destination.equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE)
+                            || destination.equals(EXPORTTYPE_STANDALONE_MS)
+                            || destination.equals(EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE);
 
                     if (isMS) {
 
@@ -517,7 +527,20 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
                     exportTypeCombo.remove(i);
                 }
             }
+        } else if("ROUTE_STANDALONE_MICROSERVICE".equals(
+                getProcessItem().getProperty().getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE))){
 
+            exportTypeCombo.select(2);
+            exportTypeCombo.notifyListeners(SWT.Selection, null);
+
+            for (int i = 0; i < exportTypeCombo.getItems().length; i++) {
+                if (exportTypeCombo.getItems()[i].equals(EXPORTTYPE_STANDALONE_MS)
+                        || exportTypeCombo.getItems()[i].equals(EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE)) {
+                    continue;
+                } else {
+                    exportTypeCombo.remove(i);
+                }
+            }
         } else {
             exportTypeCombo.select(0);
             exportTypeCombo.notifyListeners(SWT.Selection, null);
@@ -551,7 +574,8 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
         FileDialog dialog = new FileDialog(getContainer().getShell(), SWT.SAVE);
 
         String suffix = FileConstants.KAR_FILE_SUFFIX;
-        if (EXPORTTYPE_SPRING_BOOT.equals(exportTypeCombo.getText())) {
+        if (EXPORTTYPE_SPRING_BOOT.equals(exportTypeCombo.getText())
+                || EXPORTTYPE_STANDALONE_MS.equals(exportTypeCombo.getText())) {
             if (exportAsZip) {
                 suffix = FileConstants.ZIP_FILE_SUFFIX;
             } else {
@@ -573,7 +597,8 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
             return;
         }
         String idealSuffix;
-        if (EXPORTTYPE_SPRING_BOOT.equals(exportTypeCombo.getText())) {
+        if (EXPORTTYPE_SPRING_BOOT.equals(exportTypeCombo.getText())
+                || EXPORTTYPE_STANDALONE_MS.equals(exportTypeCombo.getText())) {
             if (exportAsZip) {
                 idealSuffix = FileConstants.ZIP_FILE_SUFFIX;
             } else {
@@ -644,7 +669,8 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
     @Override
     protected Map<ExportChoice, Object> getExportChoiceMap() {
 
-        if (exportTypeCombo.getText().equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE)) {
+        if (exportTypeCombo.getText().equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE)
+                || exportTypeCombo.getText().equals(EXPORTTYPE_STANDALONE_MS)) {
             return getExportChoiceMapForImage();
         }
 
@@ -838,7 +864,8 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
             exportChoiceMap.put(ExportChoice.needAssembly, Boolean.TRUE);
         }
 
-        if (new File(destinationKar).exists() && !exportTypeCombo.getText().equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE)) {
+        if (new File(destinationKar).exists() && !exportTypeCombo.getText().equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE)
+                && !exportTypeCombo.getText().equals(EXPORTTYPE_STANDALONE_MS)) {
             boolean yes = MessageDialog.openQuestion(getShell(),
                     Messages.getString("JavaCamelJobScriptsExportWSWizardPage.OverwriteKarTitle"),
                     Messages.getString("JavaCamelJobScriptsExportWSWizardPage.OverwriteKarMessage"));
@@ -859,6 +886,26 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
 
                     buildJobWithMaven(exportTypeCombo.getText().equals(EXPORTTYPE_SPRING_BOOT) ? JobExportType.ROUTE
                             : JobExportType.MSESB_IMAGE, monitor);
+
+                }
+            };
+            try {
+                getContainer().run(false, true, worker);
+            } catch (Exception e) {
+                MessageBoxExceptionHandler.process(e.getCause() == null ? e : e.getCause(), getShell());
+                return false;
+            }
+
+        } else if (exportTypeCombo.getText().equals(EXPORTTYPE_STANDALONE_MS)
+                || exportTypeCombo.getText().equals(EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE)) {
+
+            IRunnableWithProgress worker = new IRunnableWithProgress() {
+
+                @Override
+                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+                    buildJobWithMaven(exportTypeCombo.getText().equals(EXPORTTYPE_STANDALONE_MS) ? JobExportType.ROUTE
+                            : JobExportType.MSESB_STANDALONE, monitor);
 
                 }
             };
