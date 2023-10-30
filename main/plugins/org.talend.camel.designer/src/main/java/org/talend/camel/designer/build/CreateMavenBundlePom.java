@@ -417,8 +417,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         Dependency plexusIoDep = new Dependency();
         plexusIoDep.setGroupId("org.codehaus.plexus");
         plexusIoDep.setArtifactId("plexus-io");
-        plexusIoDep.setVersion("3.4.1");
-        
+        plexusIoDep.setVersion("3.2.0");
         
         dependencies.add(jaxbDependency);
         dependencies.add(xbeanDependency);
