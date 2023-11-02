@@ -2834,73 +2834,6 @@ if (isProvider) {
                 );
 <%
             }
-
-            //then process cBeanRegister components
-            List<? extends INode> beanRegisterNodes = process.getNodesOfType("cBeanRegister");
-            if(beanRegisterNodes != null && beanRegisterNodes.size()>0){
-            for(INode node: beanRegisterNodes){
-                String id = ElementParameterParser.getValue(node, "__ID__");
-                String isSimple = ElementParameterParser.getValue(node, "__SIMPLE_CONFIG__");
-                String classQualifiedName = ElementParameterParser.getValue(node, "__CLASS_QUALIFIED_NAME__");
-                String hasArguments = ElementParameterParser.getValue(node, "__SPECIFY_ARGUMENTS__");
-                List<Map<String, String>> arguments = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__ARGUMENTS__");
-
-                String code = ElementParameterParser.getValue(node, "__CODE__");
-
-                if("true".equals(isSimple)){
-                    StringBuilder sb = new StringBuilder();
-                    if("true".equals(hasArguments)){
-                        for(Map<String, String> s: arguments){
-                            if(sb.length() == 0){
-                                sb.append(s.get("VALUE"));
-                            }else{
-                                sb.append(",");
-                                sb.append(s.get("VALUE"));
-                            }
-                        }
-                    }
-%>
-                    registry.put(<%=id%>, new <%=classQualifiedName%>(<%=sb.toString()%>));
-<%
-                }else{
-%>
-                {
-                    Object beanInstance = null;
-                    <%=code%>
-                    if(beanInstance != null){
-                        registry.put(<%=id%>, beanInstance);
-                    }
-                }
-<%
-                }
-            }
-            }
-
-            //after, process cDataset
-            List<? extends INode> datasetNodes = process.getNodesOfType("cDataset");
-            for(INode n: datasetNodes){
-                String beanID = ElementParameterParser.getValue(n, "__DATASET_NAME__");
-                String registerNewBean = ElementParameterParser.getValue(n, "__REGISTER_DATASET_BEAN__");
-                if(!"true".equals(registerNewBean)){
-                    continue;
-                }
-                String beanClass = ElementParameterParser.getValue(n, "__BEAN_CLASS__");
-                List<Map<String, String>> beanArguments = (List<Map<String, String>>) ElementParameterParser.getObjectValue(n, "__BEAN_ARGUMENTS__");
-                StringBuilder sb = new StringBuilder();
-                if(beanArguments != null){
-                    for(Map<String,String> map: beanArguments){
-                        if(sb.length() == 0){
-                            sb.append(map.get("VALUE"));
-                        }else{
-                            sb.append(",");
-                            sb.append(map.get("VALUE"));
-                        }
-                    }
-                }
-%>
-                registry.put(<%=beanID%>, new <%=beanClass%>(<%=sb.toString()%>));
-<%
-            }
             for (INode node: process.getNodesOfType("cSQLConnection")) {
                 final String cid = node.getUniqueName();
                 NodeParamsHelper helper = new NodeParamsHelper(node);
@@ -2981,6 +2914,75 @@ if (isProvider) {
                         camelContext.getRegistry().bind("<%=cid%>", ds_<%=cid%>);
                     }
                 }
+
+<%
+            }
+
+            //then process cBeanRegister components
+            List<? extends INode> beanRegisterNodes = process.getNodesOfType("cBeanRegister");
+            if(beanRegisterNodes != null && beanRegisterNodes.size()>0){
+            for(INode node: beanRegisterNodes){
+                String id = ElementParameterParser.getValue(node, "__ID__");
+                String isSimple = ElementParameterParser.getValue(node, "__SIMPLE_CONFIG__");
+                String classQualifiedName = ElementParameterParser.getValue(node, "__CLASS_QUALIFIED_NAME__");
+                String hasArguments = ElementParameterParser.getValue(node, "__SPECIFY_ARGUMENTS__");
+                List<Map<String, String>> arguments = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__ARGUMENTS__");
+
+                String code = ElementParameterParser.getValue(node, "__CODE__");
+
+                if("true".equals(isSimple)){
+                    StringBuilder sb = new StringBuilder();
+                    if("true".equals(hasArguments)){
+                        for(Map<String, String> s: arguments){
+                            if(sb.length() == 0){
+                                sb.append(s.get("VALUE"));
+                            }else{
+                                sb.append(",");
+                                sb.append(s.get("VALUE"));
+                            }
+                        }
+                    }
+%>
+                    registry.put(<%=id%>, new <%=classQualifiedName%>(<%=sb.toString()%>));
+<%
+                }else{
+%>
+                {
+                    Object beanInstance = null;
+                    <%=code%>
+                    if(beanInstance != null){
+                        registry.put(<%=id%>, beanInstance);
+                    }
+                }
+<%
+                }
+            }
+            }
+
+            //after, process cDataset
+            List<? extends INode> datasetNodes = process.getNodesOfType("cDataset");
+            for(INode n: datasetNodes){
+                String beanID = ElementParameterParser.getValue(n, "__DATASET_NAME__");
+                String registerNewBean = ElementParameterParser.getValue(n, "__REGISTER_DATASET_BEAN__");
+                if(!"true".equals(registerNewBean)){
+                    continue;
+                }
+                String beanClass = ElementParameterParser.getValue(n, "__BEAN_CLASS__");
+                List<Map<String, String>> beanArguments = (List<Map<String, String>>) ElementParameterParser.getObjectValue(n, "__BEAN_ARGUMENTS__");
+                StringBuilder sb = new StringBuilder();
+                if(beanArguments != null){
+                    for(Map<String,String> map: beanArguments){
+                        if(sb.length() == 0){
+                            sb.append(map.get("VALUE"));
+                        }else{
+                            sb.append(",");
+                            sb.append(map.get("VALUE"));
+                        }
+                    }
+                }
+%>
+                registry.put(<%=beanID%>, new <%=beanClass%>(<%=sb.toString()%>));
+
 <%
             }
             //cMQConnectionFactory http://jira.talendforge.org/browse/TESB-4860
