@@ -160,10 +160,14 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
         exportTypeCombo.add(EXPORTTYPE_KAR);
         if (PluginChecker.isTIS()) {
             exportTypeCombo.add(EXPORTTYPE_SPRING_BOOT);
-            exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS);
 
             if (canESBMicroServiceDockerImage) {
                 exportTypeCombo.add(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE);
+            }
+
+            exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS);
+            
+            if (canESBMicroServiceDockerImage) {
                 exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE);
             }
         }
