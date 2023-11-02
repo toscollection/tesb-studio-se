@@ -160,14 +160,10 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
         exportTypeCombo.add(EXPORTTYPE_KAR);
         if (PluginChecker.isTIS()) {
             exportTypeCombo.add(EXPORTTYPE_SPRING_BOOT);
+            exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS);
 
             if (canESBMicroServiceDockerImage) {
                 exportTypeCombo.add(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE);
-            }
-
-            exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS);
-            
-            if (canESBMicroServiceDockerImage) {
                 exportTypeCombo.add(EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE);
             }
         }
@@ -460,6 +456,10 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
                 getProcessItem().getProperty().getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE))) {
             createDockerOptions(optionsGroup);
             restoreWidgetValuesForImage();
+        }else if ("ROUTE_STANDALONE_MICROSERVICE".equals(
+                getProcessItem().getProperty().getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE))) {
+            createDockerOptions(optionsGroup);
+            restoreWidgetValuesForImage();
         }
 
         restoreWidgetValuesForKar();
@@ -543,6 +543,7 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
                     continue;
                 } else {
                     exportTypeCombo.remove(i);
+                    i--;
                 }
             }
         } else {
@@ -703,9 +704,36 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
             return;
         }
 
-        if ("ROUTE_MICROSERVICE".equals(
-                getProcessItem().getProperty().getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE))) {
+        final String artifactBuildType = (String) getProcessItem().getProperty().getAdditionalProperties().get(TalendProcessArgumentConstant.ARG_BUILD_TYPE);
+		if ("ROUTE_MICROSERVICE".equals(artifactBuildType)) {
 
+            enablePrometheusMetricsEndpointButton = new Button(optionsGroup, SWT.CHECK | SWT.LEFT);
+            enablePrometheusMetricsEndpointButton.setText("Enable Prometheus metrics endpoint"); //$NON-NLS-1$
+            enablePrometheusMetricsEndpointButton.setSelection(enablePrometheusMetricsEndpoint);
+            enablePrometheusMetricsEndpointButton.setFont(getFont());
+            enablePrometheusMetricsEndpointButton.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    boolean selectContext = enablePrometheusMetricsEndpointButton.getSelection();
+                    enablePrometheusMetricsEndpoint = selectContext;
+                }
+            });
+            
+            exportAsZipButton = new Button(optionsGroup, SWT.CHECK | SWT.LEFT);
+            exportAsZipButton.setText("Export as ZIP"); //$NON-NLS-1$
+            exportAsZipButton.setSelection(exportAsZip);
+            exportAsZipButton.setFont(getFont());
+            exportAsZipButton.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    boolean selectContext = exportAsZipButton.getSelection();
+                    exportAsZip = selectContext;
+                    exportTypeCombo.notifyListeners(SWT.Selection, null);
+                }
+            });
+        }else if("ROUTE_STANDALONE_MICROSERVICE".equals(artifactBuildType)) {
             enablePrometheusMetricsEndpointButton = new Button(optionsGroup, SWT.CHECK | SWT.LEFT);
             enablePrometheusMetricsEndpointButton.setText("Enable Prometheus metrics endpoint"); //$NON-NLS-1$
             enablePrometheusMetricsEndpointButton.setSelection(enablePrometheusMetricsEndpoint);
