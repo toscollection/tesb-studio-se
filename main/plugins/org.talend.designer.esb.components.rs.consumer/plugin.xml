@@ -608,13 +608,13 @@
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-zookeeper}"
 		    id="zookeeper"
-		    mvn_uri="mvn:org.apache.zookeeper/zookeeper/3.5.9"
+		    mvn_uri="mvn:org.apache.zookeeper/zookeeper/${zookeeper.version}"
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-zookeeper}"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-zookeeper-jute}"
 		    id="zookeeper-jute"
-		    mvn_uri="mvn:org.apache.zookeeper/zookeeper-jute/3.5.9"
+		    mvn_uri="mvn:org.apache.zookeeper/zookeeper-jute/${zookeeper.version}"
 		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-zookeeper-jute}"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
