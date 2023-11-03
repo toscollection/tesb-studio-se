@@ -147,7 +147,7 @@ if (inputConn != null) {
 
 	 final List<java.util.Map<String, String>> customHttpHeaders_<%=cid%> = new java.util.ArrayList<java.util.Map<String, String>>();
 	 final HttpHeadersFeature httpHeadersFeature_<%=cid%> = new HttpHeadersFeature(customHttpHeaders_<%=cid%>);
-    Boolean isResponseCode202 = null;
+    Boolean isResponseCode202_<%=cid%> = null;
     try {
         routines.system.Document requestTalendDoc_<%=cid%> = <%=inputConn.getName()%>.payload;
         try {
@@ -338,7 +338,7 @@ if (inputConn != null) {
                 <% } %>
                 globalMap.put("<%=cid%>_HTTP_HEADERS", httpHeadersFeature_<%=cid%>.getResponseHeaders());
                 if(202 == genericConsumer_<%=cid%>.getHttpResponseCode()) {
-                   isResponseCode202 = true;
+                   isResponseCode202_<%=cid%> = true;
                 }else{
                     globalMap.put("<%=cid%>_HTTP_RESPONSE_CODE", httpHeadersFeature_<%=cid%>.getResponseCode());
                 }
@@ -520,7 +520,7 @@ if (inputConn != null) {
         <% } %>
     }
     
-    if (Boolean.TRUE.equals(isResponseCode202)) {
+    if (Boolean.TRUE.equals(isResponseCode202_<%=cid%>)) {
         globalMap.put("tESBConsumer_1_HTTP_RESPONSE_CODE", 202);
     } else if(httpHeadersFeature_<%=cid%> != null) {
         globalMap.put("<%=cid%>_HTTP_HEADERS", httpHeadersFeature_<%=cid%>.getResponseHeaders());
