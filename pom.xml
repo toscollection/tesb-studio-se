@@ -40,7 +40,7 @@
     <guava.version>32.0.1-jre</guava.version>
     <jackson.databind.version>2.13.4.2</jackson.databind.version>
     <validation-api.version>2.0.1.Final</validation-api.version>
-    <activemq.version>5.15.15</activemq.version>
+    <activemq.version>5.15.16</activemq.version>
   </properties>
   <repositories>
 	<repository>
