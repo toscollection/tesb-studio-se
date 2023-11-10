@@ -194,7 +194,8 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
 
                         optionsDockerGroupComposite.dispose();
 
-                        if (destination.equals(EXPORTTYPE_SPRING_BOOT)) {
+                        if (destination.equals(EXPORTTYPE_SPRING_BOOT)
+                                || destination.equals(EXPORTTYPE_STANDALONE_MS)) {
                             updateDestinationGroup(false);
                             createOptionsForKar(optionsGroupComposite, optionsGroupFont);
                             optionsGroupComposite.layout(true, true);
@@ -675,7 +676,7 @@ public class JavaCamelJobScriptsExportWSWizardPage extends JobScriptsExportWizar
     protected Map<ExportChoice, Object> getExportChoiceMap() {
 
         if (exportTypeCombo.getText().equals(EXPORTTYPE_SPRING_BOOT_DOCKER_IMAGE)
-                || exportTypeCombo.getText().equals(EXPORTTYPE_STANDALONE_MS)) {
+                || exportTypeCombo.getText().equals(EXPORTTYPE_STANDALONE_MS_DOCKER_IMAGE)) {
             return getExportChoiceMapForImage();
         }
 
