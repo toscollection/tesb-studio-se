@@ -24,4 +24,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore
 Import-Package: org.eclipse.gef.commands
 Eclipse-BundleShape: dir
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.talend.designer.esb.components.rs.provider

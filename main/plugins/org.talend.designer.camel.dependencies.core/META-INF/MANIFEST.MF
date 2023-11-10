@@ -17,4 +17,4 @@ Import-Package: org.eclipse.emf.common.util,
  org.talend.core.repository.model,
  org.talend.designer.core.model.components,
  org.talend.designer.core.model.utils.emf.talendfile
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.talend.designer.camel.dependencies.core

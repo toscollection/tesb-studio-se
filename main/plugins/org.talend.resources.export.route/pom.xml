@@ -30,6 +30,7 @@
 							<excludeTypes>pom</excludeTypes>
 							<excludeTransitive>true</excludeTransitive>
 							<outputDirectory>${basedir}/lib</outputDirectory>
+							<includeScope>runtime</includeScope>
 							<excludeGroupIds>p2.eclipse-plugin,org.talend.studio</excludeGroupIds>
 						</configuration>
 					</execution>

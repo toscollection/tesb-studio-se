@@ -6,5 +6,3 @@ Bundle-Vendor: .Talend SA.
 Bundle-SymbolicName: org.talend.libraries.esb;singleton:=true
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-

@@ -20,7 +20,6 @@ Require-Bundle: org.apache.commons.collections,
  org.eclipse.ui.intro,
  org.eclipse.ui.ide,
  org.eclipse.gef,
- org.eclipse.wst.wsdl.ui,
  org.eclipse.xsd,
  org.eclipse.wst.xsd.ui,
  org.eclipse.wst.wsdl.validation,
@@ -60,7 +59,16 @@ Require-Bundle: org.apache.commons.collections,
  org.talend.themes.core,
  org.talend.cwm.mip,
  org.eclipse.emf.ecore.xmi
-Import-Package: org.talend.utils.wsdl
+Import-Package: org.eclipse.wst.wsdl.ui.internal,
+ org.eclipse.wst.wsdl.ui.internal.actions,
+ org.eclipse.wst.wsdl.ui.internal.adapters,
+ org.eclipse.wst.wsdl.ui.internal.asd.actions,
+ org.eclipse.wst.wsdl.ui.internal.asd.design.directedit,
+ org.eclipse.wst.wsdl.ui.internal.asd.util,
+ org.eclipse.wst.wsdl.ui.internal.text,
+ org.eclipse.wst.wsdl.ui.internal.util,
+ org.eclipse.wst.xsd.ui.internal.refactor.handlers,
+ org.talend.utils.wsdl
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.
 Bundle-ClassPath: .,
@@ -72,4 +80,4 @@ Export-Package: org.talend.repository.services.action,
  org.talend.repository.services.ui.action,
  org.talend.repository.services.ui.scriptmanager,
  org.talend.repository.services.utils
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.talend.repository.services

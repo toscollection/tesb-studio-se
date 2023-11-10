@@ -641,8 +641,7 @@
               context="plugin:org.talend.libraries.guava"
               id="guava"
               name="guava-${guava.version}.jar"
-              mvn_uri="mvn:com.google.guava/guava/${guava.version}"
-              uripath="platform:/plugin/org.talend.libraries.guava/lib/guava-${guava.version}.jar">
+              mvn_uri="mvn:com.google.guava/guava/${guava.version}">
         </libraryNeeded>
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
             name="guava-failureaccess-${guava.failureaccess.version}.jar"

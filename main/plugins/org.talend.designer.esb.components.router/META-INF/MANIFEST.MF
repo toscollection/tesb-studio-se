@@ -11,4 +11,4 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Import-Package: org.talend.designer.codegen.additionaljet
 Eclipse-BundleShape: dir
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.talend.designer.esb.components.router

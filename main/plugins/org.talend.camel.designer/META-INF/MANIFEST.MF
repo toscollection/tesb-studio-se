@@ -135,6 +135,5 @@ Export-Package: org.talend.camel.designer.dialog;
    org.talend.designer.core.model.utils.emf.talendfile,
    org.talend.designer.publish.core.models"
 Bundle-Vendor: .Talend SA.
-Import-Package: org.eclipse.jdt.core,
- org.apache.commons.collections
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.jdt.core
+Automatic-Module-Name: org.talend.camel.designer

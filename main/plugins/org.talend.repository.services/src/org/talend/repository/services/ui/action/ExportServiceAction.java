@@ -40,6 +40,7 @@ import org.talend.core.runtime.process.ITalendProcessJavaProject;
 import org.talend.designer.maven.model.MavenSystemFolders;
 import org.talend.designer.maven.model.ProjectSystemFolder;
 import org.talend.designer.maven.model.TalendMavenConstants;
+import org.talend.designer.maven.utils.MavenProjectUtils;
 import org.talend.designer.maven.utils.PomIdsHelper;
 import org.talend.designer.publish.core.models.BundleModel;
 import org.talend.designer.publish.core.models.FeatureModel;
@@ -256,7 +257,7 @@ public class ExportServiceAction implements IRunnableWithProgress {
         monitor.worked(1);
 
         monitor.subTask(Messages.ProjectConfigurationManager_task_creating_project);
-        projectConfigurationManager.enableMavenNature(p, importConfiguration.getResolverConfiguration(), monitor);
+        MavenProjectUtils.enableMavenNature(monitor, p);
         monitor.worked(1);
 
         // if (this.pomFile == null) {
