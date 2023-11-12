@@ -164,6 +164,7 @@ package <%= packageName %>;
 
  <%
         boolean exportTypeSpringBoot = process.getClass().getName().endsWith("MicroServiceProcess");
+        boolean exportTypeStandaloneMS = process.getClass().getName().endsWith("StandaloneMicroServiceProcess");
         boolean isRoutelet = ((IProcess2) process).getProperty().getItem().getClass().getName().endsWith("RouteletProcessItemImpl");
 
         boolean hasCSoapOrCRest = false;
