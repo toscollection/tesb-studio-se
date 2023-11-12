@@ -15,6 +15,7 @@ package org.talend.camel.designer;
 import org.talend.camel.core.model.camelProperties.CamelPropertiesPackage;
 import org.talend.camel.core.model.camelProperties.impl.CamelProcessItemImpl;
 import org.talend.camel.designer.ui.editor.MicroServiceProcess;
+import org.talend.camel.designer.ui.editor.StandaloneMicroServiceProcess;
 import org.talend.camel.designer.ui.editor.RouteProcess;
 import org.talend.core.model.process.IProcess;
 import org.talend.core.model.properties.Item;
@@ -35,17 +36,25 @@ public class RouteProcessConvertServiceImpl implements IProcessConvertService {
                 // camelProcessItemImpl.isExportMicroService(). It is synchronized here
                 // as it gets out of sync with changes to BUILD_TYPE.
                 String bt = (String) item.getProperty().getAdditionalProperties().get("BUILD_TYPE");
-                boolean isMS;
+                boolean isMS =false;
+                boolean issMS = false;
+
                 if (bt == null) {
-                	isMS = camelProcessItemImpl.isExportMicroService();
-                } else {
-                	isMS = bt.indexOf("MICROSERVICE") >= 0;
-                	if (camelProcessItemImpl.isExportMicroService() != isMS) {
-                		camelProcessItemImpl.setExportMicroService(isMS);
-                	}
+                    isMS = camelProcessItemImpl.isExportMicroService();
+                } else if("ROUTE_STANDALONE_MICROSERVICE".equals(bt)
+                        ||"REST_STANDALONE_MS".equals(bt) ){
+                    issMS = true;
+                }else {
+                    isMS = bt.indexOf("MICROSERVICE") >= 0;
+                    if (camelProcessItemImpl.isExportMicroService() != isMS) {
+                         camelProcessItemImpl.setExportMicroService(isMS);
+                    }
                 }
-                if (isMS) {
-                    process = new MicroServiceProcess(item.getProperty());
+
+                if(issMS) {
+                    process = new StandaloneMicroServiceProcess(item.getProperty());
+                }else if (isMS) {
+                   process = new MicroServiceProcess(item.getProperty());
                 }
             }
             process.loadXmlFile(loadScreenshots);
