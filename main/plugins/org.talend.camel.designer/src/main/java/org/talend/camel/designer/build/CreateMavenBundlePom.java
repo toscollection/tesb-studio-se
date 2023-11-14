@@ -179,7 +179,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
 
             File featurePom = new File(parent.getLocation().toOSString() + File.separator + "pom-feature.xml");
 
-            Model featureModel = new Model();
+            Model featureModel = createFeatureModel();
 
             featureModel.setModelVersion("4.0.0");
             featureModel.setParent(parentPom);
@@ -191,13 +191,25 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
             featureModel.setVersion(bundleModel.getVersion());
             featureModel.setPackaging("pom");
 
-            featureModel.setProperties(bundleModel.getProperties());
+            if (featureModel.getProperties() != null) {
+            	featureModel.getProperties().putAll(bundleModel.getProperties());
+            } else {
+                featureModel.setProperties(bundleModel.getProperties());
+            }
+            
+
             featureModel.addProperty("cloud.publisher.skip", "false");
             Build featureModelBuild = new Build();
 
 
-            List<Profile> profiles = new ArrayList<Profile>();
+            List<Profile> profiles = featureModel.getProfiles();
+            
+            if (profiles == null || profiles.isEmpty()) {
+            	profiles = new ArrayList<Profile>();
+            }
 
+            // update kar-publisher plugin
+            profiles.removeIf(p-> "kar-publisher".equalsIgnoreCase(p.getId()));
             Profile profile = new Profile();
             profile.setId("kar-publisher");
 
@@ -210,7 +222,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
             profile.setActivation(activation);
 
             BuildBase buildBase = new BuildBase();
-            buildBase.addPlugin(addFeaturesMavenPlugin(bundleModel.getProperties().getProperty("talend.job.finalName")));
+            buildBase.addPlugin(addFeaturesMavenPlugin(bundleModel.getProperties().getProperty("talend.job.finalName"), featureModel));
             profile.setBuild(buildBase);
 
             profiles.add(profile);
@@ -408,9 +420,14 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         return deployCloudProfile;
     }
 
-    private Plugin addFeaturesMavenPlugin(String finalNameValue) {
-        Plugin plugin = new Plugin();
+    private Plugin addFeaturesMavenPlugin(String finalNameValue, Model featureModel) {
+    	
+    	Plugin plugin = getPluginFromModel(featureModel, "org.apache.karaf.tooling", "karaf-maven-plugin");
 
+    	if (plugin == null) {
+        	plugin = new Plugin();
+    	}
+    	
         plugin.setGroupId("org.apache.karaf.tooling");
         plugin.setArtifactId("karaf-maven-plugin");
         plugin.setVersion("4.2.10");
@@ -431,16 +448,39 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         configuration.addChild(resourcesDir);
         configuration.addChild(featuresFile);
 
+        
         List<PluginExecution> pluginExecutions = new ArrayList<PluginExecution>();
+        if (plugin.getExecutions() != null) {
+        	pluginExecutions = plugin.getExecutions();
+        }
+        
         PluginExecution pluginExecution = new PluginExecution();
+        Map<String, PluginExecution> executions = plugin.getExecutionsAsMap();
+        if (executions == null) {
+            for (Map.Entry<String, PluginExecution> entry : executions.entrySet()) {
+            	PluginExecution pe = entry.getValue();
+                if ("create-kar".equalsIgnoreCase(pe.getId())) {
+                	pluginExecution = pe; 
+                }
+            }
+        }
         pluginExecution.setId("create-kar");
-        pluginExecution.addGoal("kar");
+        if (pluginExecution.getGoals() != null && !pluginExecution.getGoals().contains("kar")) {
+            pluginExecution.addGoal("kar");
+        }
+        
         pluginExecution.setConfiguration(configuration);
 
+        pluginExecutions.removeIf(p-> "create-kar".equalsIgnoreCase(p.getId()));
         pluginExecutions.add(pluginExecution);
         plugin.setExecutions(pluginExecutions);
 
-        List<Dependency> dependencies = new ArrayList<Dependency>();
+
+        List<Dependency> dependencies = plugin.getDependencies();
+        if (dependencies == null || dependencies.isEmpty()) {
+        	dependencies = new ArrayList<Dependency>();
+        }
+        
         Dependency mavensharedDep = new Dependency();
         mavensharedDep.setGroupId("org.apache.maven.shared");
         mavensharedDep.setArtifactId("maven-shared-utils");
@@ -505,7 +545,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         plexusIoDep.setGroupId("org.codehaus.plexus");
         plexusIoDep.setArtifactId("plexus-io");
         plexusIoDep.setVersion("3.2.0");
-        
+
         Dependency commonsCompressDep = new Dependency();
         commonsCompressDep.setGroupId("org.apache.commons");
         commonsCompressDep.setArtifactId("commons-compress");
@@ -573,7 +613,7 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         sshdExclusion1.setArtifactId("sshd-osgi");
         karafShellConsoleExclusionList.add(sshdExclusion1);
         karafShellConsoleDep.setExclusions(karafShellConsoleExclusionList);
-        dependencies.add(karafShellConsoleDep);
+        updateDependency(dependencies, karafShellConsoleDep);
         
         //org.apache.karaf.shell.core---to remove dependency to sshd-osgi, then spring-framwork-bom
         Dependency karafShellCoreDep = new Dependency();
@@ -586,34 +626,57 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
         sshdExclusion.setArtifactId("sshd-osgi");
         karafShellCoreExclusionList.add(sshdExclusion);
         karafShellCoreDep.setExclusions(karafShellCoreExclusionList);
-        dependencies.add(karafShellCoreDep);
+        updateDependency(dependencies, karafShellCoreDep);
         
-        dependencies.add(mavensharedDep);
-        dependencies.add(commonsioDep);
-        dependencies.add(httpclientDep);
-        dependencies.add(httpcoreDep);
-        dependencies.add(istackDep);
-        dependencies.add(xzDep);
-        dependencies.add(junitDep);
-        dependencies.add(mavenCoreDep);
-        dependencies.add(mavenCompatDep);
-        dependencies.add(mavenSettingsDep);
-        dependencies.add(mavenSettingsBdDep);
-        dependencies.add(plexusArchiverDep);
-        dependencies.add(plexusIoDep);
-        dependencies.add(commonsCompressDep);
-        dependencies.add(jsoupDep);
-        dependencies.add(mavenModelDep);
-        dependencies.add(commonsCodecDep);
-        dependencies.add(guavaDep);
-        dependencies.add(slf4jDep);
-        dependencies.add(slf4jJclDep);
-        dependencies.add(slf4jApiDep);
-        dependencies.add(doxiaDep);
-        dependencies.add(velocityDep);
+        updateDependency(dependencies, mavensharedDep);
+        updateDependency(dependencies, commonsioDep);
+        updateDependency(dependencies, httpclientDep);
+        updateDependency(dependencies, httpcoreDep);
+        updateDependency(dependencies, istackDep);
+        updateDependency(dependencies, xzDep);
+        updateDependency(dependencies, junitDep);
+        updateDependency(dependencies, mavenCoreDep);
+        updateDependency(dependencies, mavenCompatDep);
+        updateDependency(dependencies, mavenSettingsDep);
+        updateDependency(dependencies, mavenSettingsBdDep);
+        updateDependency(dependencies, plexusArchiverDep);
+        updateDependency(dependencies, plexusIoDep);
+        updateDependency(dependencies, commonsCompressDep);
+        updateDependency(dependencies, jsoupDep);
+        updateDependency(dependencies, mavenModelDep);
+        updateDependency(dependencies, commonsCodecDep);
+        updateDependency(dependencies, guavaDep);
+        updateDependency(dependencies, slf4jDep);
+        updateDependency(dependencies, slf4jJclDep);
+        updateDependency(dependencies, slf4jApiDep);
+        updateDependency(dependencies, doxiaDep);
+        updateDependency(dependencies, velocityDep);
+        
         plugin.setDependencies(dependencies);
-
+    	
         return plugin;
+    }
+    
+    private void updateDependency(List <Dependency> dependencies, Dependency dependency) {
+    	if (dependency.getGroupId() !=null && dependency.getArtifactId() != null) {
+            dependencies.removeIf(d  -> dependency.getGroupId().equalsIgnoreCase(d.getGroupId()) &&  dependency.getArtifactId().equals(d.getArtifactId()));
+    	}
+    	dependencies.add(dependency);
+    }
+    
+    private Plugin getPluginFromModel(Model model, String groupID, String artifactID) {
+    	
+    	if (model == null || groupID == null || artifactID == null) {
+    		return null;
+    	}
+    	
+    	for (Plugin p : model.getBuild().getPlugins()) {
+			if (p.getGroupId().equals(groupID) && p.getArtifactId().equals(artifactID)) {
+				return p;
+			}
+		} 
+    	
+        return null;
     }
     
     private Plugin addOsgiHelperMavenPlugin(boolean setFeatureFile, boolean setSkipChilds, boolean setInstallProject) {
@@ -854,6 +917,20 @@ public class CreateMavenBundlePom extends CreateMavenJobPom {
             final Map<String, Object> templateParameters = PomUtil.getTemplateParameters(getJobProcessor());
             return MavenTemplateManager.getTemplateStream(templateFile,
                     IProjectSettingPreferenceConstants.TEMPLATE_ROUTES_KARAF_BUNDLE, "org.talend.resources.export.route",
+                    getBundleTemplatePath(), templateParameters);
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+    
+    @Override
+    protected InputStream getFeatureTemplateStream() throws IOException {
+        File templateFile = PomUtil.getTemplateFile(getObjectTypeFolder(), getItemRelativePath(),
+                "pom-feature.xml");
+        try {
+            final Map<String, Object> templateParameters = PomUtil.getTemplateParameters(getJobProcessor());
+            return MavenTemplateManager.getTemplateStream(templateFile,
+                    IProjectSettingPreferenceConstants.TEMPLATE_ROUTES_KARAF_FEATURE, "org.talend.resources.export.route",
                     getBundleTemplatePath(), templateParameters);
         } catch (Exception e) {
             throw new IOException(e);
