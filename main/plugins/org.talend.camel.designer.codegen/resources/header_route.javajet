@@ -493,9 +493,11 @@ class HttpConduitConfigApplier {
 
 <% } %>
 
-@org.springframework.boot.autoconfigure.SpringBootApplication
-@org.springframework.boot.context.properties.EnableConfigurationProperties(<%=className%>.ContextProperties.class)
-@org.springframework.context.annotation.ImportResource("classpath:META-INF/spring/<%=className.toLowerCase()%>.xml")
+<% if(exportTypeSpringBoot && !exportTypeStandaloneMS) { %>
+    @org.springframework.boot.autoconfigure.SpringBootApplication
+    @org.springframework.boot.context.properties.EnableConfigurationProperties(<%=className%>.ContextProperties.class)
+    @org.springframework.context.annotation.ImportResource("classpath:META-INF/spring/<%=className.toLowerCase()%>.xml")
+<% } %>
 public class <%=className%> extends org.apache.camel.builder.RouteBuilder implements TalendESBRoute {
 
     @org.springframework.beans.factory.annotation.Autowired
@@ -530,6 +532,8 @@ public class <%=className%> extends org.apache.camel.builder.RouteBuilder implem
     private boolean inOSGi = routines.system.BundleUtils.inOSGi();
 
     private boolean inMS = <%=exportTypeSpringBoot%>;
+
+    private boolean isStandaloneMS = <%=exportTypeStandaloneMS%>;
 
     private static Object arguments;
 
