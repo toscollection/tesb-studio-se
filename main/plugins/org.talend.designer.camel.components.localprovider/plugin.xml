@@ -65,45 +65,45 @@
         </libraryNeededGroup>
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-activemq-spring}"
+            name="activemq-spring-${activemq.version}.jar"
             id="activemq-spring"
             mvn_uri="mvn:org.apache.activemq/activemq-spring/${activemq.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-spring}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/activemq-spring-${activemq.version}.jar"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-activemq-broker}"
+            name="activemq-broker-${activemq.version}.jar"
             id="activemq-broker"
             mvn_uri="mvn:org.apache.activemq/activemq-broker/${activemq.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-broker}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/activemq-broker-${activemq.version}.jar"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-activemq-client}"
+            name="activemq-client-${activemq.version}.jar"
             id="activemq-client"
             mvn_uri="mvn:org.apache.activemq/activemq-client/${activemq.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-client}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/activemq-client-${activemq.version}.jar"
             bundleID="" />
 	    
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-activemq-openwire-legacy}"
+            name="activemq-openwire-legacy-${activemq.version}.jar"
             id="activemq-openwire-legacy"
             mvn_uri="mvn:org.apache.activemq/activemq-openwire-legacy/${activemq.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-openwire-legacy}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/activemq-openwire-legacy-${activemq.version}.jar"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-activemq-pool}"
+            name="activemq-pool-${activemq.version}.jar"
             id="activemq-pool"
             mvn_uri="mvn:org.apache.activemq/activemq-pool/${activemq.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-pool}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/activemq-pool-${activemq.version}.jar"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-activemq-jms-pool}"
+            name="activemq-jms-pool-${activemq.version}.jar"
             id="activemq-jms-pool"
             mvn_uri="mvn:org.apache.activemq/activemq-jms-pool/${activemq.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-activemq-jms-pool}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/activemq-jms-pool-${activemq.version}.jar"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
