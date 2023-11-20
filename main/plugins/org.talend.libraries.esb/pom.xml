@@ -541,7 +541,7 @@
 	<dependency>
 		<groupId>org.talend.esb</groupId>
 		<artifactId>sam-agent</artifactId>
-		<version>${sam-agent.version}</version>
+		<version>${tesb.version}</version>
 		<exclusions>
 			<exclusion>
 				<groupId>commons-lang</groupId>
@@ -563,11 +563,16 @@
 		<artifactId>correlationid-policy</artifactId>
 		<version>${tesb.version}</version>
 	</dependency>
+	<dependency>
+		<groupId>commons-jxpath</groupId>
+		<artifactId>commons-jxpath</artifactId>
+		<version>1.3</version>
+	</dependency>
 	<!-- Security -->
 	<dependency>
 		<groupId>org.talend.esb</groupId>
 		<artifactId>security-common</artifactId>
-		<version>${security-common.version}</version>
+		<version>${tesb.version}</version>
 	</dependency>
 	<!-- cTalendJob -->
 	<dependency>
