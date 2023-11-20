@@ -15,7 +15,7 @@ public class StandaloneMicroServiceProcess  extends RouteProcess {
     public boolean isEnableMetrics() {
         Map<String, Object> argumentsMap = LastGenerationInfo.getInstance().getLastMainJob().getProcessor().getArguments();
 
-        return ObjectUtils.equals(argumentsMap.get("ESB_METRICS"), new Boolean(true));
+        return ObjectUtils.equals(argumentsMap.get("ESB_METRICS"), Boolean.TRUE);
 
     }
 
