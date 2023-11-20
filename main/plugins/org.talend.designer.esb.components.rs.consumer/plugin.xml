@@ -600,10 +600,10 @@
 		</libraryNeededGroup>
 
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="${tesb-locator}"
+		    name="locator-${tesb.version}.jar"
 		    id="locator"
 		    mvn_uri="mvn:org.talend.esb/locator/${tesb.version}"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-locator}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/locator-${tesb.version}.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-zookeeper}"
@@ -678,16 +678,16 @@
 			bundleID="" />
 
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="${tesb-sam-agent}"
+		    name="sam-agent-${tesb.version}.jar"
 		    id="sam-agent"
 		    mvn_uri="mvn:org.talend.esb/sam-agent/${tesb.version}"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-sam-agent}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/sam-agent-${tesb.version}.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="${tesb-sam-common}"
+		    name="sam-common-${tesb.version}.jar"
 		    id="sam-common"
 		    mvn_uri="mvn:org.talend.esb/sam-common/${tesb.version}"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-sam-common}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/sam-common-${tesb.version}.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="commons-lang-2.6.jar"
@@ -710,16 +710,16 @@
 		</libraryNeededGroup>
 
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="${tesb-correlationid-policy}"
+		    name="correlationid-policy-${tesb.version}.jar"
 		    id="correlationid-policy"
 		    mvn_uri="mvn:org.talend.esb.policies/correlationid-policy/${tesb.version}"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-correlationid-policy}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/correlationid-policy-${tesb.version}.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="${tesb-commons-jxpath}"
+		    name="commons-jxpath-1.3.jar"
 		    id="commons-jxpath"
 		    mvn_uri="mvn:commons-jxpath/commons-jxpath/1.3"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-commons-jxpath}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/commons-jxpath-1.3.jar"
 		    bundleID="" />
 
 		<libraryNeededGroup
@@ -733,10 +733,10 @@
 		</libraryNeededGroup>
 
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
-		    name="${tesb-security-common}"
+		    name="security-common-${tesb.version}.jar"
 		    id="security-common"
 		    mvn_uri="mvn:org.talend.esb/security-common/${tesb.version}"
-		    uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-security-common}"
+		    uripath="platform:/plugin/org.talend.libraries.esb/lib/security-common-${tesb.version}.jar"
 		    bundleID="" />
 		<libraryNeeded context="plugin:org.talend.libraries.esb"
 		    name="${tesb-cxf-rt-rs-security-xml}"

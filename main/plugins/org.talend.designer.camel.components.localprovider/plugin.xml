@@ -793,9 +793,9 @@
         <libraryNeeded
               context="plugin:org.talend.libraries.esb"
               id="camel-talendjob"
-              name="${tesb-camel-talendjob}"
+              name="camel-talendjob-${tesb.version}.jar"
               mvn_uri="mvn:org.talend.camel/camel-talendjob/${tesb.version}"
-              uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-camel-talendjob}">
+              uripath="platform:/plugin/org.talend.libraries.esb/lib/camel-talendjob-${tesb.version}.jar">
         </libraryNeeded>
 
         <!-- camel http -->
