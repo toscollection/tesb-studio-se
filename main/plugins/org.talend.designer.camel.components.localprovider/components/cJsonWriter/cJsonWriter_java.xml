@@ -43,17 +43,14 @@
 
 	<CODEGENERATION>
 		<IMPORTS>
-			<IMPORT MODULE="camel-gson-alldep-${camel.version}.jar" MVN="mvn:org.talend.libraries/camel-gson-alldep-${camel.version}/6.0.0"
+			<IMPORT MODULE="camel-gson-alldep-${camel-alldep-verson}.jar" MVN="mvn:org.talend.camel.libraries/camel-gson-alldep/${camel-alldep-verson}"
 				NAME="talend-camel-gson"
-				UrlPath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-gson-alldep-${camel.version}.jar"
 				REQUIRED_IF="JSON_LIBRARY == 'org.apache.camel.model.dataformat.JsonLibrary.Gson'" />
-			<IMPORT MODULE="camel-jackson-alldep-${camel.version}.jar" MVN="mvn:org.talend.libraries/camel-jackson-alldep-${camel.version}/6.0.0"
+			<IMPORT MODULE="camel-jackson-alldep-${camel-alldep-verson}.jar" MVN="mvn:org.talend.camel.libraries/camel-jackson-alldep/${camel-alldep-verson}"
 				NAME="talend-camel-jackson"
-				UrlPath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-jackson-alldep-${camel.version}.jar"
 				REQUIRED_IF="JSON_LIBRARY == 'org.apache.camel.model.dataformat.JsonLibrary.Jackson'" />
-			<IMPORT MODULE="camel-fastjson-alldep-${camel.version}.jar" MVN="mvn:org.talend.libraries/camel-fastjson-alldep-${camel.version}/6.0.0"
+			<IMPORT MODULE="camel-fastjson-alldep-${camel-alldep-verson}.jar" MVN="mvn:org.talend.camel.libraries/camel-fastjson-alldep/${camel-alldep-verson}"
 				NAME="talend-camel-fastjson"
-				UrlPath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-fastjson-alldep-${camel.version}.jar"
 				REQUIRED_IF="JSON_LIBRARY == 'org.apache.camel.model.dataformat.JsonLibrary.Fastjson'" />
 		</IMPORTS>
 	</CODEGENERATION>
