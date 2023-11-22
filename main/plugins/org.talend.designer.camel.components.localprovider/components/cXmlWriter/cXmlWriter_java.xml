@@ -43,17 +43,14 @@
 
 	<CODEGENERATION>
 		<IMPORTS>
-			<IMPORT MODULE="camel-jaxb-alldep-${camel.version}.jar" MVN="mvn:org.talend.libraries/camel-jaxb-alldep-${camel.version}/6.0.0"
+			<IMPORT MODULE="camel-jaxb-alldep-${camel-alldep-verson}.jar" MVN="mvn:org.talend.camel.libraries/camel-jaxb-alldep/${camel-alldep-verson}"
 				NAME="talend-camel-jaxb"
-				UrlPath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-jaxb-alldep-${camel.version}.jar"
 				REQUIRED_IF="XML_LIBRARY == 'jaxb'" />
-			<IMPORT MODULE="camel-jacksonxml-alldep-${camel.version}.jar" MVN="mvn:org.talend.libraries/camel-jacksonxml-alldep-${camel.version}/6.0.0"
+			<IMPORT MODULE="camel-jacksonxml-alldep-${camel-alldep-verson}.jar" MVN="mvn:org.talend.camel.libraries/camel-jacksonxml-alldep/${camel-alldep-verson}"
 				NAME="talend-camel-jacksonxml"
-				UrlPath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-jacksonxml-alldep-${camel.version}.jar"
 				REQUIRED_IF="XML_LIBRARY == 'jacksonxml'" />
-			<IMPORT MODULE="camel-xstream-alldep-${camel.version}.jar" MVN="mvn:org.talend.libraries/camel-xstream-alldep-${camel.version}/6.0.0"
+			<IMPORT MODULE="camel-xstream-alldep-${camel-alldep-verson}.jar" MVN="mvn:org.talend.camel.libraries/camel-xstream-alldep/${camel-alldep-verson}"
 				NAME="talend-camel-xstream"
-				UrlPath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-xstream-alldep-${camel.version}.jar"
 				REQUIRED_IF="XML_LIBRARY == 'xstream'" />
 		</IMPORTS>
 	</CODEGENERATION>
