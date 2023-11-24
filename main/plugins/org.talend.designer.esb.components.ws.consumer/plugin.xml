@@ -649,10 +649,10 @@
             uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-zookeeper-jute}"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-cxf-rt-features-clustering}"
+            name="cxf-rt-features-clustering-${cxf.version}.jar"
             id="cxf-rt-features-clustering"
             mvn_uri="mvn:org.apache.cxf/cxf-rt-features-clustering/${cxf.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-cxf-rt-features-clustering}"
+            uripath="platform:/plugin/org.talend.libraries.esb/lib/cxf-rt-features-clustering-${cxf.version}.jar"
             bundleID="" />
 
         <libraryNeededGroup
