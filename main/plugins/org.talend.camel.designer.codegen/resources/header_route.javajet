@@ -186,7 +186,7 @@ package <%= packageName %>;
         importsSet.add("import org.eclipse.jetty.servlet.ServletContextHandler");
         importsSet.add("import org.eclipse.jetty.servlet.ServletHolder");
         importsSet.add("import org.jolokia.http.AgentServlet");
-        importsSet.add("import org.talend.camel.TalendEndpoint");
+//        importsSet.add("import org.talend.camel.TalendEndpoint");
 //        importsSet.add("import org.apache.http.client.utils.URIBuilder");		
     }
 	
@@ -598,7 +598,7 @@ if (exportTypeStandaloneMS) {
 					contextParams = (List<Map<String,String>>)ElementParameterParser.getObjectValue(node, "__EXTERNAL_JAR_CONTEXTPARAMS__");
 %>
 					@EndpointInject("talend:" + <%=typeName%> + "?context=" + <%=context%> + "&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>")
-					private TalendEndpoint endpoint_<%=cid%>;
+					private org.talend.camel.TalendEndpoint endpoint_<%=cid%>;
 <%
 				}else{
 					String typeName = "";
@@ -639,12 +639,12 @@ if (exportTypeStandaloneMS) {
 						String executionContextVariable = "contextStr";
 %>
 					   @EndpointInject("talend:<%=ownerName%>/<%=typeName%>?context=" + <%=executionContextVariable%> + "&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>")
-					   private TalendEndpoint endpoint_<%=cid%>;
+					   private org.talend.camel.TalendEndpoint endpoint_<%=cid%>;
 <%
 					} else {
 %>
 					   @EndpointInject(("talend:<%=ownerName%>/<%=typeName%>?context=<%=context%>&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>"))
-					   private TalendEndpoint endpoint_<%=cid%>;
+					   private org.talend.camel.TalendEndpoint endpoint_<%=cid%>;
 <%
 					}
 				}
@@ -1363,10 +1363,6 @@ final Map<String, String> contentTypes = new java.util.HashMap<String, String>()
 		if (exportTypeStandaloneMS) {
 %>
    
-			// tests
-			public String getCXFRSEndpointAddress() {
-				return getCXFRSEndpointAddress(context.dispatchEndpoint);
-			}
 <% 
 		}
 %>			
