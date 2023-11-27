@@ -56,7 +56,31 @@
 
     private void run() throws java.lang.Exception {
         main = new org.apache.camel.main.Main() {
+		
+<%
+	if(exportTypeStandaloneMS){
+%>
+		protected CamelContext createCamelContext() {
+			DefaultCamelContext camelContext = new DefaultCamelContext(false);
+			camelContext.setLogJvmUptime(true);
+			camelContext.setRegistry(this.registry);
+			final DefaultHealthCheckRegistry checkRegistry = new DefaultHealthCheckRegistry();
+			checkRegistry.register(new RoutesHealthCheckRepository());
+			camelContext.setExtension(HealthCheckRegistry.class, checkRegistry);
+			if (this.mainClass != null) {
+				camelContext.getGlobalOptions().put("CamelMainClass", this.mainClass.getName());
+			} else {
+				camelContext.getGlobalOptions().put("CamelMainClass", this.getClass().getName());
+			}
 
+			camelContext.setName("<%=className %>");
+			camelContext.setLoadHealthChecks(true);
+			
+			return camelContext;
+		}
+<%
+	} else {
+%>
             protected CamelContext createCamelContext() {
                 final org.apache.camel.impl.DefaultCamelContext camelContext =
 <%
@@ -141,6 +165,9 @@
 %>
                 return camelContext;
             }
+<%
+	}//end if(exportTypeStandaloneMS)
+%>
         };
 
         //add route
@@ -414,22 +441,23 @@ for (IContextParameter ctxParam : params) {
 	private final Properties context_param = new Properties();
 
     <% 
-        if(exportTypeSpringBoot){
+        if(exportTypeStandaloneMS){
     %>
-    
+
+        public static void main(String[] args){
+			AppJetty.parseCmdLineAndPrintBanner(args);
+            int exitCode = new <%=className %>().runJobInTOS(args);
+            if(exitCode != 0) {
+                System.exit(exitCode);
+            }
+        }
+    <% } else if(exportTypeSpringBoot){ %>
+
         public static void main(String... args){
             String[] resetArgs = resetArgs(args);
             org.springframework.context.ApplicationContext applicationContext = new org.springframework.boot.SpringApplication(<%=className%>.class).run(resetArgs);
             org.apache.camel.spring.boot.CamelSpringBootApplicationController applicationController = applicationContext.getBean(org.apache.camel.spring.boot.CamelSpringBootApplicationController.class);
             applicationController.blockMainThread();
-        }
-    <% } else if(exportTypeStandaloneMS){ %>
-
-        public static void main(String[] args){
-            int exitCode = new <%=className %>().runJobInTOS(args);
-            if(exitCode != 0) {
-                System.exit(exitCode);
-            }
         }
 
     <% } else { %>
@@ -579,6 +607,13 @@ if (isTestContainer) {
 
     @Override
     public int runJobInTOS(String[] args) {
+	
+<%if(exportTypeStandaloneMS){%>
+		pid = AppConfig.getInstance().getConfigs().getString("pid", TalendString.getAsciiRandomString(6));
+		portStats = AppConfig.getInstance().getConfigs().getInt("stat_port", -1);
+		context_param.putAll(AppConfig.getContextParamsOverride());
+		contextStr = AppConfig.getInstance().getConfigs().getString("context");
+<%} else { %>	
 		String lastStr = "";
         for (String arg : args) {
         	if (arg.equalsIgnoreCase("--context_param")) {
@@ -599,7 +634,10 @@ if (isTestContainer) {
 	    }
 <%
     }
+}	
 %>
+
+
 		try {
 			run();
 		} catch (java.lang.Exception e) {
@@ -783,7 +821,7 @@ if (isTestContainer) {
             }
     <%}%>
     
-
+<%if(!exportTypeStandaloneMS){%>
 	private void evalParam(String arg) {
         if (arg.startsWith("--context=")) {
             contextStr = arg.substring(10);
@@ -811,5 +849,8 @@ if (isTestContainer) {
     }
 %>
 	}
+<%
+    }
+%>
 }
 

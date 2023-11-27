@@ -146,6 +146,50 @@ package <%= packageName %>;
         importsSet.add("import org.junit.Test");
         importsSet.add("import org.apache.camel.component.mock.MockEndpoint");
     }
+	
+	if(process.getClass().getName().endsWith("StandaloneMicroServiceProcess")){
+        importsSet.add("import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE");
+//        importsSet.add("import static org.apache.camel.component.rest.RestConstants.CONTENT_TYPE");
+        importsSet.add("import javax.servlet.ServletException");
+        importsSet.add("import javax.servlet.http.HttpServlet");
+        importsSet.add("import javax.servlet.http.HttpServletRequest");
+        importsSet.add("import javax.servlet.http.HttpServletResponse");
+        importsSet.add("import org.apache.camel.CamelContext");
+        importsSet.add("import org.apache.camel.Exchange");
+        importsSet.add("import org.apache.camel.health.HealthCheck");
+        importsSet.add("import org.apache.camel.health.HealthCheckHelper");
+        importsSet.add("import org.apache.camel.health.HealthCheckRegistry");
+        importsSet.add("import org.apache.camel.impl.DefaultCamelContext");
+        importsSet.add("import org.apache.camel.component.cxf.common.CxfPayload");
+        importsSet.add("import app.utils.server.*");
+        importsSet.add("import app.utils.server.management.info.InfoServlet");
+        importsSet.add("import app.utils.config.AppConfig");
+        importsSet.add("import org.apache.camel.EndpointInject");
+        importsSet.add("import org.apache.camel.impl.health.DefaultHealthCheckRegistry");
+        importsSet.add("import org.apache.camel.impl.health.RoutesHealthCheckRepository");
+        importsSet.add("import org.apache.camel.model.rest.RestBindingMode");
+        importsSet.add("import org.apache.camel.support.jsse.KeyManagersParameters");
+        importsSet.add("import org.apache.camel.support.jsse.KeyStoreParameters");
+        importsSet.add("import org.apache.camel.support.jsse.SSLContextParameters");
+        importsSet.add("import org.apache.camel.support.jsse.TrustManagersParameters");
+//        importsSet.add("import org.apache.commons.configuration2.CompositeConfiguration");
+        importsSet.add("import org.apache.cxf.Bus");
+        importsSet.add("import org.apache.cxf.BusFactory");
+        importsSet.add("import org.apache.cxf.management.InstrumentationManager");
+        importsSet.add("import org.apache.cxf.management.counters.CounterRepository");
+        importsSet.add("import org.apache.cxf.management.jmx.InstrumentationManagerImpl");
+        importsSet.add("import org.apache.cxf.transport.http.HttpServerEngineSupport");
+        importsSet.add("import org.apache.cxf.transport.http_jetty.JettyHTTPServerEngine");
+        importsSet.add("import org.apache.cxf.transport.http_jetty.JettyHTTPServerEngineFactory");
+        importsSet.add("import org.eclipse.jetty.server.Request");
+        importsSet.add("import org.eclipse.jetty.server.handler.ContextHandler");
+        importsSet.add("import org.eclipse.jetty.servlet.ServletContextHandler");
+        importsSet.add("import org.eclipse.jetty.servlet.ServletHolder");
+        importsSet.add("import org.jolokia.http.AgentServlet");
+        importsSet.add("import org.talend.camel.TalendEndpoint");
+//        importsSet.add("import org.apache.http.client.utils.URIBuilder");		
+    }
+	
 
     for(String s: importsSet){
 %>
@@ -163,8 +207,8 @@ package <%= packageName %>;
  */
 
  <%
+        boolean exportTypeSpringBoot = process.getClass().getName().endsWith("MicroServiceProcess");
         boolean exportTypeStandaloneMS = process.getClass().getName().endsWith("StandaloneMicroServiceProcess");
-        boolean exportTypeSpringBoot = process.getClass().getName().endsWith("MicroServiceProcess") && !exportTypeStandaloneMS;
         boolean isRoutelet = ((IProcess2) process).getProperty().getItem().getClass().getName().endsWith("RouteletProcessItemImpl");
 
         boolean hasCSoapOrCRest = false;
@@ -529,9 +573,90 @@ public class <%=className%> extends org.apache.camel.builder.RouteBuilder implem
    }
 %>
 
+
+<%
+if (exportTypeStandaloneMS) {
+	for (INode node : graphicalNodes) {
+		if (!node.isActivate()) {
+			continue;
+		}
+		String nodeComponentName = node.getComponent().getName();
+			
+		if("cTalendJob".equals(nodeComponentName)){
+			if (!node.getIncomingConnections().isEmpty()) {
+				String ownerName = process.getName();
+				String cid = node.getUniqueName();
+				List<Map<String, String>> contextParams = null;
+				String useJar = ElementParameterParser.getValue(node, "__FROM_EXTERNAL_JAR__");
+				// when propagateHeader parameter will be removed the https://github.com/Talend/tesb-rt-se/blob/master/camel-talendjob/src/main/java/org/talend/camel/TalendProducer.java
+				// have to be changed - remove populateTalendContextParamsWithCamelHeaders(exchange, args);
+				String propagateHeader = ElementParameterParser.getValue(node, "__PROPAGATE_HEADER__");
+				String stickyJob = ElementParameterParser.getValue(node, "__STICKY_JOB__");
+				if("true".equals(useJar)){
+					String typeName = ElementParameterParser.getValue(node, "__JOB__");
+					String context = ElementParameterParser.getValue(node, "__CONTEXT__");
+					contextParams = (List<Map<String,String>>)ElementParameterParser.getObjectValue(node, "__EXTERNAL_JAR_CONTEXTPARAMS__");
+%>
+					@EndpointInject("talend:" + <%=typeName%> + "?context=" + <%=context%> + "&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>")
+					private TalendEndpoint endpoint_<%=cid%>;
+<%
+				}else{
+					String typeName = "";
+					contextParams = (List<Map<String,String>>)ElementParameterParser.getObjectValue(node, "__CONTEXTPARAMS__");
+					String context = (String) node.getElementParameter("PROCESS_TYPE_CONTEXT").getValue();
+					String id = (String) node.getElementParameter("PROCESS_TYPE_PROCESS").getValue();
+					if(id != null){
+						String useSelectedContext = ElementParameterParser.getValue(node, "__USE_SELECTED_CONTEXT__");
+						String useRouteContext = ElementParameterParser.getValue(node, "__USE_ROUTE_CONTEXT__");
+						String useJobContext = ElementParameterParser.getValue(node, "__USE_JOB_CONTEXT__");
+						if("true".equals(useRouteContext)){
+							// TESB-13614
+							// we can't define context during codegeneration in this case, because
+							// context will provided to the job before execution
+							context = "NOT_DEFINED";
+
+						}else if("true".equals(useJobContext)){
+							context = ElementParameterParser.getProcessSelectedContext(id);
+						}
+
+						String jobName = ElementParameterParser.getStringElementParameterValue(node.getElementParameter("SELECTED_JOB_NAME"));
+		//              String jobName = (String) node.getElementParameter("SELECTED_JOB_NAME").getValue();
+						String jobVersion = ElementParameterParser.getStringElementParameterValue(node.getElementParameter("PROCESS_TYPE_VERSION"));
+						String jobFolderName = JavaResourcesHelper.getJobFolderName(jobName, jobVersion);
+
+						try{
+							String selectedId = (String) node.getElementParameter("PROCESS_TYPE_PROCESS").getValue();
+							String selectedContext = (String) node.getElementParameter("PROCESS_TYPE_CONTEXT").getValue();
+							String selectedVersion = (String) node.getElementParameter("PROCESS_TYPE_VERSION").getValue();
+
+							typeName = org.talend.designer.runprocess.ProcessorUtilities.getMainCommand(selectedId,selectedVersion, selectedContext,org.talend.designer.runprocess.IProcessor.NO_STATISTICS,org.talend.designer.runprocess.IProcessor.NO_TRACES, null)[0];
+						}catch(Exception e){
+							typeName = codeGenArgument.getCurrentProjectName().toLowerCase() + "." + jobFolderName + "." + jobName;
+						}
+					}
+
+					if("NOT_DEFINED".equals(context)){
+						String executionContextVariable = "contextStr";
+%>
+					   @EndpointInject("talend:<%=ownerName%>/<%=typeName%>?context=" + <%=executionContextVariable%> + "&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>")
+					   private TalendEndpoint endpoint_<%=cid%>;
+<%
+					} else {
+%>
+					   @EndpointInject(("talend:<%=ownerName%>/<%=typeName%>?context=<%=context%>&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>"))
+					   private TalendEndpoint endpoint_<%=cid%>;
+<%
+					}
+				}
+			}
+		}
+	}
+}
+%>
+
     private boolean inOSGi = routines.system.BundleUtils.inOSGi();
 
-    private boolean inMS = <%=exportTypeSpringBoot%>;
+    private boolean inMS = <%=(exportTypeSpringBoot && !exportTypeStandaloneMS)%>;
 
     private boolean isStandaloneMS = <%=exportTypeStandaloneMS%>;
 
@@ -557,7 +682,7 @@ public class <%=className%> extends org.apache.camel.builder.RouteBuilder implem
     public void setArguments(Object arguments) {
         this.inOSGi = true;
         <%=className%>.arguments = arguments;
-        <% if(!exportTypeSpringBoot){ %>
+        <% if(!exportTypeSpringBoot || exportTypeStandaloneMS){ %>
         if (null != context && null != context.getProperty("context")) {
             contextStr = (String) context.getProperty("context");
         }
@@ -1232,6 +1357,20 @@ final Map<String, String> contentTypes = new java.util.HashMap<String, String>()
             defaultUri = defaultUri + "/";
         }
 %>
+
+
+<% 
+		if (exportTypeStandaloneMS) {
+%>
+   
+			// tests
+			public String getCXFRSEndpointAddress() {
+				return getCXFRSEndpointAddress(context.dispatchEndpoint);
+			}
+<% 
+		}
+%>			
+
     public String getCXFRSEndpointAddress(String endpointUrl) {
 
         if (inOSGi || inMS) {
@@ -1439,12 +1578,20 @@ static class CxfPayloadProvider implements javax.ws.rs.ext.MessageBodyWriter<org
                     }
                 }
 <%
-            } if(hasCXF && exportTypeSpringBoot){
+            } if(hasCXF && exportTypeSpringBoot && !exportTypeStandaloneMS){
 %>
-            @org.springframework.context.annotation.Bean
-            public org.springframework.boot.web.servlet.ServletRegistrationBean servletRegistrationBean(org.springframework.context.ApplicationContext context) {
-                return new org.springframework.boot.web.servlet.ServletRegistrationBean(new org.apache.cxf.transport.servlet.CXFServlet(), "/services/*");
-            }
+
+<%
+				if(!exportTypeStandaloneMS){
+%>
+					@org.springframework.context.annotation.Bean
+					public org.springframework.boot.web.servlet.ServletRegistrationBean servletRegistrationBean(org.springframework.context.ApplicationContext context) {
+						return new org.springframework.boot.web.servlet.ServletRegistrationBean(new org.apache.cxf.transport.servlet.CXFServlet(), "/services/*");
+					}
+<%
+				}
+%>
+			
             @org.springframework.context.annotation.Bean(name = "cxf")
             public org.apache.cxf.bus.spring.SpringBus springBus() {
 
@@ -2361,12 +2508,17 @@ if (isProvider) {
 
                 <%}%>
 
-                <%if(exportTypeSpringBoot){%>
+                <%if(exportTypeSpringBoot || exportTypeStandaloneMS){%>
                     <%if(!isRoutelet){%>
                         <%= generateAddRoutesMethod(process)%>
                     <%}%>
-                    //read context values
-                    readContextValues(contextStr);
+					//read context values
+					<%if(exportTypeStandaloneMS){%>
+                    readContextValues(contextStr, camelContext);
+					<%}else{%>
+					readContextValues(contextStr);
+					<%}%>
+					
                 <%}else{%>
                     <%if(!isRoutelet) {%>
                     if(inOSGi){
@@ -2608,8 +2760,9 @@ if (isProvider) {
 <%
                 if (isProvider) {
 %>
-
-                <%if(exportTypeSpringBoot){%>
+                <%if(exportTypeStandaloneMS){%>
+					factory_<%=cid%>.setAddress(AppConfig.getInstance().getServerConfigAddress(getCXFRSEndpointAddress(<%=ElementParameterParser.getValue(node, "__URL__")%>)));
+                <%}else if(exportTypeSpringBoot){%>
                     factory_<%=cid%>.setAddress(<%=ElementParameterParser.getValue(node, "__URL__")%>);
                 <%}else{%>
                     factory_<%=cid%>.setAddress(getCXFRSEndpointAddress(<%=ElementParameterParser.getValue(node, "__URL__")%>));
@@ -2837,6 +2990,43 @@ if (isProvider) {
                         }
                     }
                 );
+		
+		<%if(exportTypeSpringBoot){%>
+		
+			AppJetty.generateUserNameAndPassword();
+			SSLContextParameters sslContextParameters = AppJetty.buildSSLContext();
+			if (sslContextParameters != null) {
+				sslContextParameters.createSSLContext(camelContext);
+				registry.put("sslParams", sslContextParameters);
+			}
+
+			// creates a custom bus to be able to register other servlets
+			Bus cxfBus = BusFactory.getDefaultBus(true);
+			// use the bus to get the objects
+			JettyHTTPServerEngine serverEngine = AppJetty.createServer(cxfBus);
+
+			ServletContextHandler servletContext = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+			// set the context path for the management endpoints
+			servletContext.setContextPath(AppConfig.getInstance().getConfig("server.management.base-path"));
+
+			AppJetty.addJolokiaServlet(servletContext);
+
+			AppJetty.addHealthCheck(servletContext, new LivenessServlet(getContext()));
+
+			AppJetty.addCamelHealthCheck(servletContext, new ReadinessServlet(getContext()));
+
+			AppJetty.addInfoEndpoint(servletContext, new InfoServlet(getContext()));
+
+			AppJetty.addShutdownEndpoint(servletContext, new ShutdownServlet(getContext(), serverEngine));
+
+			serverEngine.setHandlers(java.util.Arrays.asList(servletContext));
+
+			AppJetty.addJmxManagement(cxfBus);
+			// servlet path is /mgmt, so for the constraint, add /*
+			AppJetty.addBasicAuthentication(servletContext, "/*");
+			
+		<%}%>
+				
 <%
             }
             for (INode node: process.getNodesOfType("cSQLConnection")) {
@@ -3890,8 +4080,10 @@ if (isProvider) {
             String context = ElementParameterParser.getValue(node, "__CONTEXT__");
             contextParams = (List<Map<String,String>>)ElementParameterParser.getObjectValue(node, "__EXTERNAL_JAR_CONTEXTPARAMS__");
 %>
-        org.talend.camel.TalendEndpoint endpoint_<%=cid%> =
-            (org.talend.camel.TalendEndpoint) endpoint("talend:" + <%=typeName%> + "?context=" + <%=context%> + "&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>");
+		<%if(!exportTypeStandaloneMS){%>
+			org.talend.camel.TalendEndpoint endpoint_<%=cid%> =
+				(org.talend.camel.TalendEndpoint) endpoint("talend:" + <%=typeName%> + "?context=" + <%=context%> + "&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>");
+		<%}%>				
 <%
         }else{
             String typeName = "";
@@ -3931,13 +4123,17 @@ if (isProvider) {
             if("NOT_DEFINED".equals(context)){
                 String executionContextVariable = "contextStr";
 %>
+			<%if(!exportTypeStandaloneMS){%>
             org.talend.camel.TalendEndpoint endpoint_<%=cid%> =
                 (org.talend.camel.TalendEndpoint) endpoint("talend:<%=ownerName%>/<%=typeName%>?context=" + <%=executionContextVariable%> + "&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>");
+			<%}%>	
 <%
             } else {
 %>
+			<%if(!exportTypeStandaloneMS){%>
             org.talend.camel.TalendEndpoint endpoint_<%=cid%> =
                 (org.talend.camel.TalendEndpoint) endpoint("talend:<%=ownerName%>/<%=typeName%>?context=<%=context%>&propagateHeader=<%=propagateHeader%>&sticky=<%=stickyJob%>&componentId=<%=cid%>");
+			<%}%>
 <%
             }
         }

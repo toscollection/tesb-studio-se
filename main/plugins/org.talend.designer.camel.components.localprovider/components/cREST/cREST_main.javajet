@@ -39,6 +39,14 @@ imports="
     builder.useDoubleSlash(false);
     builderRT.useComponentColon(false);
     builderRT.useDoubleSlash(false);
+	
+	boolean exportTypeSpringBoot = false;
+    boolean exportTypeStandaloneMS = false;
+    if(process.getClass().getName().endsWith("StandaloneMicroServiceProcess")){
+        exportTypeStandaloneMS = true;
+    }else if(process.getClass().getName().endsWith("MicroServiceProcess")){
+        exportTypeSpringBoot = true;
+    }
 
 
 %>
@@ -60,7 +68,11 @@ imports="
             if (endpointUrlRT.startsWith("\"/services")) {
                 endpointUrlRT = endpointUrlRT.replaceFirst("/services","");
             }
-            endpointUrlRT = "getCXFRSEndpointAddress(" + endpointUrlRT + ")";
+		    if (exportTypeStandaloneMS) {
+                endpointUrlRT = "AppConfig.getInstance().getServerConfigAddress(getCXFRSEndpointAddress(" + endpointUrlRT + "))";
+		    } else {
+			    endpointUrlRT = "getCXFRSEndpointAddress(" + endpointUrlRT + ")";
+		    }
         }
 
         if (defaultUri != null && defaultUri.endsWith("/")) {
@@ -90,7 +102,11 @@ imports="
                 endpointUrlStudio = defaultEndpointUrl + "+" + endpointUrlStudio;
             }
             
-            endpointUrlStudio = "getCXFRSEndpointAddress(" + endpointUrlStudio + ")";
+		    if (exportTypeStandaloneMS) {
+                endpointUrlStudio = "AppConfig.getInstance().getServerConfigAddress(getCXFRSEndpointAddress(" + endpointUrlStudio + "))";
+		    } else {
+			    endpointUrlStudio = "getCXFRSEndpointAddress(" + endpointUrlStudio + ")";
+		    }
         }
 
         boolean isTestContainer = ProcessUtils.isTestContainer(process);
