@@ -160,7 +160,6 @@ package <%= packageName %>;
         importsSet.add("import org.apache.camel.health.HealthCheckHelper");
         importsSet.add("import org.apache.camel.health.HealthCheckRegistry");
         importsSet.add("import org.apache.camel.impl.DefaultCamelContext");
-        importsSet.add("import org.apache.camel.component.cxf.common.CxfPayload");
         importsSet.add("import app.utils.server.*");
         importsSet.add("import app.utils.server.management.info.InfoServlet");
         importsSet.add("import app.utils.config.AppConfig");
