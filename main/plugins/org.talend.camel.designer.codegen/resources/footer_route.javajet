@@ -609,10 +609,10 @@ if (isTestContainer) {
     public int runJobInTOS(String[] args) {
 	
 <%if(exportTypeStandaloneMS){%>
-		pid = AppConfig.getInstance().getConfigs().getString("pid", TalendString.getAsciiRandomString(6));
-		portStats = AppConfig.getInstance().getConfigs().getInt("stat_port", -1);
+		String pid = AppConfig.getInstance().getConfigs().getString("pid", TalendString.getAsciiRandomString(6));
+		int portStats = AppConfig.getInstance().getConfigs().getInt("stat_port", -1);
 		context_param.putAll(AppConfig.getContextParamsOverride());
-		contextStr = AppConfig.getInstance().getConfigs().getString("context");
+		String contextStr = AppConfig.getInstance().getConfigs().getString("context");
 <%} else { %>	
 		String lastStr = "";
         for (String arg : args) {
