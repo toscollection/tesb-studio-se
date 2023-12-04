@@ -2986,7 +2986,7 @@ if (isProvider) {
                     }
                 );
 		
-		<%if(exportTypeSpringBoot){%>
+		<%if(exportTypeStandaloneMS){%>
 		
 			AppJetty.generateUserNameAndPassword();
 			SSLContextParameters sslContextParameters = AppJetty.buildSSLContext();
