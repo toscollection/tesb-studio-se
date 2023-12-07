@@ -539,7 +539,7 @@ public static class RestServiceProviderImpl4TalendJob {
 
 
 	public RestServiceProviderImpl4TalendJob() {
-		this.job = new ReceivePlaneJob11_SP();
+		this.job = new <%=className%>();
 	}
 
 	public RestServiceProviderImpl4TalendJob(<%=process.getName()%> job) {
