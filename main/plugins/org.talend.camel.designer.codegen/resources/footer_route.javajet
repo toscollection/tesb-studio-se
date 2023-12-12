@@ -57,30 +57,6 @@
     private void run() throws java.lang.Exception {
         main = new org.apache.camel.main.Main() {
 		
-<%
-	if(exportTypeStandaloneMS){
-%>
-		protected CamelContext createCamelContext() {
-			DefaultCamelContext camelContext = new DefaultCamelContext(false);
-			camelContext.setLogJvmUptime(true);
-			camelContext.setRegistry(this.registry);
-			final DefaultHealthCheckRegistry checkRegistry = new DefaultHealthCheckRegistry();
-			checkRegistry.register(new RoutesHealthCheckRepository());
-			camelContext.setExtension(HealthCheckRegistry.class, checkRegistry);
-			if (this.mainClass != null) {
-				camelContext.getGlobalOptions().put("CamelMainClass", this.mainClass.getName());
-			} else {
-				camelContext.getGlobalOptions().put("CamelMainClass", this.getClass().getName());
-			}
-
-			camelContext.setName("<%=className %>");
-			camelContext.setLoadHealthChecks(true);
-			
-			return camelContext;
-		}
-<%
-	} else {
-%>
             protected CamelContext createCamelContext() {
                 final org.apache.camel.impl.DefaultCamelContext camelContext =
 <%
@@ -165,9 +141,6 @@
 %>
                 return camelContext;
             }
-<%
-	}//end if(exportTypeStandaloneMS)
-%>
         };
 
         //add route
