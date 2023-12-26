@@ -1010,7 +1010,11 @@
 			<artifactId>asm</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-aws2-mq</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>

@@ -70,9 +70,12 @@
         <IMPORTS>
             <IMPORT MODULE_GROUP="camel-core" REQUIRED="true" />
             <IMPORT MODULE_GROUP="camel-spring" REQUIRED="true" />
-			<IMPORT MODULE_GROUP="camel-aws-mq" REQUIRED="true" />
             <IMPORT MODULE_GROUP="aws-jackson" REQUIRED="true" />
             
+            <IMPORT NAME="camel-aws2-mq-${camel.version}.jar" MODULE="camel-aws2-mq-${camel.version}.jar"
+                MVN="mvn:org.apache.camel/camel-aws2-mq/${camel.version}"
+                UrlPath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/camel-aws2-mq-${camel.version}.jar"
+                REQUIRED="true" />
             <IMPORT NAME="httpcore-4.4.13.jar" MODULE="httpcore-4.4.13.jar"
                 MVN="mvn:org.apache.httpcomponents/httpcore/4.4.13"
                 UrlPath="platform:/plugin/org.talend.libraries.apache.http/lib/httpcore-4.4.13.jar"

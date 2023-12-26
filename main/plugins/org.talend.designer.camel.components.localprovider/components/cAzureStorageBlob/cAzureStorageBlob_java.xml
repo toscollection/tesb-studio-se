@@ -392,9 +392,10 @@
         <IMPORTS>
             <IMPORT MODULE_GROUP="camel-core" REQUIRED="true" />
             <IMPORT MODULE_GROUP="camel-spring" REQUIRED="true" />
-            <IMPORT MODULE_GROUP="camel-azure" REQUIRED="true" />
 			<IMPORT MODULE_GROUP="azure-jackson" REQUIRED="true" />
-
+            <IMPORT MODULE_GROUP="camel-azure-storage-blob-alldep" REQUIRED="true" />
+            <IMPORT MODULE_GROUP="camel-azure-storage-queue-alldep" REQUIRED="true" />
+            
             <IMPORT NAME="httpcore-4.4.13.jar" MODULE="httpcore-4.4.13.jar"
                 MVN="mvn:org.apache.httpcomponents/httpcore/4.4.13"
                 UrlPath="platform:/plugin/org.talend.libraries.apache.http/lib/httpcore-4.4.13.jar"
