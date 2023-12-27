@@ -380,7 +380,7 @@
             -->
             <!-- additional deps which excluded by camel-shape build -->
             <IMPORT MODULE="commons-codec-1.15" MVN="mvn:commons-codec/commons-codec/1.15" REQUIRED="true" />
-            <IMPORT MODULE="commons-collections" MVN="${mvn-commons-collections}" REQUIRED="true" />
+            <IMPORT MODULE="commons-collections" MVN="mvn:commons-collections/commons-collections/3.2.2" REQUIRED="true" />
             <IMPORT MODULE="commons-io" MVN="mvn:commons-io/commons-io/2.11.0" REQUIRED="true" />
             <IMPORT MODULE="commons-lang" MVN="${mvn-commons-lang}" REQUIRED="true" />
             <IMPORT MODULE="commons-pool" MVN="${mvn-commons-pool}" REQUIRED="true" />

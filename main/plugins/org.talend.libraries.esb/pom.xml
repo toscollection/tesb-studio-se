@@ -59,7 +59,7 @@
 						    <excludeGroupIds>org.talend.studio</excludeGroupIds>
 			                <includeScope>runtime</includeScope>
 			                <excludeTransitive>true</excludeTransitive>
-					<includeGroupIds>com.sun.xml.bind,org.apache.cxf,org.codehaus.woodstox,com.sun.istack,javax.ws.rs,org.codehaus.jettison,org.slf4j,org.apache.wss4j,org.apache.santuario,com.google.guava,org.glassfish.jaxb,org.apache.neethi,com.fasterxml.woodstox,org.apache.ws.xmlschema,org.springframework,aopalliance,org.talend.esb,org.ops4j.pax.cdi,ch.qos.reload4j,org.apache.servicemix.bundles,org.apache.zookeeper,org.talend.esb.policies,commons-jxpath,org.talend.camel,org.scala-lang,org.osgi,com.fasterxml.jackson.core,com.fasterxml.jackson.dataformat,org.yaml,javax.validation,jakarta.xml.soap,org.apache.geronimo.specs,jakarta.xml.ws,jakarta.activation,jakarta.xml.bind,jakarta.annotation,com.sun.activation,org.apache.servicemix.specs,org.apache.activemq,org.cryptacular,org.bouncycastle,jakarta.ws.rs,org.jvnet.staxex,org.glassfish.jaxb,jakarta.jws,xml-resolver,commons-logging,commons-lang,joda-time</includeGroupIds>
+					<includeGroupIds>com.sun.xml.bind,org.apache.cxf,org.codehaus.woodstox,com.sun.istack,javax.ws.rs,org.codehaus.jettison,org.slf4j,org.apache.wss4j,org.apache.santuario,com.google.guava,org.glassfish.jaxb,org.apache.neethi,com.fasterxml.woodstox,org.apache.ws.xmlschema,org.springframework,aopalliance,org.talend.esb,org.ops4j.pax.cdi,ch.qos.reload4j,org.apache.servicemix.bundles,org.apache.zookeeper,org.talend.esb.policies,commons-jxpath,org.talend.camel,org.scala-lang,org.osgi,com.fasterxml.jackson.core,com.fasterxml.jackson.dataformat,org.yaml,javax.validation,jakarta.xml.soap,org.apache.geronimo.specs,jakarta.xml.ws,jakarta.activation,jakarta.xml.bind,jakarta.annotation,com.sun.activation,org.apache.servicemix.specs,org.apache.activemq,org.cryptacular,org.bouncycastle,jakarta.ws.rs,org.jvnet.staxex,org.glassfish.jaxb,jakarta.jws,xml-resolver,commons-logging,commons-lang,joda-time,wsdl4j,org.apache.xbean,org.opensaml,org.ehcache,org.jasypt,org.reflections</includeGroupIds>
 						</configuration>
 					</execution>
 				</executions>
@@ -715,6 +715,36 @@
     </dependency>
 
     <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-broker</artifactId>
+        <version>${activemq.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-client</artifactId>
+        <version>${activemq.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-openwire-legacy</artifactId>
+        <version>${activemq.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-pool</artifactId>
+        <version>${activemq.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-jms-pool</artifactId>
+        <version>${activemq.version}</version>
+    </dependency>
+
+    <dependency>
         <groupId>org.cryptacular</groupId>
         <artifactId>cryptacular</artifactId>
         <version>${cryptacular.version}</version>
@@ -778,6 +808,168 @@
 	    <groupId>joda-time</groupId>
 	    <artifactId>joda-time</artifactId>
 	    <version>${joda-time.version}</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>wsdl4j</groupId>
+	    <artifactId>wsdl4j</artifactId>
+	    <version>1.6.3</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-beans</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-aop</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-expression</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.cxf</groupId>
+		<artifactId>cxf-rt-wsdl</artifactId>
+		<version>${cxf.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.cxf</groupId>
+		<artifactId>cxf-rt-ws-policy</artifactId>
+		<version>${cxf.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.cxf</groupId>
+		<artifactId>cxf-rt-security-saml</artifactId>
+		<version>${cxf.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.cxf</groupId>
+		<artifactId>cxf-rt-rs-service-description-common-openapi</artifactId>
+		<version>${cxf.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.xbean</groupId>
+		<artifactId>xbean-spring</artifactId>
+		<version>4.20</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-saml-impl</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-profile-api</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-core</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-saml-api</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-xmlsec-api</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-soap-api</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-security-impl</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-security-api</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-xmlsec-impl</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-xacml-impl</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-xacml-api</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-xacml-saml-impl</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.opensaml</groupId>
+		<artifactId>opensaml-xacml-saml-api</artifactId>
+		<version>${opensaml.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.ehcache</groupId>
+		<artifactId>ehcache</artifactId>
+		<version>3.9.3</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.jasypt</groupId>
+		<artifactId>jasypt</artifactId>
+		<version>1.9.3</version>
+	</dependency>
+
+	<dependency>
+		<groupId>com.sun.activation</groupId>
+		<artifactId>javax.activation</artifactId>
+		<version>1.2.0</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.reflections</groupId>
+		<artifactId>reflections</artifactId>
+		<version>${reflections.version}</version>
 	</dependency>
 
   </dependencies>

@@ -55,7 +55,6 @@
 		<json-smart-version>2.4.10</json-smart-version>
 		<accessors-smart-version>2.4.7</accessors-smart-version>
 		<asm-version>9.3</asm-version>
-		<reflections.version>0.9.12</reflections.version>
 		<guava.version>32.0.1-jre</guava.version>
 		<guava.failureaccess.version>1.0.1</guava.failureaccess.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
@@ -1011,6 +1010,17 @@
 			<version>1.0.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.fusesource.hawtbuf</groupId>
+			<artifactId>hawtbuf</artifactId>
+			<version>${hawtbuf.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -1030,7 +1040,7 @@
 							<excludeTransitive>true</excludeTransitive>
 							<outputDirectory>${basedir}/lib</outputDirectory>
 							<excludeGroupIds>p2.eclipse-plugin,org.talend.studio</excludeGroupIds>
-							<includeGroupIds>org.apache.camel,org.springframework,org.codehaus.groovy,com.fasterxml.jackson.core,com.fasterxml.jackson.module,org.apache.geronimo.specs,com.thoughtworks.xstream,org.ogce,org.apache.qpid,io.netty,com.sun.mail,org.eclipse.jetty.aggregate,javax.servlet,com.jcraft,commons-net,net.sf.flatpack,org.jdom,org.apache.commons,javax.jms,com.jayway.jsonpath,net.minidev,org.ow2.asm,net.sf.saxon,org.apache.kafka,org.xerial.snappy,org.lz4,com.fasterxml.jackson.jaxrs,com.fasterxml.jackson.dataformat,org.hamcrest,joda-time,org.yaml,org.apache.camel.karaf,com.github.ben-manes.caffeine,software.amazon.awssdk,org.reactivestreams,org.eclipse.paho,org.iq80.leveldb,org.fusesource.leveldbjni,com.google.guava,com.networknt,com.microsoft.azure,com.nimbusds,net.minidev</includeGroupIds>
+							<includeGroupIds>org.apache.camel,org.springframework,org.codehaus.groovy,com.fasterxml.jackson.core,com.fasterxml.jackson.module,org.apache.geronimo.specs,com.thoughtworks.xstream,org.ogce,org.apache.qpid,io.netty,com.sun.mail,org.eclipse.jetty.aggregate,javax.servlet,com.jcraft,commons-net,net.sf.flatpack,org.jdom,org.apache.commons,javax.jms,com.jayway.jsonpath,net.minidev,org.ow2.asm,net.sf.saxon,org.apache.kafka,org.xerial.snappy,org.lz4,com.fasterxml.jackson.jaxrs,com.fasterxml.jackson.dataformat,org.hamcrest,joda-time,org.yaml,org.apache.camel.karaf,com.github.ben-manes.caffeine,software.amazon.awssdk,org.reactivestreams,org.eclipse.paho,org.iq80.leveldb,org.fusesource.leveldbjni,com.google.guava,com.networknt,com.microsoft.azure,com.nimbusds,net.minidev,org.fusesource.hawtbuf,commons-collections</includeGroupIds>
 						</configuration>
 					</execution>
 <!--                     <execution>

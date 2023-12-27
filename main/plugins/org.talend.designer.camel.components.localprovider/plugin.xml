@@ -36,7 +36,7 @@
             name="commons-collections-3.2.2.jar"
             id="commons-collections"
             mvn_uri="mvn:commons-collections/commons-collections/3.2.2"
-            uripath="platform:/plugin/org.talend.libraries.apache.common/lib/commons-collections-3.2.2.jar"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/commons-collections-3.2.2.jar"
             bundleID="" />
         <libraryNeeded context="plugin:org.talend.libraries.apache.common"
             name="commons-io-2.10.0.jar"
@@ -340,10 +340,10 @@
         </libraryNeededGroup>
 
         <libraryNeeded context="plugin:org.talend.libraries.esb"
-            name="${tesb-hawtbuf}"
+            name="hawtbuf-${hawtbuf.version}.jar"
             id="hawtbuf"
             mvn_uri="mvn:org.fusesource.hawtbuf/hawtbuf/${hawtbuf.version}"
-            uripath="platform:/plugin/org.talend.libraries.esb/lib/${tesb-hawtbuf}"
+            uripath="platform:/plugin/org.talend.designer.camel.components.localprovider/lib/hawtbuf-${hawtbuf.version}.jar"
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
