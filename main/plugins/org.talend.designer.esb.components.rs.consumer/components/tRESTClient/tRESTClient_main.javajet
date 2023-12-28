@@ -444,7 +444,7 @@ try {
 		webClient_<%=cid%>.type("<%=contentType%>");
 	<% } %>
 
-	<% if (!acceptType.isEmpty()) { %>
+	<% if (!acceptType.isEmpty() && !"none".equals(acceptType)) { %>
 		// set Accept-Type
 		webClient_<%=cid%>.accept("<%=acceptType%>");
 	<% } %>
