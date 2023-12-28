@@ -66,6 +66,7 @@
 				<ITEM NAME="JSON" VALUE="application/json" />
                 <ITEM NAME="MULTIPART" VALUE="multipart/mixed" />
 				<ITEM NAME="ANY" VALUE="*/*" />
+				<ITEM NAME="NONE" VALUE="none"/>
 			</ITEMS>
 		</PARAMETER>
 
