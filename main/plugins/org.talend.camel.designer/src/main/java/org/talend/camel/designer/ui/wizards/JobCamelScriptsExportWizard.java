@@ -21,7 +21,6 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.talend.camel.designer.CamelDesignerPlugin;
 import org.talend.camel.designer.i18n.Messages;
 
@@ -39,7 +38,6 @@ public class JobCamelScriptsExportWizard extends Wizard implements IExportWizard
 
     public JobCamelScriptsExportWizard() {
         setWindowTitle(Messages.getString("JobScriptsExportWizard.buildRounte")); //$NON-NLS-1$
-        setDefaultPageImageDescriptor(IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/exportzip_wiz.png"));//$NON-NLS-1$
         setNeedsProgressMonitor(true);
 
         IDialogSettings workbenchSettings = CamelDesignerPlugin.getDefault().getDialogSettings();

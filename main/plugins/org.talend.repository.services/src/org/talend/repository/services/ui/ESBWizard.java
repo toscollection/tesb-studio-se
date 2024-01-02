@@ -16,8 +16,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.talend.commons.ui.runtime.image.EImage;
-import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
@@ -60,7 +58,6 @@ public class ESBWizard extends CheckLastVersionRepositoryWizard {
     public ESBWizard(IWorkbench workbench, boolean creation, ISelection selection) {
         super(workbench, creation);
         setWindowTitle("Services");
-        setDefaultPageImageDescriptor(ImageProvider.getImageDesc(EImage.DEFAULT_IMAGE));
 
         this.selection = selection;
         setNeedsProgressMonitor(true);

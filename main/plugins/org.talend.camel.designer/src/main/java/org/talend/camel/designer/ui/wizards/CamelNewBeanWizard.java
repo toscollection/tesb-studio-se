@@ -22,7 +22,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.talend.camel.core.model.camelProperties.BeanItem;
 import org.talend.camel.core.model.camelProperties.CamelPropertiesFactory;
-import org.talend.camel.designer.CamelDesignerPlugin;
 import org.talend.camel.designer.i18n.Messages;
 import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
@@ -147,7 +146,6 @@ public class CamelNewBeanWizard extends Wizard {
         mainPage = new CamelNewBeanWizardPage(property, path);
         addPage(mainPage);
         setWindowTitle(mainPage.getTitle());
-        setDefaultPageImageDescriptor(CamelDesignerPlugin.getImageDescriptor(CamelDesignerPlugin.BEAN_WIZ_ICON));
     }
 
     /**

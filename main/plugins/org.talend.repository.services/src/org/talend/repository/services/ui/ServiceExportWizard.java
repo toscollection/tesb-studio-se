@@ -26,12 +26,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.commons.utils.io.FilesUtils;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.process.IContext;
-import org.talend.core.prefs.IDEWorkbenchPlugin;
 import org.talend.core.runtime.process.ITalendProcessJavaProject;
 import org.talend.core.runtime.repository.build.IBuildResourceParametes;
 import org.talend.designer.maven.tools.BuildCacheManager;
@@ -70,9 +68,7 @@ public class ServiceExportWizard extends Wizard implements IExportWizard {
         }
         setDialogSettings(section);
 
-        // setDefaultPageImageDescriptor(IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/exportzip_wiz.png"));//$NON-NLS-1$
-        setDefaultPageImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(IDEWorkbenchPlugin.IDE_WORKBENCH,
-                "$nl$/icons/full/wizban/exportzip_wiz.png")); //$NON-NLS-1$
+
         setNeedsProgressMonitor(true);
     }
 

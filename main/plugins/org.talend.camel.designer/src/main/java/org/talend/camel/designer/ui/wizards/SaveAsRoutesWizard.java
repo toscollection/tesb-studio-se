@@ -18,8 +18,6 @@ import org.eclipse.jface.wizard.Wizard;
 import org.talend.camel.core.model.camelProperties.CamelProcessItem;
 import org.talend.camel.core.model.camelProperties.CamelPropertiesFactory;
 import org.talend.commons.exception.ExceptionHandler;
-import org.talend.commons.ui.runtime.image.ECoreImage;
-import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.core.CorePlugin;
 import org.talend.core.model.process.IProcess2;
 import org.talend.core.model.properties.PropertiesFactory;
@@ -87,7 +85,6 @@ public class SaveAsRoutesWizard extends Wizard {
 
         repositoryFactory = service.getProxyRepositoryFactory();
 
-        setDefaultPageImageDescriptor(ImageProvider.getImageDesc(ECoreImage.PROCESS_WIZ));
     }
 
     @Override
