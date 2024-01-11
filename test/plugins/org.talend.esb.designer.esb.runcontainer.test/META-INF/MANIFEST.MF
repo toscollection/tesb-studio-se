@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.talend.esb.designer.esb.runcontainer.test
 Bundle-SymbolicName: org.talend.esb.designer.esb.runcontainer.test
-Bundle-Version: 8.8.8.qualifier
+Bundle-Version: 8.0.2.qualifier
 Fragment-Host: org.talend.designer.esb.runcontainer
 Require-Bundle: org.talend.model,
  org.talend.designer.core,
