@@ -141,9 +141,9 @@
             bundleID="" />
 
         <libraryNeeded context="plugin:org.talend.designer.camel.components.localprovider"
-            name="camel-groovy-alldep-${camel.version}.jar"
+            name="camel-groovy-alldep-${camel-alldep-verson}.jar"
             id="camel-groovy"
-            uripath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-groovy-alldep-${camel.version}.jar"
+            uripath="platform:/plugin/org.talend.libraries.camel.alldeps/lib/camel-groovy-alldep-${camel-alldep-verson}.jar"
             bundleID="" />
 
         <libraryNeededGroup

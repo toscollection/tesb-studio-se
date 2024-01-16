@@ -49,6 +49,7 @@
     <zookeeper.version>3.7.2</zookeeper.version>
     <plexus.version>4.8.0</plexus.version>
     <reflections.version>0.9.11</reflections.version>
+    <io-netty.version>4.1.101.Final</io-netty.version>
     <camel-alldep-timestamp>R2023-12</camel-alldep-timestamp>
     <camel-alldep-verson>${camel.version}.${camel-alldep-timestamp}</camel-alldep-verson>
   </properties>
