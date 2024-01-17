@@ -38,7 +38,6 @@ Require-Bundle: org.talend.commons.ui,
  org.eclipse.emf.codegen,
  org.apache.commons.collections,
  org.apache.commons.lang,
- org.apache.commons.io,
  org.eclipse.jdt.core,
  org.eclipse.jdt.debug,
  org.eclipse.jdt.launching,
@@ -135,5 +134,6 @@ Export-Package: org.talend.camel.designer.dialog;
    org.talend.designer.core.model.utils.emf.talendfile,
    org.talend.designer.publish.core.models"
 Bundle-Vendor: .Talend SA.
-Import-Package: org.eclipse.jdt.core
+Import-Package: org.apache.commons.io,
+ org.eclipse.jdt.core
 Automatic-Module-Name: org.talend.camel.designer

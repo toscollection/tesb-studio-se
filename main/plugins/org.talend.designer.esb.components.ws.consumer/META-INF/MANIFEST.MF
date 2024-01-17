@@ -25,9 +25,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.common,
  org.talend.common.ui.runtime,
  org.apache.commons.lang,
- org.apache.commons.codec,
  org.eclipse.emf.ecore
-Import-Package: org.talend.designer.core.model.components,
+Import-Package: org.apache.commons.codec,
+ org.apache.commons.codec.binary,
+ org.talend.designer.core.model.components,
  org.talend.repository.services.action;resolution:=optional,
  org.talend.utils.wsdl
 Export-Package: org.talend.designer.esb.webservice

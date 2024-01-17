@@ -22,7 +22,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.codegen,
  org.apache.commons.collections,
  org.apache.commons.lang,
- org.apache.commons.io,
  org.talend.core.ui,
  org.eclipse.jdt.core,
  org.eclipse.jdt.debug,
@@ -41,4 +40,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.
 Eclipse-BundleShape: dir
+Import-Package: org.apache.commons.io
 Automatic-Module-Name: org.talend.resources.export.route
