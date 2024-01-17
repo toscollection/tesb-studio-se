@@ -146,6 +146,7 @@
 			id="cxf-rt-frontend-jaxws"
 			name="cxf-rt-frontend-jaxws">
 		    <library id="cxf-rt-frontend-jaxws" />
+		    <library id="cxf-rt-features-logging" />
 		    <library id="xml-resolver" />
 		    <group id="cxf-rt-bindings-soap" />
 		    <library id="cxf-rt-bindings-xml" />
