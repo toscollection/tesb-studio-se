@@ -18,8 +18,6 @@ import org.talend.camel.core.model.camelProperties.CamelPropertiesFactory;
 import org.talend.camel.designer.i18n.Messages;
 import org.talend.camel.designer.util.CamelSpringUtil;
 import org.talend.camel.model.CamelRepositoryNodeType;
-import org.talend.commons.ui.runtime.image.ECoreImage;
-import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -31,7 +29,6 @@ public class CamelNewProcessWizard extends NewProcessWizard {
     public CamelNewProcessWizard(IPath path) {
         super(path);
 
-        setDefaultPageImageDescriptor(ImageProvider.getImageDesc(ECoreImage.ROUTES_ICON));
     }
 
     @Override
